@@ -1,0 +1,75 @@
+﻿@model TecoRP_Website.Models.Questions
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Questions</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.QuestionText)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.QuestionText)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsTextArea)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsTextArea)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Selection_A)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Selection_A)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Selection_B)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Selection_B)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Selection_C)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Selection_C)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RightAnswer)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RightAnswer)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RegisterDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RegisterDate)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.QuestionID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

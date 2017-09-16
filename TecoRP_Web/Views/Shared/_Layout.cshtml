@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Teco RP Panel</title>
+    <!-- Core CSS - Include with every page -->
+    <link href="/Content/plugins/bootstrap/bootstrap.css" rel="stylesheet" />
+    <link href="/Content/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <link href="/Content/plugins/pace/pace-theme-big-counter.css" rel="stylesheet" />
+    <link href="/Content/css/style.css" rel="stylesheet" />
+    <link href="/Content/css/main-style.css" rel="stylesheet" />
+    <!-- Page-Level CSS -->
+    <link href="/Content/assets/plugins/morris/morris-0.4.3.min.css" rel="stylesheet" />
+
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+</head>
+<body>
+    @*<div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    <li>@Html.ActionLink("About", "About", "Home")</li>
+                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                </ul>
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+    </div>*@
+
+    @Html.Partial("_PartialPage1")
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        </footer>
+    </div>
+
+    <!-- Core Scripts - Include with every page -->
+    <script src="/Scripts/plugins/jquery-1.10.2.js"></script>
+    <script src="/Scripts/plugins/bootstrap/bootstrap.min.js"></script>
+    <script src="/Scripts/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="/Scripts/plugins/pace/pace.js"></script>
+    <script src="/Scripts/scripts/siminta.js"></script>
+    <!-- Page-Lev/Scripts/lugin Scripts-->
+    <script src="/Scripts/plugins/morris/raphael-2.1.0.min.js"></script>
+    <script src="/Scripts/plugins/morris/morris.js"></script>
+    <script src="/Scripts/scripts/dashboard-demo.js"></script>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,121 @@
+﻿@model IEnumerable<TecoRP_Website.Models.Applications>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="demo-cards mdl-cell mdl-cell--4-col mdl-cell--6-col-tablet mdl-grid mdl-grid--no-spacing">
+    <div style="min-height: 36px;" class="demo-updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-desktop">
+        @Html.ActionLink("ONAY BEKLEYENLER", "Index", "Application", new { filter = "awaiting" }, new { @class = "mdl-button mdl-js-button mdl-js-ripple-effect" })
+    </div>
+</div>
+<div class="demo-cards mdl-cell mdl-cell--4-col mdl-cell--6-col-tablet mdl-grid mdl-grid--no-spacing">
+    <div style="min-height: 36px;" class="demo-updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-desktop">
+        @Html.ActionLink("ONAYLANANLAR", "Index", "Application", new { filter = "approved" }, new { @class = "mdl-button mdl-js-button mdl-js-ripple-effect" })
+    </div>
+</div>
+<div class="demo-cards mdl-cell mdl-cell--4-col mdl-cell--6-col-tablet mdl-grid mdl-grid--no-spacing">
+    <div style="min-height: 36px;" class="demo-updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-desktop">
+        @Html.ActionLink("REDDEDİLENLER", "Index", "Application", new { filter = "rejected" }, new { @class = "mdl-button mdl-js-button mdl-js-ripple-effect" })
+    </div>
+</div>
+
+<hr />
+
+@foreach (var item in Model)
+{
+
+    switch (item.IsApproved)
+    {
+        case null:
+            <div class="demo-cards mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-grid mdl-grid--no-spacing">
+                <div class="demo-updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--12-col-desktop">
+                    <div style="background-image:url(/Content/images/basvuru.png);" class="mdl-card__title mdl-card--expand mdl-color--yellow-A200">
+                        <h2 class="mdl-card__title-text mdlco mdl-color-text--grey-900">@item.SocialClubName</h2>
+                    </div>
+                    <div class="mdl-card__supporting-text mdl-color-text--grey-600">
+                        @item.Name <br>
+                        <b>Tarih: </b> @Convert.ToDateTime(item.RegisterDate).ToShortDateString() @Convert.ToDateTime(item.RegisterDate).ToShortTimeString()
+                    </div>
+                    <div class="mdl-card__actions mdl-card--border">
+                        <a href="@Url.Action("ApproveStatus","Application",new { id = item.ApplicationId, status=true})" class="mdl-button mdl-js-button mdl-js-ripple-effect" data-upgraded=",MaterialButton,MaterialRipple">
+                            ONAYLA
+                            <span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span>
+                        </a>
+                        <a href="@Url.Action("ApproveStatus","Application",new { id = item.ApplicationId, status=false})" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--red-800" data-upgraded=",MaterialButton,MaterialRipple">
+                            REDDET
+                            <span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span>
+                        </a>
+                        <a href="@Url.Action("Details","Application",new { id=item.ApplicationId})" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--grey-900" data-upgraded=",MaterialButton,MaterialRipple">
+                            DETAY
+                            <span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span>
+                        </a>
+                    </div>
+                </div>
+                <div class="demo-separator mdl-cell--1-col"></div>
+            </div>
+            break;
+        case true:
+            <div class="demo-cards mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-grid mdl-grid--no-spacing">
+                <div class="demo-updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--12-col-desktop">
+                    <div style="background-image:url(/Content/images/basvuru.png);" class="mdl-card__title mdl-card--expand mdl-color--green-A200">
+                        <h2 class="mdl-card__title-text mdlco mdl-color-text--grey-900">@item.SocialClubName</h2>
+                    </div>
+                    <div class="mdl-card__supporting-text mdl-color-text--grey-600">
+                        @item.Name <br>
+                        <b>Tarih: </b> @Convert.ToDateTime(item.RegisterDate).ToShortDateString() @Convert.ToDateTime(item.RegisterDate).ToShortTimeString()
+                    </div>
+                    <div class="mdl-card__actions mdl-card--border">
+                        <a href="@Url.Action("ApproveStatus","Application",new { id = item.ApplicationId, status=true})" class="mdl-button mdl-js-button mdl-js-ripple-effect" data-upgraded=",MaterialButton,MaterialRipple">
+                            ONAYLA
+                            <span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span>
+                        </a>
+                        <a href="@Url.Action("ApproveStatus","Application",new { id = item.ApplicationId, status=false})" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--red-800" data-upgraded=",MaterialButton,MaterialRipple">
+                            REDDET
+                            <span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span>
+                        </a>
+                        <a href="@Url.Action("Details","Application",new { id=item.ApplicationId})" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--grey-900" data-upgraded=",MaterialButton,MaterialRipple">
+                            DETAY
+                            <span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span>
+                        </a>
+                    </div>
+                </div>
+                <div class="demo-separator mdl-cell--1-col"></div>
+            </div>
+            break;
+        case false:
+
+            <div class="demo-cards mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-grid mdl-grid--no-spacing">
+                <div class="demo-updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--12-col-desktop">
+                    <div style="background-image:url(/Content/images/basvuru.png);" class="mdl-card__title mdl-card--expand mdl-color--red-A400">
+                        <h2 class="mdl-card__title-text mdlco mdl-color-text--grey-900">@item.SocialClubName</h2>
+                    </div>
+                    <div class="mdl-card__supporting-text mdl-color-text--grey-600">
+                        @item.Name <br>
+                        <b>Tarih: </b> @Convert.ToDateTime(item.RegisterDate).ToShortDateString() @Convert.ToDateTime(item.RegisterDate).ToShortTimeString()
+                    </div>
+                    <div class="mdl-card__actions mdl-card--border">
+                        <a href="@Url.Action("ApproveStatus","Application",new { id = item.ApplicationId, status=true})" class="mdl-button mdl-js-button mdl-js-ripple-effect" data-upgraded=",MaterialButton,MaterialRipple">
+                            ONAYLA
+                            <span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span>
+                        </a>
+                        <a href="@Url.Action("ApproveStatus","Application",new { id = item.ApplicationId, status=false})" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--red-800" data-upgraded=",MaterialButton,MaterialRipple">
+                            REDDET
+                            <span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span>
+                        </a>
+                        <a href="@Url.Action("Details","Application",new { id=item.ApplicationId})" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--grey-900" data-upgraded=",MaterialButton,MaterialRipple">
+                            DETAY
+                            <span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span>
+                        </a>
+                    </div>
+                </div>
+                <div class="demo-separator mdl-cell--1-col"></div>
+            </div>
+            break;
+        default:
+            break;
+    }
+
+}
+

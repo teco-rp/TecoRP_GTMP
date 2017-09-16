@@ -1,0 +1,232 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{2BA003F5-5329-4376-83D7-0CB9CB9CA674}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TecoRP</RootNamespace>
+    <AssemblyName>TecoRP</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="GrandTheftMultiplayer.Server, Version=0.1.513.481, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\grandtheftmultiplayer.api.0.1.513.481\lib\net452\GrandTheftMultiplayer.Server.exe</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="GrandTheftMultiplayer.Shared, Version=0.1.489.410, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\grandtheftmultiplayer.api.0.1.513.481\lib\net452\GrandTheftMultiplayer.Shared.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.4.9\lib\net45\NLog.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="protobuf-net, Version=2.0.0.668, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
+      <HintPath>..\packages\protobuf-net.2.0.0.668\lib\net40\protobuf-net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Admin\AdminCommands.cs" />
+    <Compile Include="Client\ClientManager.cs" />
+    <Compile Include="Database\db_Adversitements.cs" />
+    <Compile Include="Database\db_Buildings.cs" />
+    <Compile Include="Database\db_Craftings.cs" />
+    <Compile Include="Database\db_FactionInteractives.cs" />
+    <Compile Include="Database\db_Hospital.cs" />
+    <Compile Include="Database\db_HouseElements.cs" />
+    <Compile Include="Database\db_Reports.cs" />
+    <Compile Include="Database\db_WhiteList.cs" />
+    <Compile Include="Database\db_Arrests.cs" />
+    <Compile Include="Database\db_Banks.cs" />
+    <Compile Include="Database\db_Businesses.cs" />
+    <Compile Include="Database\db_Crimes.cs" />
+    <Compile Include="Database\db_FactionRanks.cs" />
+    <Compile Include="Database\db_FactionVaults.cs" />
+    <Compile Include="Database\db_GasStations.cs" />
+    <Compile Include="Database\db_LicensePoints.cs" />
+    <Compile Include="Database\db_PhoneOperatorShop.cs" />
+    <Compile Include="Jobs\db_KamyonJob.cs" />
+    <Compile Include="Jobs\db_TirJob.cs" />
+    <Compile Include="Managers\AdvertisementManager.cs" />
+    <Compile Include="Managers\BankManager.cs" />
+    <Compile Include="Managers\BlipManager.cs" />
+    <Compile Include="Database\db_Accounts.cs" />
+    <Compile Include="Database\db_Blips.cs" />
+    <Compile Include="Database\db_Entrances.cs" />
+    <Compile Include="Database\db_Houses.cs" />
+    <Compile Include="Database\db_Items.cs" />
+    <Compile Include="Database\db_Objects.cs" />
+    <Compile Include="Database\db_SaleVehicles.cs" />
+    <Compile Include="Database\db_Shops.cs" />
+    <Compile Include="Database\db_Vehicles.cs" />
+    <Compile Include="Managers\BuildingManager.cs" />
+    <Compile Include="Managers\BusinessManager.cs" />
+    <Compile Include="Managers\CraftingManager.cs" />
+    <Compile Include="Managers\CrimeManager.cs" />
+    <Compile Include="Managers\EntranceManager.cs" />
+    <Compile Include="Managers\FactionManager.cs" />
+    <Compile Include="Managers\GameObjectsManager.cs" />
+    <Compile Include="Managers\HelpManager.cs" />
+    <Compile Include="Jobs\db_BusJob.cs" />
+    <Compile Include="Jobs\db_Jobs.cs" />
+    <Compile Include="Managers\Job_BankDeliveryManager.cs" />
+    <Compile Include="Managers\Job_GasTanker.cs" />
+    <Compile Include="Managers\Job_KamyonManager.cs" />
+    <Compile Include="Managers\Job_RepairmanManager.cs" />
+    <Compile Include="Managers\Job_TaxyManager.cs" />
+    <Compile Include="Managers\Job_TirManager.cs" />
+    <Compile Include="Managers\LicenseManager.cs" />
+    <Compile Include="Managers\PhoneManager.cs" />
+    <Compile Include="Managers\TradeManager.cs" />
+    <Compile Include="Managers\VehicleManager.cs" />
+    <Compile Include="Managers\Job_BusManager.cs" />
+    <Compile Include="Managers\ConnectionManager.cs" />
+    <Compile Include="Managers\HouseManager.cs" />
+    <Compile Include="Managers\InventoryManager.cs" />
+    <Compile Include="Managers\JobManager.cs" />
+    <Compile Include="Managers\RPGElements.cs" />
+    <Compile Include="Managers\SaleVehicleManager.cs" />
+    <Compile Include="Models\Advertisements.cs" />
+    <Compile Include="Models\Arrests.cs" />
+    <Compile Include="Models\Banks.cs" />
+    <Compile Include="Models\Blips.cs" />
+    <Compile Include="Models\Buildings.cs" />
+    <Compile Include="Models\Businesses.cs" />
+    <Compile Include="Models\Craftings.cs" />
+    <Compile Include="Models\Entrances.cs" />
+    <Compile Include="Models\FactionInteractive.cs" />
+    <Compile Include="Models\FactionRanks.cs" />
+    <Compile Include="Models\FactionVaults.cs" />
+    <Compile Include="Models\GasStations.cs" />
+    <Compile Include="Models\Hints.cs" />
+    <Compile Include="Models\Hospital.cs" />
+    <Compile Include="Models\HouseElements.cs" />
+    <Compile Include="Models\Houses.cs" />
+    <Compile Include="Models\Items.cs" />
+    <Compile Include="Models\Jobs.cs" />
+    <Compile Include="Models\Job_Bus.cs" />
+    <Compile Include="Models\Job_Kamyon.cs" />
+    <Compile Include="Models\Job_Tir.cs" />
+    <Compile Include="Models\LicenseTakings.cs" />
+    <Compile Include="Models\Objects.cs" />
+    <Compile Include="Models\PhoneOperatorShop.cs" />
+    <Compile Include="Models\PoliceDatabase.cs" />
+    <Compile Include="Models\ReportsAndQuestions.cs" />
+    <Compile Include="Models\Shops.cs" />
+    <Compile Include="Models\Users.cs" />
+    <Compile Include="Models\Vehicles.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Managers\RPGManager.cs" />
+    <Compile Include="Users\Animation.cs" />
+    <Compile Include="Users\MedicalCommands.cs" />
+    <Compile Include="Users\PoliceCommands.cs" />
+    <Compile Include="Users\TaxyCommands.cs" />
+    <Compile Include="Users\UserCommands.cs" />
+    <Compile Include="Users\WzNewsCommands.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Client\Bank.js" />
+    <Content Include="Client\Building.js" />
+    <Content Include="Client\CraftingMenu.js" />
+    <Content Include="Client\CustomMenu.js" />
+    <Content Include="Client\Fuel.js" />
+    <Content Include="Client\HelpBrowser.js" />
+    <Content Include="Client\InputCharacter.js" />
+    <Content Include="Client\Inventory.js" />
+    <Content Include="Client\JobMenus.js" />
+    <Content Include="Client\LSPDComputer.js" />
+    <Content Include="Client\Menu.js" />
+    <Content Include="Client\OnSearchPlayer.js" />
+    <Content Include="Client\Phone.js" />
+    <Content Include="Client\Shop.js" />
+    <Content Include="Client\Shortcuts.js" />
+    <Content Include="Client\Skills.js" />
+    <Content Include="Client\Sounds.js" />
+    <Content Include="Client\Storage.js" />
+    <Content Include="Client\TradeSelector.js" />
+    <Content Include="Client\Vault.js" />
+    <Content Include="meta.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Client\MoneyDisplay.js" />
+    <Content Include="Client\WayPoint.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="Client.ts" />
+    <TypeScriptCompile Include="types-gt-mp\Declarations.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Client.GUI.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Client.Javascript.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Client.Javascript.ScriptContext.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Client.Misc.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Client.Sound.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Client.Streamer.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Client.Sync.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Client.Util.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Shared.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Shared.Math.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\GTA.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\GTA.Math.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\GTA.Native.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\GTA.NaturalMotion.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\GTA.UI.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\index.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\Microsoft.ClearScript.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\NativeUI.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\NativeUI.UIMenu.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\NativeUI.UIMenuItem.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\NativeUI.UIResText.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\System.Collections.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\System.Collections.Generic.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\System.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\System.Drawing.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\System.Windows.Forms.d.ts" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

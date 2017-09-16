@@ -1,0 +1,31 @@
+﻿@model IEnumerable<TecoRP.Models.Vehicle>
+@{
+    ViewBag.Title = "Vehicles";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@foreach (var item in Model)
+{
+    <div class="demo-cards mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-grid mdl-grid--no-spacing">
+        <div class="demo-updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--12-col-desktop">
+            <div style="background-image:url(/Content/images/arac.png);" class="mdl-card__title mdl-card--expand mdl-color--yellow-A100">
+                <h2 class="mdl-card__title-text mdl-color-text--blue-grey-900">@item.VehicleModelId</h2>
+            </div>
+            <div class="mdl-card__supporting-text mdl-color-text--grey-600">
+                <b>Plaka:</b> @item.Plate | <b>Vergi:</b> @item.Tax $  <br>
+                <b>Bagaj:</b> @item.GetBaggageItemsCount() / @item.MaxBaggageCount | <b>Torpido:</b> @item.GetTorpedoItemsCount() / @item.MaxTorpedoCount
+                <b>Benzin:</b> @item.Fuel <br />
+            </div>
+            <div class="mdl-card__actions mdl-card--border">
+                <a href="#" class="mdl-button mdl-js-button mdl-js-ripple-effect" data-upgraded=",MaterialButton,MaterialRipple">
+                    VERGİ ÖDE
+                    <span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span>
+                </a>
+            </div>
+        </div>
+     
+        <div class="demo-separator mdl-cell--1-col"></div>
+    </div>
+}
+

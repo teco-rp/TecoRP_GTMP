@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TecoRP", "TecoRP\TecoRP.csproj", "{2BA003F5-5329-4376-83D7-0CB9CB9CA674}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TecoRP_ItemEditor", "TecoRP_ItemEditor\TecoRP_ItemEditor.csproj", "{5FB75ED1-AD12-4263-B514-4E09653A6485}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TecoRP_Website", "TecoRP_Website\TecoRP_Website.csproj", "{0AF28A20-EC60-4C89-96E0-7850FDECA40E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TecoRP_Debugger", "TecoRP_Debugger\TecoRP_Debugger.csproj", "{F582DDA8-3EBC-4426-9576-A3DCD8F2E3BC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2BA003F5-5329-4376-83D7-0CB9CB9CA674}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BA003F5-5329-4376-83D7-0CB9CB9CA674}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BA003F5-5329-4376-83D7-0CB9CB9CA674}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BA003F5-5329-4376-83D7-0CB9CB9CA674}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FB75ED1-AD12-4263-B514-4E09653A6485}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FB75ED1-AD12-4263-B514-4E09653A6485}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FB75ED1-AD12-4263-B514-4E09653A6485}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FB75ED1-AD12-4263-B514-4E09653A6485}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0AF28A20-EC60-4C89-96E0-7850FDECA40E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0AF28A20-EC60-4C89-96E0-7850FDECA40E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0AF28A20-EC60-4C89-96E0-7850FDECA40E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0AF28A20-EC60-4C89-96E0-7850FDECA40E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F582DDA8-3EBC-4426-9576-A3DCD8F2E3BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F582DDA8-3EBC-4426-9576-A3DCD8F2E3BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F582DDA8-3EBC-4426-9576-A3DCD8F2E3BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F582DDA8-3EBC-4426-9576-A3DCD8F2E3BC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

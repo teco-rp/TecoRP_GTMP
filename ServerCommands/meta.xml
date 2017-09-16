@@ -1,0 +1,4 @@
+<meta>
+  <info name="Server" author="enisn" type="script"/>
+  <script src="ServerCommands.cs" type="server" lang="csharp"  />  
+</meta>

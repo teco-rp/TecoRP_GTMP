@@ -1,0 +1,71 @@
+﻿@model IEnumerable<TecoRP_Website.Models.Questions>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+<br />
+<br />
+<table class="mdl-radio__button mdl-radio__ripple-">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.QuestionText)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsTextArea)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Selection_A)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Selection_B)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Selection_C)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RightAnswer)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RegisterDate)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.QuestionText)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsTextArea)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Selection_A)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Selection_B)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Selection_C)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RightAnswer)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RegisterDate)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.QuestionID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.QuestionID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.QuestionID })
+        </td>
+    </tr>
+}
+
+</table>

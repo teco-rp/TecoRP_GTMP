@@ -1,0 +1,68 @@
+﻿@model TecoRP_Website.Models.Applications
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@switch (Model.IsApproved)
+{
+    case null:
+        <div class="demo-cards mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-grid mdl-grid--no-spacing">
+            <div class="demo-updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--12-col-tablet mdl-cell--12-col-desktop">
+                <div style="background-image:url(/Content/images/basvuru.png);" class="mdl-card__title mdl-card--expand mdl-color--yellow-A200">
+                    <h2 class="mdl-card__title-text">Onay Bekliyor</h2>
+                </div>
+                <div class="mdl-card__supporting-text mdl-color-text--grey-600">
+                    @Convert.ToDateTime(Model.RegisterDate).ToString("dd.MM.yyyy") tarihli başvurunuz onay bekliyor.
+                </div>
+              
+            </div>
+            <div class="demo-separator mdl-cell--1-col"></div>
+        </div>
+        break;
+    case true:
+        <div class="demo-cards mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-grid mdl-grid--no-spacing">
+            <div class="demo-updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--12-col-tablet mdl-cell--12-col-desktop">
+                <div style="background-image:url(/Content/images/basvuru.png);" class="mdl-card__title mdl-card--expand mdl-color--green-A200">
+                    <h2 class="mdl-card__title-text">ONAYLANDI</h2>
+                </div>
+                <div class="mdl-card__supporting-text mdl-color-text--grey-600">
+                    @Convert.ToDateTime(Model.RegisterDate).ToString("dd.MM.yyyy") tarihli başvurunuz onaylanmıştır.<br />
+                    <b>@Model.SocialClubName</b> adlı social club üyeliğiniz ile oyuna giriş yapabilirsiniz. <br />
+                    <hr />
+                    Oyuna <b>185.122.202.58</b> adresinden veya <b>server.teco-rp.com</b> adresi üzerinden <b>4499</b> portuyla bağlanabilirsiniz.
+                </div>
+
+            </div>
+            <div class="demo-separator mdl-cell--1-col"></div>
+        </div>
+        break;
+    case false:
+        <div class="demo-cards mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-grid mdl-grid--no-spacing">
+            <div class="demo-updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--12-col-tablet mdl-cell--12-col-desktop">
+                <div style="background-image:url(/Content/images/basvuru.png);" class="mdl-card__title mdl-card--expand mdl-color--red-900">
+                    <h2 class="mdl-card__title-text">Reddedildi.</h2>
+                </div>
+                <div class="mdl-card__supporting-text mdl-color-text--grey-600">
+                    @Convert.ToDateTime(Model.RegisterDate).ToString("dd.MM.yyyy") tarihli başvurunuz maalesef reddedilmiş. Ama üzülmen gerek yok. Hemen yeni bir başvuruda bulunabilirsin.<br />
+                    
+                   <p>Social club hesabınız link veya url olarak girildiğinden dolayı başvurunuz reddedilmiş olabilir.<br />
+                    Bunu çözmek için @Html.ActionLink("buraya","Configuration","Home") tıklayabilirsiniz.
+                    </p>                
+                   
+                </div>
+                <div class="mdl-card__actions mdl-card--border">
+                    <a href="@Url.Action("New","Applications",new { param="new" })" class="mdl-button mdl-js-button mdl-js-ripple-effect" data-upgraded=",MaterialButton,MaterialRipple">
+                        YENİ BAŞVURU
+                        <span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span>
+                    </a>
+                </div>
+            </div>
+            <div class="demo-separator mdl-cell--1-col"></div>
+        </div>
+        break;
+    default:
+        break;
+}

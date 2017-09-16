@@ -1,0 +1,74 @@
+﻿@model TecoRP_Website.Models.ApplicationModel
+
+@{
+    ViewBag.Title = "New";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+
+    
+    <div class="mdl-grid demo-content">
+
+        @for (int i = 0; i < Model.Answers.Count; i++)
+        {
+            @Html.HiddenFor(model => model.Answers[i].QuestionId)
+        <div class="demo-cards mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet mdl-grid mdl-grid--no-spacing">
+            <div class="demo-updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--12-col-tablet mdl-cell--12-col-desktop">
+                <div style="background-image:url(/Content/images/soru.png);" class="mdl-card__title mdl-card--expand mdl-color--purple-400">
+                    <h1 class="mdl-card__title-text">SORU</h1>
+                </div>
+                <div class="mdl-card__supporting-text mdl-color-text--grey-600">
+                   <h2 style="font-size:larger"> @Model.Answers[i].QuestionText </h2> <br>                       
+                 </div>
+                <div class="mdl-card__supporting-text mdl-color-text--grey-400">
+                    @if (Model.Answers[i].IsTextArea)
+                    {
+                        @Html.TextAreaFor(model => model.Answers[i].AnswerText,new { @cols="50" })
+                    }
+                    else
+                    {
+                        @Html.RadioButtonFor(model => model.Answers[i].AnswerSelection, 0, new { @class = "mdl-radio__button" })
+                        <span> @Model.Answers[i].Selection_A </span> <br />
+                        @Html.RadioButtonFor(model => model.Answers[i].AnswerSelection, 1)
+                        <span> @Model.Answers[i].Selection_B </span> <br />
+                        @Html.RadioButtonFor(model => model.Answers[i].AnswerSelection, 2)
+                        <span> @Model.Answers[i].Selection_C </span> <br />
+                        <hr />
+                    }
+
+
+                    <br>
+                </div>
+            </div>
+            <div class="demo-separator mdl-cell--1-col"></div>
+        </div>
+
+        }
+
+
+
+        <div class="demo-cards mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-grid mdl-grid--no-spacing">
+            <div style="min-height: 36px;" class="demo-updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--12-col-desktop">
+
+
+                <input type="submit" value="GÖNDER" class="mdl-button mdl-js-button mdl-js-ripple-effect" />
+
+            </div>
+        </div>
+
+    </div>
+
+
+    
+
+
+        
+
+
+}
+

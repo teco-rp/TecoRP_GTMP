@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TecoRP", "TecoRP\TecoRP.csproj", "{2BA003F5-5329-4376-83D7-0CB9CB9CA674}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TecoRP_DAL", "TecoRP_DAL\TecoRP_DAL.csproj", "{D9BA96E1-F30B-4C6C-B645-6FA52C3492C5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TecoRP_Console", "TecoRP_Console\TecoRP_Console.csproj", "{33F56B2F-4A9F-4159-B2D6-A5EFE5634B64}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2BA003F5-5329-4376-83D7-0CB9CB9CA674}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BA003F5-5329-4376-83D7-0CB9CB9CA674}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BA003F5-5329-4376-83D7-0CB9CB9CA674}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BA003F5-5329-4376-83D7-0CB9CB9CA674}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9BA96E1-F30B-4C6C-B645-6FA52C3492C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9BA96E1-F30B-4C6C-B645-6FA52C3492C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9BA96E1-F30B-4C6C-B645-6FA52C3492C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9BA96E1-F30B-4C6C-B645-6FA52C3492C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33F56B2F-4A9F-4159-B2D6-A5EFE5634B64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33F56B2F-4A9F-4159-B2D6-A5EFE5634B64}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33F56B2F-4A9F-4159-B2D6-A5EFE5634B64}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33F56B2F-4A9F-4159-B2D6-A5EFE5634B64}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

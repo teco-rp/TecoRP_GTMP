@@ -1,0 +1,30 @@
+﻿@using Microsoft.AspNet.Identity
+
+<div class="demo-drawer mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
+    <header class="demo-drawer-header">
+        <center>
+            <img src="/Content/images/user.png" class="demo-avatar">
+        </center>
+        <div class="demo-avatar-dropdown">
+
+            <a class="mdl-navigation__link mdl-color-text--blue-grey-50" href="@Url.Action("Index", "Manage")">
+
+               <center> <span>@User.Identity.GetUserName()</span> </center>
+            </a>
+            <div class="mdl-layout-spacer"></div>
+
+        </div>
+    </header>
+    <nav class="demo-navigation mdl-navigation mdl-color--blue-grey-800">
+        <a class="mdl-navigation__link" href="@Url.Action("Index","Home",new { Area = "" })"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">home</i>Anasayfa</a>
+        <a class="mdl-navigation__link" href="@Url.Action("MyCharacter", "Home",new { Area = "" })"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">accessibility</i>Karakterim</a>
+        <a class="mdl-navigation__link" href="@Url.Action("Skills", "Home",new { Area = "" })"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">touch_app</i>Yetenekler</a>
+        <a class="mdl-navigation__link" href="@Url.Action("Vehicles", "Home",new { Area = "" })"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">vpn_key</i>Araçlar</a>
+        @if (HttpContext.Current.User.IsInRole("Admin"))
+        {
+            @Html.Partial("_AdminMenu")
+        }
+
+        @Html.Partial("_LoginPartial")
+    </nav>
+</div>

@@ -1,0 +1,57 @@
+﻿@using TecoRP_Web.Models
+@model LoginViewModel
+@{
+    ViewBag.Title = "Log in";
+}
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4 text-center logo-margin ">
+            <img src="assets/img/logo.png" alt="" />
+        </div>
+        <div class="col-md-4 col-md-offset-4">
+            <div class="login-panel panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">@ViewBag.Title</h3>
+                </div>
+                <div class="panel-body">
+               @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+               {
+                @Html.AntiForgeryToken()
+
+                <fieldset>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control",@placeholder="E-mail", @type="email" })
+                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                       
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+                        @Html.PasswordFor(m => m.Password, new { @class = "form-control",@placeholder="Şifre",type="password" })
+                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            @Html.CheckBoxFor(m => m.RememberMe,new { @type="checkbox",@value="Beni Hatırla" })
+                            @Html.LabelFor(m => m.RememberMe)
+                        </label>
+                    </div>
+                    <!-- Change this to a button or input when using this as a form -->
+                    <input type="submit" value="Giriş Yap" class="btn btn-lg btn-success btn-block" />
+                </fieldset>
+                <center> @Html.ActionLink("Hesabınız yok mu?", "Register")</center>
+               }
+                        
+                
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

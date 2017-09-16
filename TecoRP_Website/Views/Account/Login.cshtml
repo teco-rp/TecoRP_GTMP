@@ -1,0 +1,54 @@
+﻿@using TecoRP_Website.Models
+@model LoginViewModel
+@{
+    ViewBag.Title = "Log in";
+}
+
+
+
+            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-horizontal" style="width:100%">
+
+
+                    <div class="demo-cards mdl-cell mdl-cell--8-col mdl-cell--8-col-tablet mdl-grid mdl-grid--no-spacing ">
+                        <div class="demo-updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--12-col-desktop">
+                            <div style="background-image:url(/Content/images/logo-tecorp.png);" class="mdl-card__title mdl-card--expand mdl-color--purple-50">
+
+                            </div>
+                            <div class="mdl-card__supporting-text mdl-color-text--grey-600">
+                                <h1>GİRİŞ</h1>
+                                <hr />
+                                <p>E-Posta:</p>
+                                @Html.TextBoxFor(m => m.Email, new { @class = "mdl-textfield__input text-box single-line" })
+                                @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                                <br />
+                                <p>Şifre:</p>
+                                @Html.PasswordFor(m => m.Password, new { @class = "mdl-textfield__input text-box single-line" })
+                                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                                <br />
+                                @Html.CheckBoxFor(m => m.RememberMe, new { @class = "mdl-checkbox__input" })
+                                <span>Oturumu açık tut</span>
+
+
+
+                            
+                            </div>
+                            <div class="mdl-card__actions mdl-card--border">
+                                <input type="submit" value="GİRİŞ" class="mdl-button mdl-js-button mdl-js-ripple-effect" />
+
+                                @Html.ActionLink("KAYDOL", "Register",null,new { @class= "mdl-button mdl-js-button mdl-js-ripple-effect" })
+                            </div>
+                        </div>
+                        <div class="demo-separator mdl-cell--1-col"></div>
+
+                    </div>
+                </div>
+              
+            }
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Whitelist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <IsEnabled>false</IsEnabled>
+  <User SocialClubName="WatWall">
+    <LastValidateTime>2019-09-05T15:55:55.1012932+03:00</LastValidateTime>
+  </User>
+</Whitelist>

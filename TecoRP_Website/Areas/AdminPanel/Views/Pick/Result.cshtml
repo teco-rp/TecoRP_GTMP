@@ -1,0 +1,25 @@
+﻿@model IEnumerable<TecoRP_Website.Models.AspNetUsers>
+@{
+    ViewBag.Title = "Result";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<table>
+    <tr>
+        <th> Email </th>
+        <th> SocialClubName</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @item.Email
+            </td>
+            <td>
+                @item.SocialClubName
+            </td>
+        </tr>
+    }
+</table>
+
