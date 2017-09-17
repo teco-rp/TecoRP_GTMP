@@ -88,40 +88,10 @@ namespace TecoRP.Managers
                 catch (Exception ex)
                 {
                     API.shared.consoleOutput(LogCat.Fatal, ex.ToString());
-                    goto baslangic;
-                }
-                //foreach (var itemBusiness in db_Businesses.currentBusiness.Item1)
-                //{
-                //    #region BusinessMoney
-                //    try
-                //    {
-                //        if (!String.IsNullOrEmpty(itemBusiness.OwnerSocialClubName) && itemBusiness.IsClosed==false)
-                //        {
-                //            itemBusiness.MinutesPast++;
-                //            if (itemBusiness.MinutesPast % 60 == 0)
-                //            {
-                //                if (itemBusiness.VaultMoney + itemBusiness.MoneyIncomePerHour <= itemBusiness.MaxVaultMoney)
-                //                {
-                //                    itemBusiness.VaultMoney += itemBusiness.MoneyIncomePerHour;
-                //                }
-                //                else
-                //                {
-                //                    itemBusiness.VaultMoney = itemBusiness.MaxVaultMoney;
-                //                }
-                //            }
+                    goto Outside;
+                }             
 
-                //        }
-                //    }
-                //    catch (Exception ex)
-                //    {
-                //        API.shared.consoleOutput(LogCat.Fatal, ex.ToString());
-                //        continue;
-                //    }
-                //    #endregion
-                //}
-                //db_Businesses.SaveChanges();
-
-
+                Outside:
                 await Task.Delay(60000);
                 goto baslangic;
             });

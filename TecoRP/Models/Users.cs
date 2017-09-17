@@ -42,7 +42,7 @@ namespace TecoRP.Models
         public int ArmorLevel { get; set; } = 0;
         public int HealthLevel { get; set; } = 100;
         public bool Jailed { get; set; } = false;
-        public uint? JailedTime { get; set; }
+        public int? JailedTime { get; set; }
         public bool Dead { get; set; } = false;
         public int DeadSeconds { get; set; } = 0;
         public bool Cuffed { get; set; } = false;

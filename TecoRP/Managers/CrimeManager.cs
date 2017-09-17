@@ -32,16 +32,18 @@ namespace TecoRP.Managers
             int factionId = API.getEntityData(sender, "FactionId");
             if (factionId != 1) { API.sendChatMessageToPlayer(sender, "~r~Bunun için polis olmalısınız."); return; }
 
-            var t = Task.Run(()=> {
+            var t = Task.Run(() =>
+            {
 
                 foreach (var item in db_FactionInteractives.currentFactionInteractives.Values)
                 {
-                    if (item.Faction == 1  && Vector3.Distance(item.Position,sender.position) < 4)
+                    if (item.Faction == 1 && Vector3.Distance(item.Position, sender.position) < 4)
                     {
                         Clients.ClientManager.ShowLSPDComputer(sender);
                         return;
                     }
                 }
+                API.sendChatMessageToPlayer(sender, "~r~UYARI: ~s~Bu araçta LSPD bilgisayarı bulunmuyor.");
             });
             if (sender.isInVehicle)
             {
@@ -58,14 +60,14 @@ namespace TecoRP.Managers
             }
             else
             {
-               // API.sendChatMessageToPlayer(sender, "~r~HATA: ~s~Bunun için LSPD bilgisayarı olan bir araçta olmalısın.");
+                // API.sendChatMessageToPlayer(sender, "~r~HATA: ~s~Bunun için LSPD bilgisayarı olan bir araçta olmalısın.");
             }
         }
 
         public static void OnGuiltyListSelected(Client sender)
         {
-            if (sender.isInVehicle)
-            {
+            //if (sender.isInVehicle)
+            //{
                 var guiltyList = db_Crimes.GetAll();
                 if (guiltyList != null)
                 {
@@ -89,13 +91,14 @@ namespace TecoRP.Managers
                     }
 
                     Clients.ClientManager.ShowGuiltyList(sender, names, descs);
-                }
+                return;
+                //}
 
 
             }
             else
             {
-                API.shared.sendChatMessageToPlayer(sender, "~r~Yakınınızda Polis bilgisayarı yok");
+                API.shared.sendChatMessageToPlayer(sender, "~r~Suçlu listesi boş");
             }
         }
 

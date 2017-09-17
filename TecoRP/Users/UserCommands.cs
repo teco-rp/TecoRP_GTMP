@@ -102,14 +102,14 @@ namespace TecoRP.Users
                 }
             }
             API.consoleOutput("PLAYER CONNECTED ID : " + API.getEntityData(player, "ID"));
-         
+
             #endregion
 
             RPGManager.CreatePlayerTalkLabel(player);
         }
         private void API_onPlayerFinishedDownload(Client player)
         {
-            API.consoleOutput("ONPLAYERFINISHEDDOWNLOAD "+player.socialClubName);
+            API.consoleOutput("ONPLAYERFINISHEDDOWNLOAD " + player.socialClubName);
             API.shared.setEntityData(player, "FINISHED_DOWNLOAD", true);
             if (!db_Accounts.DoesAccountExist(player.socialClubName))
             {
@@ -260,7 +260,7 @@ namespace TecoRP.Users
 
         private void API_onPlayerDisconnected(Client player, string reason)
         {
-            if(API.hasEntityData(player, "LOGGED_IN") && Convert.ToBoolean(API.getEntityData(player, "LOGGED_IN")))
+            if (API.hasEntityData(player, "LOGGED_IN") && Convert.ToBoolean(API.getEntityData(player, "LOGGED_IN")))
             {
                 lock (player)
                 {
@@ -276,8 +276,8 @@ namespace TecoRP.Users
                     }
                     catch (Exception ex)
                     {
-                        API.shared.consoleOutput("Player Save Hatası."+ex.ToString());
-                    } 
+                        API.shared.consoleOutput("Player Save Hatası." + ex.ToString());
+                    }
                 }
             }
         }
@@ -297,9 +297,11 @@ namespace TecoRP.Users
             }
         }
 
-        [Command("otur","/otur [1-6]")]
+        [Command("otur", "/otur [1-6]")]
         public void SitAnimation(Client sender, int anim)
         {
+            if (!Animation.IsPlayerAvailableForAnim(sender))
+                return;
             if (!sender.isInVehicle)
             {
                 switch (anim)
@@ -320,7 +322,7 @@ namespace TecoRP.Users
                         API.playPlayerAnimation(sender, 1, "switch@michael@sitting", "idle");
                         break;
                     case 6:
-                        API.playPlayerAnimation(sender,1, "mp_army_contact", "idle");
+                        API.playPlayerAnimation(sender, 1, "mp_army_contact", "idle");
                         break;
                     default:
                         break;
@@ -473,6 +475,8 @@ namespace TecoRP.Users
                     "~y~USAGE: ~w~/anim stop - Animsyonu durdurmak için.")]
         public void SetPlayerAnim(Client sender, string animation)
         {
+            if (!Animation.IsPlayerAvailableForAnim(sender))
+                return;
             if (animation == "list")
             {
                 string helpText = AnimationList.Aggregate(new StringBuilder(),
@@ -500,7 +504,7 @@ namespace TecoRP.Users
             }
             else if (animation == "stop")
             {
-                if (API.hasEntityData(sender, "Cuffed") ||  API.hasEntityData(sender, "Cuffed") == true)
+                if (API.hasEntityData(sender, "Cuffed") || API.hasEntityData(sender, "Cuffed") == true)
                 {
                     API.sendChatMessageToPlayer(sender, "~r~HATA: ~s~Kelepçeliyken bunu yapamazsınız.");
                     return;
@@ -530,7 +534,7 @@ namespace TecoRP.Users
         public void Handsup(Client sender)
         {
             API.setEntityData(sender, "Handsup", true);
-            API.playPlayerAnimation(sender,(int)(AnimationFlags.Loop | AnimationFlags.OnlyAnimateUpperBody | AnimationFlags.AllowPlayerControl ), "missminuteman_1ig_2", "handsup_base");
+            API.playPlayerAnimation(sender, (int)(AnimationFlags.Loop | AnimationFlags.OnlyAnimateUpperBody | AnimationFlags.AllowPlayerControl), "missminuteman_1ig_2", "handsup_base");
         }
 
         [Command("satinal", "/satinal")]

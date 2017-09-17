@@ -82,25 +82,29 @@ namespace TecoRP.Managers
                 var _tableModel = db_Craftings.GetCraftingTableModel(craftingModelID);
                 var crafting = _tableModel.Craftings[index];
                 API.shared.consoleOutput(crafting.ToString() + "  " + db_Items.GetItemById(crafting.CraftedGameItemId).Name);
-                if (crafting.RequiredMetalPart > InventoryManager.GetPlayerMetalParts(sender)) { API.shared.sendChatMessageToPlayer(sender,"~r~UYARI: ~s~Bu üretim için yeterli metal parçanız bulunmuyor."); return; }
-                    foreach (var item in crafting.RequredItemIds)
-                    {
-                        API.shared.consoleOutput(InventoryManager.DoesPlayerHasItemById(sender, item).ToString());
-                        if (!InventoryManager.DoesPlayerHasItemById(sender, item))
-                        {
-                            API.shared.sendChatMessageToPlayer(sender, "~r~UYARI: ~s~Bu eşyayı üretmek için üzerinizde yeterli eşya bulunmuyor.");
-                            return;
-                        }
-                    }
-
+                if (crafting.RequiredMetalPart > InventoryManager.GetPlayerMetalParts(sender)) { API.shared.sendChatMessageToPlayer(sender, "~r~UYARI: ~s~Bu üretim için yeterli metal parçanız bulunmuyor."); return; }
                 foreach (var item in crafting.RequredItemIds)
                 {
-                    InventoryManager.RemoveItemFromPlayerInventory(sender, item);
+                    API.shared.consoleOutput(InventoryManager.DoesPlayerHasItemById(sender, item).ToString());
+                    if (!InventoryManager.DoesPlayerHasItemById(sender, item))
+                    {
+                        API.shared.sendChatMessageToPlayer(sender, "~r~UYARI: ~s~Bu eşyayı üretmek için üzerinizde yeterli eşya bulunmuyor.");
+                        return;
+                    }
                 }
-                InventoryManager.AddMetalPartsToPlayer(sender, -1 * crafting.RequiredMetalPart);
-                InventoryManager.AddItemToPlayerInventory(sender, new Models.ClientItem { Count = 1, Equipped = false, ItemId = crafting.CraftedGameItemId });
-                API.shared.sendChatMessageToPlayer(sender,"~g~BAŞARILI: ~s~Üretimi başarıyla tamamladınız.");
-                JobManager.PlayerJobComplete(sender, crafting.RequiredJob);
+
+                if (InventoryManager.AddItemToPlayerInventory(sender, new Models.ClientItem { Count = 1, Equipped = false, ItemId = crafting.CraftedGameItemId }))
+                {
+                    foreach (var item in crafting.RequredItemIds)
+                    {
+                        InventoryManager.RemoveItemFromPlayerInventory(sender, item);
+                    }
+                    InventoryManager.AddMetalPartsToPlayer(sender, -1 * crafting.RequiredMetalPart);
+                    API.shared.sendChatMessageToPlayer(sender, "~g~BAŞARILI: ~s~Üretimi başarıyla tamamladınız.");
+                    JobManager.PlayerJobComplete(sender, crafting.RequiredJob);
+                    return;
+                }
+                API.shared.sendChatMessageToPlayer(sender, "~r~HATA: ~e~Envanterinizde bu eşya için yetrli yer yok.");
             }
             catch (Exception ex)
             {

@@ -234,9 +234,11 @@ namespace TecoRP.Users
             if (Vector3.Distance(sender.position, player.position) < 5)
             {
                 API.setEntityData(player, "Dead", false);
+                API.resetEntityData(player, "firstAided");
+                API.shared.resetEntityData(player, "DeadSeconds");
+
                 Clients.ClientManager.RemoveBlip(sender);
                 API.stopPlayerAnimation(player);
-                API.resetEntityData(player, "firstAided");
                 RespawnPlayer(player,false);
             }
             else
