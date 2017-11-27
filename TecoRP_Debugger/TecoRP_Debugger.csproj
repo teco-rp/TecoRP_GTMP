@@ -56,6 +56,10 @@
     <Reference Include="TecoRP">
       <HintPath>..\TecoRP\bin\Debug\TecoRP.dll</HintPath>
     </Reference>
+    <Reference Include="TecoRP_BugReporter, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\TecoRP_BugReporter\bin\Debug\TecoRP_BugReporter.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\Answers.cs">

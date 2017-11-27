@@ -111,6 +111,7 @@ namespace TecoRP.Database
             catch (Exception ex)
             {
                 API.shared.consoleOutput(LogCat.Fatal, $"LoadPlayerData | {player.socialClubName} | {API.shared.getEntityData(player,"ID")} | {ex.ToString()}");
+           
             }
 
             try

@@ -1,4 +1,5 @@
 ﻿using GrandTheftMultiplayer.Server.API;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TecoRP.Database;
@@ -11,37 +12,38 @@ namespace TecoRP.Managers
         public static List<GrandTheftMultiplayer.Server.Elements.Object> ObjectsOnMap = new List<GrandTheftMultiplayer.Server.Elements.Object>();
         public GameObjectsManager()
         {
+            //206x110
             foreach (var item in db_Objects.currentObjectList.Items)
             {
                 ObjectsOnMap.Add(API.createObject(item.ModelId, item.FirstPosition, item.Rotation, item.Dimension));
-            }   
+            }
             InitIPLs();
 
-            Task.Run(() => { db_Items.InitGameItems(); }).ContinueWith(async(t) => 
+            Task.Run(() => { db_Items.InitGameItems(); }).ContinueWith(async (t) =>
             {
                 await t;
                 db_Items.InitDropped();
             });
-            Task.Run(() => { db_Craftings.Init(); }).ContinueWith(async(t)=> 
+            Task.Run(() => { db_Craftings.Init(); }).ContinueWith(async (t) =>
             {
                 await t;
                 db_Craftings.SpawnAll();
-            }); 
-            Task.Run(()=> { db_Vehicles.SpawnAll();});
-            Task.Run(()=> { db_Buildings.SpawnAll(); });
-            Task.Run(()=> { db_FactionVaults.SpawnAll(); });
-            Task.Run(()=> { db_Jobs.SpawnAll(); });
-            Task.Run(()=> { db_GasStations.SpawnAll(); });
-            Task.Run(()=> { db_BusJob.Init(); });
-            Task.Run(()=> { db_Arrests.Init(); });
-            Task.Run(()=> { db_PhoneOperatorShop.SpawnAll(); });
-            Task.Run(()=> { db_Banks.SpawnAll(); });
-            Task.Run(()=> { db_TirJob.Init(); });
-            Task.Run(()=> { db_KamyonJob.Init(); });
-            Task.Run(()=> { db_Businesses.SpawnAll(); });
+            });
+            Task.Run(() => { db_Vehicles.SpawnAll(); });
+            Task.Run(() => { db_Buildings.SpawnAll(); });
+            Task.Run(() => { db_FactionVaults.SpawnAll(); });
+            Task.Run(() => { db_Jobs.SpawnAll(); });
+            Task.Run(() => { db_GasStations.SpawnAll(); });
+            Task.Run(() => { db_BusJob.Init(); });
+            Task.Run(() => { db_Arrests.Init(); });
+            Task.Run(() => { db_PhoneOperatorShop.SpawnAll(); });
+            Task.Run(() => { db_Banks.SpawnAll(); });
+            Task.Run(() => { db_TirJob.Init(); });
+            Task.Run(() => { db_KamyonJob.Init(); });
+            Task.Run(() => { db_Businesses.SpawnAll(); });
             Task.Run(() => { db_LicensePoints.SpawnAll(); });
-            Task.Run(()=> { db_Hospital.ReadData(); });
-            Task.Run(()=> { db_FactionInteractives.SpawnAll(); });
+            Task.Run(() => { db_Hospital.ReadData(); });
+            Task.Run(() => { db_FactionInteractives.SpawnAll(); });
             db_FactionRanks.InitRanks();
             // GetAllIPLSs();
         }
@@ -8288,7 +8290,7 @@ namespace TecoRP.Managers
            "v_tunnel_hole_swap_lod                                                                   ",
            "woccl_city_00                                                                            ",
            //"yogagame                                                                                 ",
-        }; 
+        };
         #endregion
     }
 }

@@ -23,13 +23,12 @@ namespace TecoRP.Managers
         {
 
             API.onClientEventTrigger += API_onClientEventTrigger;
+            
             API.onPlayerExitVehicle += API_onPlayerExitVehicle;
             API.onPlayerEnterVehicle += API_onPlayerEnterVehicle;
-            API.onPlayerEnterVehicle += API_onPlayerEnterVehicle1;
             API.onVehicleDoorBreak += API_onVehicleDoorBreak;
             VehicleSpawn();
         }
-
 
         ~VehicleManager()
         {
@@ -169,7 +168,7 @@ namespace TecoRP.Managers
             }
         }
 
-        private void API_onPlayerEnterVehicle(Client player, GrandTheftMultiplayer.Shared.NetHandle vehicle)
+        private void API_onPlayerEnterVehicle(Client player, GrandTheftMultiplayer.Shared.NetHandle vehicle,int seat)
         {
             foreach (var item in db_SaleVehicles.currentSaleVehicleList.Items)
             {
@@ -179,7 +178,7 @@ namespace TecoRP.Managers
                 }
             }
         }
-        private void API_onPlayerExitVehicle(Client player, NetHandle vehicle)
+        private void API_onPlayerExitVehicle(Client player, NetHandle vehicle,int seat)
         {
             player.seatbelt = false;
         }
