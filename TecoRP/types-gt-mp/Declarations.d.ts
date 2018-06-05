@@ -3,12 +3,14 @@
 declare const API: GrandTheftMultiplayer.Client.Javascript.ScriptContext;
 declare const host: Microsoft.ClearScript.HostFunctions;
 import Keys = System.Windows.Forms.Keys;
+import Control = GTA.Control;
 import Point = System.Drawing.Point;
 import PointF = System.Drawing.PointF;
 import Size = System.Drawing.Size;
-import LocalHandle = GrandTheftMultiplayer.Client.Util.LocalHandle;
+import LocalHandle = GrandTheftMultiplayer.Client.Models.LocalHandle;
 import menuControl = NativeUI.UIMenu.MenuControls;
 import Vector3 = GrandTheftMultiplayer.Shared.Math.Vector3;
+import BadgeStyle = NativeUI.UIMenuItem.BadgeStyle;
 
 declare var resource: any;
 

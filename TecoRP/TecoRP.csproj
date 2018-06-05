@@ -33,11 +33,11 @@
     <Reference Include="BCrypt.Net, Version=0.1.5073.29922, Culture=neutral, PublicKeyToken=6bcd409ee6bc9292, processorArchitecture=MSIL">
       <HintPath>..\packages\BCrypt-Official.0.1.109\lib\BCrypt.Net.dll</HintPath>
     </Reference>
-    <Reference Include="GrandTheftMultiplayer.Server, Version=0.1.640.64, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\grandtheftmultiplayer.api.0.1.640.64\lib\net452\GrandTheftMultiplayer.Server.exe</HintPath>
+    <Reference Include="GrandTheftMultiplayer.Server, Version=0.1.798.595, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\grandtheftmultiplayer.api.0.1.798.595\lib\net452\GrandTheftMultiplayer.Server.exe</HintPath>
     </Reference>
     <Reference Include="GrandTheftMultiplayer.Shared, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\grandtheftmultiplayer.api.0.1.640.64\lib\net452\GrandTheftMultiplayer.Shared.dll</HintPath>
+      <HintPath>..\packages\grandtheftmultiplayer.api.0.1.798.595\lib\net452\GrandTheftMultiplayer.Shared.dll</HintPath>
     </Reference>
     <Reference Include="ModelMixer">
       <HintPath>C:\Users\docto\source\repos\ModelMixer\ModelMixer\bin\Debug\ModelMixer.dll</HintPath>
@@ -197,14 +197,14 @@
   <ItemGroup>
     <TypeScriptCompile Include="Client.ts" />
     <TypeScriptCompile Include="types-gt-mp\Declarations.d.ts" />
-    <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Client.GUI.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Client.Contracts.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Client.GUI.CEF.d.ts" />
     <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Client.Javascript.d.ts" />
     <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Client.Javascript.ScriptContext.d.ts" />
-    <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Client.Misc.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Client.Models.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Client.Models.Game.d.ts" />
     <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Client.Sound.d.ts" />
-    <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Client.Streamer.d.ts" />
     <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Client.Sync.d.ts" />
-    <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Client.Util.d.ts" />
     <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Shared.d.ts" />
     <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Shared.Math.d.ts" />
     <TypeScriptCompile Include="types-gt-mp\GTA.d.ts" />
@@ -216,6 +216,7 @@
     <TypeScriptCompile Include="types-gt-mp\Microsoft.ClearScript.d.ts" />
     <TypeScriptCompile Include="types-gt-mp\NativeUI.d.ts" />
     <TypeScriptCompile Include="types-gt-mp\NativeUI.UIMenu.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\NativeUI.UIMenuDynamicListItem.d.ts" />
     <TypeScriptCompile Include="types-gt-mp\NativeUI.UIMenuItem.d.ts" />
     <TypeScriptCompile Include="types-gt-mp\NativeUI.UIResText.d.ts" />
     <TypeScriptCompile Include="types-gt-mp\System.Collections.d.ts" />

@@ -23,7 +23,8 @@
 		Tatoo = 19,
 		Trevor = 20,
 		Lock = 21,
-		Tick = 22
+		Tick = 22,
+		Sale = 23
 	}
 
 }

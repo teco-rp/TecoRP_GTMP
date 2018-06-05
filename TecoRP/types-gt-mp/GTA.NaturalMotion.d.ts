@@ -593,7 +593,7 @@
 		LegCuffs: boolean;
 		RightDominant: boolean;
 		PassiveMode: number;
-		BespokeBehaviour: boolean;
+		BespokeBehavior: boolean;
 		Blend2ZeroPose: number;
 		constructor(ped: GTA.Ped);
 	}
@@ -738,7 +738,7 @@
 		readonly FireWeapon: GTA.NaturalMotion.FireWeaponHelper;
 		readonly ConfigureConstraints: GTA.NaturalMotion.ConfigureConstraintsHelper;
 		readonly StayUpright: GTA.NaturalMotion.StayUprightHelper;
-		readonly StopAllBehaviours: GTA.NaturalMotion.StopAllBehavioursHelper;
+		readonly StopAllBehaviors: GTA.NaturalMotion.StopAllBehaviorsHelper;
 		readonly SetCharacterStrength: GTA.NaturalMotion.SetCharacterStrengthHelper;
 		readonly SetCharacterHealth: GTA.NaturalMotion.SetCharacterHealthHelper;
 		readonly SetFallingReaction: GTA.NaturalMotion.SetFallingReactionHelper;
@@ -1722,7 +1722,7 @@
 		constructor(ped: GTA.Ped);
 	}
 
-	class StopAllBehavioursHelper {
+	class StopAllBehaviorsHelper {
 		constructor(ped: GTA.Ped);
 	}
 

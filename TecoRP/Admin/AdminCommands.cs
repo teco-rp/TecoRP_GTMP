@@ -993,7 +993,9 @@ namespace TecoRP.Admin
                 {
                     if (API.getEntityData(item, "ID") == Convert.ToInt32(targetPlayer))
                     {
-                        API.givePlayerWeapon(item, API.weaponNameToModel(value), 99999, false, false);
+                        //OLD
+                        //API.givePlayerWeapon(item, API.weaponNameToModel(value), 99999, false, false);
+                        API.givePlayerWeapon(item, API.weaponNameToModel(value), 99999, false);
                     }
                 }
             }

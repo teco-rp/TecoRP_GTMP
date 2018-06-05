@@ -1,4 +1,4 @@
-﻿declare namespace GrandTheftMultiplayer.Client.Misc {
+﻿declare namespace GrandTheftMultiplayer.Client.Models.Game {
 
 	class ModelDimensions {
 		Maximum: GrandTheftMultiplayer.Shared.Math.Vector3;

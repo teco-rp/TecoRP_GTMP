@@ -285,7 +285,9 @@ namespace TecoRP.Managers
                         }
                         var _WeaponSpecified = String.IsNullOrEmpty(usedItemInInventory.SpecifiedValue) ? new SpecifiedValueWeapon { Ammo = Convert.ToInt32(usedItem.Value_1), WeaponTint = WeaponTint.Normal } : (SpecifiedValueWeapon)API.fromJson(usedItemInInventory.SpecifiedValue).ToObject<SpecifiedValueWeapon>();
                         API.removeAllPlayerWeapons(sender);
-                        API.givePlayerWeapon(sender, API.weaponNameToModel(usedItem.Value_0), (_WeaponSpecified.Ammo < Convert.ToInt32(usedItem.Value_1) ? Convert.ToInt32(usedItem.Value_1) : _WeaponSpecified.Ammo), true, true);
+                        //OLD
+                        //API.givePlayerWeapon(sender, API.weaponNameToModel(usedItem.Value_0), (_WeaponSpecified.Ammo < Convert.ToInt32(usedItem.Value_1) ? Convert.ToInt32(usedItem.Value_1) : _WeaponSpecified.Ammo), true, true);
+                        API.givePlayerWeapon(sender, API.weaponNameToModel(usedItem.Value_0), (_WeaponSpecified.Ammo < Convert.ToInt32(usedItem.Value_1) ? Convert.ToInt32(usedItem.Value_1) : _WeaponSpecified.Ammo), true);
                         API.setPlayerWeaponTint(sender, API.weaponNameToModel(usedItem.Value_0), _WeaponSpecified.WeaponTint);
                         API.setEntityData(sender, "inventory", _inventory);
                         #endregion
@@ -1356,9 +1358,10 @@ namespace TecoRP.Managers
                                 break;
                             case ItemType.Weapon:
                                 SpecifiedValueWeapon _weaponSpec = String.IsNullOrEmpty(item.SpecifiedValue) ? new SpecifiedValueWeapon { Ammo = 0, WeaponTint = WeaponTint.Normal } : (SpecifiedValueWeapon)API.shared.fromJson(item.SpecifiedValue).ToObject<SpecifiedValueWeapon>();
-                                API.shared.givePlayerWeapon(sender, API.shared.weaponNameToModel(gameItem.Value_0), _weaponSpec.Ammo, true, true);
+                                //OLD
+                                //API.shared.givePlayerWeapon(sender, API.shared.weaponNameToModel(gameItem.Value_0), _weaponSpec.Ammo, true, true);
+                                API.shared.givePlayerWeapon(sender, API.shared.weaponNameToModel(gameItem.Value_0), _weaponSpec.Ammo, true);
                                 API.shared.setPlayerWeaponTint(sender, API.shared.getPlayerWeapons(sender).FirstOrDefault(), _weaponSpec.WeaponTint);
-
                                 break;
                             case ItemType.License:
                                 #region Rozet

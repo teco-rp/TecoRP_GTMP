@@ -29,9 +29,8 @@
 		IsShortRange: boolean;
 		constructor(handle: number);
 		RemoveNumberLabel(): void;
-		Remove(): void;
+		Delete(): void;
 		Exists(): boolean;
-		Exists(blip: GTA.Blip): boolean;
 		Equals(blip: GTA.Blip): boolean;
 		Equals(obj: any): boolean;
 		GetHashCode(): number;
@@ -42,6 +41,9 @@
 		Red = 1,
 		Green = 2,
 		Blue = 3,
+		MichaelBlue = 42,
+		FranklinGreen = 43,
+		TrevorOrange = 44,
 		Yellow = 66
 	}
 
@@ -266,6 +268,8 @@
 		SKEL_L_Calf = 63931,
 		SKEL_L_Foot = 14201,
 		SKEL_L_Toe0 = 2108,
+		EO_L_Foot = 33989,
+		EO_L_Toe = 26813,
 		IK_L_Foot = 65245,
 		PH_L_Foot = 57717,
 		MH_L_Knee = 46078,
@@ -273,6 +277,8 @@
 		SKEL_R_Calf = 36864,
 		SKEL_R_Foot = 52301,
 		SKEL_R_Toe0 = 20781,
+		EO_R_Foot = 4246,
+		EO_R_Toe = 29027,
 		IK_R_Foot = 35502,
 		PH_R_Foot = 24806,
 		MH_R_Knee = 16335,
@@ -357,14 +363,276 @@
 		FB_R_Lip_Bot_000 = 49979,
 		FB_Tongue_000 = 47495,
 		RB_Neck_1 = 35731,
-		IK_Root = 56604
+		SPR_L_Breast = 64654,
+		SPR_R_Breast = 34911,
+		IK_Root = 56604,
+		SKEL_Neck_2 = 24532,
+		SKEL_Pelvis1 = 53251,
+		SKEL_PelvisRoot = 17916,
+		SKEL_SADDLE = 38180,
+		MH_L_CalfBack = 4115,
+		MH_L_ThighBack = 24589,
+		SM_L_Skirt = 50201,
+		MH_R_CalfBack = 45075,
+		MH_R_ThighBack = 20899,
+		SM_R_Skirt = 30482,
+		SM_M_BackSkirtRoll = 3515,
+		SM_L_BackSkirtRoll = 16562,
+		SM_R_BackSkirtRoll = 49473,
+		SM_M_FrontSkirtRoll = 52667,
+		SM_L_FrontSkirtRoll = 39785,
+		SM_R_FrontSkirtRoll = 34545,
+		SM_CockNBalls_ROOT = 50813,
+		SM_CockNBalls = 40244,
+		MH_L_Finger00 = 35939,
+		MH_L_FingerBulge00 = 24504,
+		MH_L_Finger10 = 35923,
+		MH_L_FingerTop00 = 41540,
+		MH_L_HandSide = 51082,
+		MH_Watch = 10040,
+		MH_L_Sleeve = 37692,
+		MH_R_Finger00 = 11363,
+		MH_R_FingerBulge00 = 27064,
+		MH_R_Finger10 = 11347,
+		MH_R_FingerTop00 = 61259,
+		MH_R_HandSide = 26875,
+		MH_R_Sleeve = 37596,
+		FACIAL_jaw = 2849,
+		FACIAL_underChin = 35477,
+		FACIAL_L_underChin = 9038,
+		FACIAL_chin = 46456,
+		FACIAL_chinSkinBottom = 39100,
+		FACIAL_L_chinSkinBottom = 16015,
+		FACIAL_R_chinSkinBottom = 40591,
+		FACIAL_tongueA = 19068,
+		FACIAL_tongueB = 19069,
+		FACIAL_tongueC = 19070,
+		FACIAL_tongueD = 19071,
+		FACIAL_tongueE = 19072,
+		FACIAL_L_tongueE = 13810,
+		FACIAL_R_tongueE = 12274,
+		FACIAL_L_tongueD = 13809,
+		FACIAL_R_tongueD = 12273,
+		FACIAL_L_tongueC = 13808,
+		FACIAL_R_tongueC = 12272,
+		FACIAL_L_tongueB = 13807,
+		FACIAL_R_tongueB = 12271,
+		FACIAL_L_tongueA = 13806,
+		FACIAL_R_tongueA = 12270,
+		FACIAL_chinSkinTop = 29222,
+		FACIAL_L_chinSkinTop = 16051,
+		FACIAL_chinSkinMid = 35226,
+		FACIAL_L_chinSkinMid = 17447,
+		FACIAL_L_chinSide = 19038,
+		FACIAL_R_chinSkinMid = 62895,
+		FACIAL_R_chinSkinTop = 61499,
+		FACIAL_R_chinSide = 43614,
+		FACIAL_R_underChin = 11252,
+		FACIAL_L_lipLowerSDK = 47585,
+		FACIAL_L_lipLowerAnalog = 9290,
+		FACIAL_L_lipLowerThicknessV = 51017,
+		FACIAL_L_lipLowerThicknessH = 50811,
+		FACIAL_lipLowerSDK = 29317,
+		FACIAL_lipLowerAnalog = 55675,
+		FACIAL_lipLowerThicknessV = 50619,
+		FACIAL_lipLowerThicknessH = 50669,
+		FACIAL_R_lipLowerSDK = 41012,
+		FACIAL_R_lipLowerAnalog = 49881,
+		FACIAL_R_lipLowerThicknessV = 50921,
+		FACIAL_R_lipLowerThicknessH = 50907,
+		FACIAL_nose = 8433,
+		FACIAL_L_nostril = 29474,
+		FACIAL_L_nostrilThickness = 49503,
+		FACIAL_noseLower = 57434,
+		FACIAL_L_noseLowerThickness = 31189,
+		FACIAL_R_noseLowerThickness = 31093,
+		FACIAL_noseTip = 27232,
+		FACIAL_R_nostril = 31010,
+		FACIAL_R_nostrilThickness = 14079,
+		FACIAL_noseUpper = 41039,
+		FACIAL_L_noseUpper = 8120,
+		FACIAL_noseBridge = 39843,
+		FACIAL_L_nasolabialFurrow = 23242,
+		FACIAL_L_nasolabialBulge = 52600,
+		FACIAL_L_cheekLower = 26887,
+		FACIAL_L_cheekLowerBulge1 = 58363,
+		FACIAL_L_cheekLowerBulge2 = 58364,
+		FACIAL_L_cheekInner = 59307,
+		FACIAL_L_cheekOuter = 33121,
+		FACIAL_L_eyesackLower = 30491,
+		FACIAL_L_eyeball = 5956,
+		FACIAL_L_eyelidLower = 39308,
+		FACIAL_L_eyelidLowerOuterSDK = 65100,
+		FACIAL_L_eyelidLowerOuterAnalog = 47530,
+		FACIAL_L_eyelashLowerOuter = 55286,
+		FACIAL_L_eyelidLowerInnerSDK = 61777,
+		FACIAL_L_eyelidLowerInnerAnalog = 33346,
+		FACIAL_L_eyelashLowerInner = 19663,
+		FACIAL_L_eyelidUpper = 38849,
+		FACIAL_L_eyelidUpperOuterSDK = 44821,
+		FACIAL_L_eyelidUpperOuterAnalog = 26618,
+		FACIAL_L_eyelashUpperOuter = 10167,
+		FACIAL_L_eyelidUpperInnerSDK = 54081,
+		FACIAL_L_eyelidUpperInnerAnalog = 61586,
+		FACIAL_L_eyelashUpperInner = 39711,
+		FACIAL_L_eyesackUpperOuterBulge = 42329,
+		FACIAL_L_eyesackUpperInnerBulge = 12074,
+		FACIAL_L_eyesackUpperOuterFurrow = 50583,
+		FACIAL_L_eyesackUpperInnerFurrow = 21159,
+		FACIAL_forehead = 37400,
+		FACIAL_L_foreheadInner = 2115,
+		FACIAL_L_foreheadInnerBulge = 30332,
+		FACIAL_L_foreheadOuter = 36299,
+		FACIAL_skull = 16929,
+		FACIAL_foreheadUpper = 63446,
+		FACIAL_L_foreheadUpperInner = 53011,
+		FACIAL_L_foreheadUpperOuter = 20635,
+		FACIAL_R_foreheadUpperInner = 52979,
+		FACIAL_R_foreheadUpperOuter = 20603,
+		FACIAL_L_temple = 44921,
+		FACIAL_L_ear = 6621,
+		FACIAL_L_earLower = 24625,
+		FACIAL_L_masseter = 10256,
+		FACIAL_L_jawRecess = 40058,
+		FACIAL_L_cheekOuterSkin = 5285,
+		FACIAL_R_cheekLower = 62311,
+		FACIAL_R_cheekLowerBulge1 = 22939,
+		FACIAL_R_cheekLowerBulge2 = 22940,
+		FACIAL_R_masseter = 2064,
+		FACIAL_R_jawRecess = 37844,
+		FACIAL_R_ear = 4407,
+		FACIAL_R_earLower = 32817,
+		FACIAL_R_eyesackLower = 30587,
+		FACIAL_R_nasolabialBulge = 54814,
+		FACIAL_R_cheekOuter = 3378,
+		FACIAL_R_cheekInner = 29564,
+		FACIAL_R_noseUpper = 7382,
+		FACIAL_R_foreheadInner = 3651,
+		FACIAL_R_foreheadInnerBulge = 30364,
+		FACIAL_R_foreheadOuter = 36811,
+		FACIAL_R_cheekOuterSkin = 45876,
+		FACIAL_R_eyesackUpperInnerFurrow = 40878,
+		FACIAL_R_eyesackUpperOuterFurrow = 5135,
+		FACIAL_R_eyesackUpperInnerBulge = 41817,
+		FACIAL_R_eyesackUpperOuterBulge = 6905,
+		FACIAL_R_nasolabialFurrow = 11434,
+		FACIAL_R_temple = 44825,
+		FACIAL_R_eyeball = 6468,
+		FACIAL_R_eyelidUpper = 32276,
+		FACIAL_R_eyelidUpperOuterSDK = 45333,
+		FACIAL_R_eyelidUpperOuterAnalog = 62042,
+		FACIAL_R_eyelashUpperOuter = 3594,
+		FACIAL_R_eyelidUpperInnerSDK = 54593,
+		FACIAL_R_eyelidUpperInnerAnalog = 31843,
+		FACIAL_R_eyelashUpperInner = 33138,
+		FACIAL_R_eyelidLower = 32735,
+		FACIAL_R_eyelidLowerOuterSDK = 445,
+		FACIAL_R_eyelidLowerOuterAnalog = 17787,
+		FACIAL_R_eyelashLowerOuter = 48713,
+		FACIAL_R_eyelidLowerInnerSDK = 62289,
+		FACIAL_R_eyelidLowerInnerAnalog = 3603,
+		FACIAL_R_eyelashLowerInner = 13090,
+		FACIAL_L_lipUpperSDK = 36656,
+		FACIAL_L_lipUpperAnalog = 45519,
+		FACIAL_L_lipUpperThicknessH = 14286,
+		FACIAL_L_lipUpperThicknessV = 14524,
+		FACIAL_lipUpperSDK = 6004,
+		FACIAL_lipUpperAnalog = 57444,
+		FACIAL_lipUpperThicknessH = 31123,
+		FACIAL_lipUpperThicknessV = 31105,
+		FACIAL_L_lipCornerSDK = 2844,
+		FACIAL_L_lipCornerAnalog = 58728,
+		FACIAL_L_lipCornerThicknessUpper = 1980,
+		FACIAL_L_lipCornerThicknessLower = 56642,
+		FACIAL_R_lipUpperSDK = 30083,
+		FACIAL_R_lipUpperAnalog = 20943,
+		FACIAL_R_lipUpperThicknessH = 14382,
+		FACIAL_R_lipUpperThicknessV = 14428,
+		FACIAL_R_lipCornerSDK = 2876,
+		FACIAL_R_lipCornerAnalog = 60942,
+		FACIAL_R_lipCornerThicknessUpper = 21699,
+		FACIAL_R_lipCornerThicknessLower = 11194,
+		MH_MulletRoot = 15987,
+		MH_MulletScaler = 41410,
+		MH_Hair_Scale = 50788,
+		MH_Hair_Crown = 5749,
+		SM_Torch = 2262,
+		FX_Light = 35161,
+		FX_Light_Scale = 20536,
+		FX_Light_Switch = 57742,
+		BagRoot = 44297,
+		BagPivotROOT = 47158,
+		BagPivot = 19729,
+		BagBody = 43885,
+		BagBone_R = 2359,
+		BagBone_L = 2449,
+		SM_LifeSaver_Front = 37920,
+		SM_R_Pouches_ROOT = 10594,
+		SM_R_Pouches = 16705,
+		SM_L_Pouches_ROOT = 10754,
+		SM_L_Pouches = 19265,
+		SM_Suit_Back_Flapper = 55853,
+		SPR_CopRadio = 33349,
+		SM_LifeSaver_Back = 8487,
+		MH_BlushSlider = 41166,
+		SKEL_Tail_01 = 839,
+		SKEL_Tail_02 = 840,
+		MH_L_Concertina_B = 51592,
+		MH_L_Concertina_A = 51591,
+		MH_R_Concertina_B = 51432,
+		MH_R_Concertina_A = 51431,
+		MH_L_ShoulderBladeRoot = 34577,
+		MH_L_ShoulderBlade = 20143,
+		MH_R_ShoulderBladeRoot = 14858,
+		MH_R_ShoulderBlade = 21679,
+		FB_R_Ear_000 = 27871,
+		SPR_R_Ear = 25526,
+		FB_L_Ear_000 = 25657,
+		SPR_L_Ear = 23312,
+		FB_TongueA_000 = 16902,
+		FB_TongueB_000 = 16903,
+		FB_TongueC_000 = 16904,
+		SKEL_L_Toe1 = 7531,
+		SKEL_R_Toe1 = 45631,
+		SKEL_Tail_03 = 841,
+		SKEL_Tail_04 = 842,
+		SKEL_Tail_05 = 843,
+		SPR_Gonads_ROOT = 49118,
+		SPR_Gonads = 7168,
+		FB_L_Brow_Out_001 = 58331,
+		FB_L_Lid_Upper_001 = 45750,
+		FB_L_Eye_001 = 25260,
+		FB_L_CheekBone_001 = 21550,
+		FB_L_Lip_Corner_001 = 29868,
+		FB_R_Lid_Upper_001 = 43536,
+		FB_R_Eye_001 = 27474,
+		FB_R_CheekBone_001 = 19336,
+		FB_R_Brow_Out_001 = 1356,
+		FB_R_Lip_Corner_001 = 11174,
+		FB_Brow_Centre_001 = 37193,
+		FB_UpperLipRoot_001 = 20178,
+		FB_UpperLip_001 = 61839,
+		FB_L_Lip_Top_001 = 20279,
+		FB_R_Lip_Top_001 = 17719,
+		FB_Jaw_001 = 46240,
+		FB_LowerLipRoot_001 = 17188,
+		FB_LowerLip_001 = 20623,
+		FB_L_Lip_Bot_001 = 47419,
+		FB_R_Lip_Bot_001 = 49979,
+		FB_Tongue_001 = 47495
 	}
 
 	class Camera {
+		readonly MemoryAddress: any;
+		readonly MatrixAddress: any;
 		IsActive: boolean;
 		Position: GTA.Math.Vector3;
 		Rotation: GTA.Math.Vector3;
 		Direction: GTA.Math.Vector3;
+		readonly UpVector: GTA.Math.Vector3;
+		readonly ForwardVector: GTA.Math.Vector3;
+		readonly RightVector: GTA.Math.Vector3;
+		readonly Matrix: GTA.Math.Matrix;
 		FieldOfView: number;
 		NearClip: number;
 		FarClip: number;
@@ -376,23 +644,20 @@
 		ShakeAmplitude: number;
 		readonly IsInterpolating: boolean;
 		constructor(handle: number);
-		GetOffsetInWorldCoords(offset: GTA.Math.Vector3): GTA.Math.Vector3;
-		GetOffsetFromWorldCoords(worldCoords: GTA.Math.Vector3): GTA.Math.Vector3;
+		GetOffsetPosition(offset: GTA.Math.Vector3): GTA.Math.Vector3;
+		GetPositionOffset(worldCoords: GTA.Math.Vector3): GTA.Math.Vector3;
 		Shake(shakeType: GTA.CameraShake, amplitude: number): void;
 		StopShaking(): void;
-		PointAt(target: GTA.Entity): void;
-		PointAt(target: GTA.Entity, offset: GTA.Math.Vector3): void;
-		PointAt(target: GTA.Ped, boneIndex: number): void;
-		PointAt(target: GTA.Ped, boneIndex: number, offset: GTA.Math.Vector3): void;
+		PointAt(target: GTA.Entity, offset?: GTA.Math.Vector3): void;
+		PointAt(target: GTA.PedBone, offset?: GTA.Math.Vector3): void;
 		PointAt(target: GTA.Math.Vector3): void;
 		StopPointing(): void;
 		InterpTo(to: GTA.Camera, duration: number, easePosition: boolean, easeRotation: boolean): void;
 		AttachTo(entity: GTA.Entity, offset: GTA.Math.Vector3): void;
-		AttachTo(entity: GTA.Ped, boneIndex: number, offset: GTA.Math.Vector3): void;
+		AttachTo(pedBone: GTA.PedBone, offset: GTA.Math.Vector3): void;
 		Detach(): void;
-		Destroy(): void;
+		Delete(): void;
 		Exists(): boolean;
-		Exists(camera: GTA.Camera): boolean;
 		Equals(camera: GTA.Camera): boolean;
 		Equals(obj: any): boolean;
 		GetHashCode(): number;
@@ -415,6 +680,116 @@
 	enum CargobobHook {
 		Hook = 0,
 		Magnet = 1
+	}
+
+	class Checkpoint {
+		readonly MemoryAddress: any;
+		Position: GTA.Math.Vector3;
+		TargetPosition: GTA.Math.Vector3;
+		Icon: GTA.CheckpointIcon;
+		CustomIcon: GTA.CheckpointCustomIcon;
+		Radius: number;
+		Color: System.Drawing.Color;
+		IconColor: System.Drawing.Color;
+		CylinderNearHeight: number;
+		CylinderFarHeight: number;
+		CylinderRadius: number;
+		constructor(handle: number);
+		Delete(): void;
+		Exists(): boolean;
+		Equals(checkpoint: GTA.Checkpoint): boolean;
+		Equals(obj: any): boolean;
+		GetHashCode(): number;
+	}
+
+	class CheckpointCustomIcon {
+		Style: GTA.CheckpointCustomIconStyle;
+		Number: number;
+		constructor(iconStyle: GTA.CheckpointCustomIconStyle, iconNumber: number);
+		ToString(): string;
+		GetHashCode(): number;
+	}
+
+	enum CheckpointCustomIconStyle {
+		Number = 0,
+		SingleArrow = 1,
+		DoubleArrow = 2,
+		TripleArrow = 3,
+		Ring = 4,
+		CycleArrow = 5,
+		Ring2 = 6,
+		RingPointer = 7,
+		SegmentedRing = 8,
+		Sphere = 9,
+		Dollar = 10,
+		QuintupleLines = 11,
+		BeastIcon = 12
+	}
+
+	enum CheckpointIcon {
+		CylinderSingleArrow = 0,
+		CylinderDoubleArrow = 1,
+		CylinderTripleArrow = 2,
+		CylinderCycleArrow = 3,
+		CylinderCheckerboard = 4,
+		CylinderSingleArrow2 = 5,
+		CylinderDoubleArrow2 = 6,
+		CylinderTripleArrow2 = 7,
+		CylinderCycleArrow2 = 8,
+		CylinderCheckerboard2 = 9,
+		RingSingleArrow = 10,
+		RingDoubleArrow = 11,
+		RingTripleArrow = 12,
+		RingCycleArrow = 13,
+		RingCheckerboard = 14,
+		SingleArrow = 15,
+		DoubleArrow = 16,
+		TripleArrow = 17,
+		CycleArrow = 18,
+		Checkerboard = 19,
+		CylinderSingleArrow3 = 20,
+		CylinderDoubleArrow3 = 21,
+		CylinderTripleArrow3 = 22,
+		CylinderCycleArrow3 = 23,
+		CylinderCheckerboard3 = 24,
+		CylinderSingleArrow4 = 25,
+		CylinderDoubleArrow4 = 26,
+		CylinderTripleArrow4 = 27,
+		CylinderCycleArrow4 = 28,
+		CylinderCheckerboard4 = 29,
+		CylinderSingleArrow5 = 30,
+		CylinderDoubleArrow5 = 31,
+		CylinderTripleArrow5 = 32,
+		CylinderCycleArrow5 = 33,
+		CylinderCheckerboard5 = 34,
+		RingPlaneUp = 35,
+		RingPlaneLeft = 36,
+		RingPlaneRight = 37,
+		RingPlaneDown = 38,
+		Empty = 39,
+		Ring = 40,
+		Empty2 = 41,
+		Cyclinder = 45,
+		Cyclinder2 = 46,
+		Cyclinder3 = 47
+	}
+
+	enum ComponentAttachmentPoint {
+		Invalid = 4294967295,
+		Clip = 3723347892,
+		Clip2 = 291640902,
+		FlashLaser = 679107254,
+		FlashLaser2 = 2722126698,
+		Supp = 1863181664,
+		Supp2 = 945598191,
+		GunRoot = 962500902,
+		Scope = 196630833,
+		Scope2 = 1684637069,
+		Grip = 2972950469,
+		Grip2 = 3748215485,
+		TorchBulb = 421673795,
+		Rail = 2451679629,
+		Rail2 = 497110245
 	}
 
 	enum Control {
@@ -759,7 +1134,8 @@
 		ReplaySnapmaticPhoto = 338,
 		VehicleCarJump = 339,
 		VehicleRocketBoost = 340,
-		VehicleParachute = 341
+		VehicleParachute = 341,
+		VehicleBikeWings = 342
 	}
 
 	enum DrivingStyle {
@@ -771,12 +1147,24 @@
 		AvoidTrafficExtremely = 6
 	}
 
+	enum EnterVehicleFlags {
+		None = 0,
+		WarpToDoor = 2,
+		AllowJacking = 8,
+		WarpIn = 16,
+		EnterFromOppositeSide = 262144,
+		OnlyOpenDoor = 524288
+	}
+
 	class Entity {
 		readonly MemoryAddress: any;
 		Health: number;
+		HealthFloat: number;
 		MaxHealth: number;
+		MaxHealthFloat: number;
 		readonly IsDead: boolean;
 		readonly IsAlive: boolean;
+		readonly EntityType: GTA.EntityType;
 		readonly Model: GTA.Model;
 		Position: GTA.Math.Vector3;
 		PositionNoOffset: GTA.Math.Vector3;
@@ -786,10 +1174,17 @@
 		readonly UpVector: GTA.Math.Vector3;
 		readonly RightVector: GTA.Math.Vector3;
 		readonly ForwardVector: GTA.Math.Vector3;
+		readonly LeftPosition: GTA.Math.Vector3;
+		readonly RightPosition: GTA.Math.Vector3;
+		readonly FrontPosition: GTA.Math.Vector3;
+		readonly RearPosition: GTA.Math.Vector3;
+		readonly AbovePosition: GTA.Math.Vector3;
+		readonly BelowPosition: GTA.Math.Vector3;
 		readonly Matrix: GTA.Math.Matrix;
 		IsPositionFrozen: boolean;
 		Velocity: GTA.Math.Vector3;
 		readonly RotationVelocity: GTA.Math.Vector3;
+		Speed: number;
 		MaxSpeed: number;
 		HasGravity: boolean;
 		readonly HeightAboveGround: number;
@@ -798,6 +1193,7 @@
 		IsVisible: boolean;
 		readonly IsOccluded: boolean;
 		readonly IsOnScreen: boolean;
+		readonly IsRendered: boolean;
 		readonly IsUpright: boolean;
 		readonly IsUpsideDown: boolean;
 		readonly IsInAir: boolean;
@@ -815,6 +1211,7 @@
 		readonly HasCollided: boolean;
 		IsCollisionEnabled: boolean;
 		IsRecordingCollisions: boolean;
+		readonly Bones: GTA.EntityBoneCollection;
 		readonly AttachedBlip: GTA.Blip;
 		readonly AttachedBlips: any[];
 		constructor(handle: number);
@@ -833,37 +1230,62 @@
 		IsTouching(entity: GTA.Entity): boolean;
 		GetOffsetPosition(offset: GTA.Math.Vector3): GTA.Math.Vector3;
 		GetPositionOffset(worldCoords: GTA.Math.Vector3): GTA.Math.Vector3;
-		GetBoneIndex(boneName: string): number;
-		GetBonePosition(boneIndex: number): GTA.Math.Vector3;
-		GetBonePosition(boneName: string): GTA.Math.Vector3;
-		GetBoneOffsetPosition(boneName: string, offset: GTA.Math.Vector3): GTA.Math.Vector3;
-		GetBoneOffsetPosition(boneIndex: number, offset: GTA.Math.Vector3): GTA.Math.Vector3;
-		GetBonePositionOffset(boneName: string, worldCoords: GTA.Math.Vector3): GTA.Math.Vector3;
-		GetBonePositionOffset(boneIndex: number, worldCoords: GTA.Math.Vector3): GTA.Math.Vector3;
-		GetBoneMatrix(boneName: string): GTA.Math.Matrix;
-		GetBoneMatrix(boneIndex: number): GTA.Math.Matrix;
-		HasBone(boneName: string): boolean;
 		AttachBlip(): GTA.Blip;
-		AttachTo(entity: GTA.Entity, boneIndex: number): void;
-		AttachTo(entity: GTA.Entity, boneIndex: number, position: GTA.Math.Vector3, rotation: GTA.Math.Vector3): void;
+		AttachTo(entity: GTA.Entity, position?: GTA.Math.Vector3, rotation?: GTA.Math.Vector3): void;
+		AttachTo(entityBone: GTA.EntityBone, position?: GTA.Math.Vector3, rotation?: GTA.Math.Vector3): void;
 		Detach(): void;
 		IsAttached(): boolean;
 		IsAttachedTo(entity: GTA.Entity): boolean;
 		GetEntityAttachedTo(): GTA.Entity;
-		ApplyForce(direction: GTA.Math.Vector3): void;
-		ApplyForce(direction: GTA.Math.Vector3, rotation: GTA.Math.Vector3): void;
-		ApplyForce(direction: GTA.Math.Vector3, rotation: GTA.Math.Vector3, forceType: GTA.ForceType): void;
-		ApplyForceRelative(direction: GTA.Math.Vector3): void;
-		ApplyForceRelative(direction: GTA.Math.Vector3, rotation: GTA.Math.Vector3): void;
-		ApplyForceRelative(direction: GTA.Math.Vector3, rotation: GTA.Math.Vector3, forceType: GTA.ForceType): void;
+		ApplyForce(direction: GTA.Math.Vector3, rotation?: GTA.Math.Vector3, forceType?: GTA.ForceType): void;
+		ApplyForceRelative(direction: GTA.Math.Vector3, rotation?: GTA.Math.Vector3, forceType?: GTA.ForceType): void;
+		RemoveAllParticleEffects(): void;
 		Delete(): void;
 		MarkAsNoLongerNeeded(): void;
-		FromHandle(handle: number): GTA.Entity;
 		Exists(): boolean;
-		Exists(entity: GTA.Entity): boolean;
 		Equals(entity: GTA.Entity): boolean;
 		Equals(obj: any): boolean;
 		GetHashCode(): number;
+	}
+
+	class EntityBone {
+		readonly Index: number;
+		readonly Owner: GTA.Entity;
+		readonly Position: GTA.Math.Vector3;
+		Pose: GTA.Math.Vector3;
+		PoseMatrix: GTA.Math.Matrix;
+		readonly RelativeMatrix: GTA.Math.Matrix;
+		readonly RelativeRightVector: GTA.Math.Vector3;
+		readonly RelativeForwardVector: GTA.Math.Vector3;
+		readonly RelativeUpVector: GTA.Math.Vector3;
+		readonly RightVector: GTA.Math.Vector3;
+		readonly ForwardVector: GTA.Math.Vector3;
+		readonly UpVector: GTA.Math.Vector3;
+		readonly RelativePosition: GTA.Math.Vector3;
+		readonly IsValid: boolean;
+		GetOffsetPosition(offset: GTA.Math.Vector3): GTA.Math.Vector3;
+		GetRelativeOffsetPosition(offset: GTA.Math.Vector3): GTA.Math.Vector3;
+		GetPositionOffset(worldCoords: GTA.Math.Vector3): GTA.Math.Vector3;
+		GetRelativePositionOffset(entityOffset: GTA.Math.Vector3): GTA.Math.Vector3;
+		Equals(entityBone: GTA.EntityBone): boolean;
+		Equals(obj: any): boolean;
+		GetHashCode(): number;
+	}
+
+	class EntityBoneCollection {
+		readonly Item: GTA.EntityBone;
+		readonly Count: number;
+		readonly Core: GTA.EntityBone;
+		HasBone(boneName: string): boolean;
+		GetEnumerator(): any;
+		GetHashCode(): number;
+		GetEnumerator(): any;
+	}
+
+	enum EntityType {
+		Ped = 1,
+		Vehicle = 2,
+		Prop = 3
 	}
 
 	enum FiringPattern {
@@ -907,10 +1329,73 @@
 		Female = 1
 	}
 
+	class HandlingData {
+		readonly MemoryAddress: any;
+		readonly IsValid: boolean;
+		AntiRollBarBiasFront: number;
+		DriveBiasFront: number;
+		AntiRollBarForce: number;
+		BrakeForce: number;
+		BrakeBiasFront: number;
+		CamberStiffness: number;
+		CenterOfMassOffset: GTA.Math.Vector3;
+		ClutchChangeRateScaleDownShift: number;
+		InitialDragCoefficiency: number;
+		ClutchChangeRateScaleUpShift: number;
+		CollisionDamageMultiplier: number;
+		DeformationDamageMultiplier: number;
+		DriveInertia: number;
+		EngineDamageMultiplier: number;
+		HandBrakeForce: number;
+		InertiaMultiplier: GTA.Math.Vector3;
+		InitialDriveForce: number;
+		InitialDriveMaxFlatVelocity: number;
+		InitialDriveGears: number;
+		Mass: number;
+		MonetaryValue: number;
+		OilVolume: number;
+		PercentSubmerged: number;
+		PetrolTankVolume: number;
+		RollCenterHeightFront: number;
+		RollCenterHeightRear: number;
+		SeatOffsetDistanceX: number;
+		SeatOffsetDistanceY: number;
+		SeatOffsetDistanceZ: number;
+		SteeringLock: number;
+		SuspensionBiasFront: number;
+		SuspensionCompressionDamping: number;
+		SuspensionForce: number;
+		SuspensionLowerLimit: number;
+		SuspensionRaise: number;
+		SuspensionReboundDamping: number;
+		SuspensionUpperLimit: number;
+		TractionBiasFront: number;
+		TractionCurveMax: number;
+		TractionCurveMin: number;
+		TractionLossMultiplier: number;
+		TractionSpringDeltaMax: number;
+		WeaponDamageMultiplier: number;
+		Equals(handlingData: GTA.HandlingData): boolean;
+		Equals(obj: any): boolean;
+		GetHashCode(): number;
+	}
+
 	enum HelmetType {
 		RegularMotorcycleHelmet = 4096,
 		FiremanHelmet = 16384,
 		PilotHeadset = 32768
+	}
+
+	interface IPedVariation {
+		readonly Count: number;
+		Index: number;
+		readonly TextureCount: number;
+		TextureIndex: number;
+		readonly HasVariations: boolean;
+		readonly HasTextureVariations: boolean;
+		readonly HasAnyVariations: boolean;
+		IsVariationValid(index: number, textureIndex?: number): boolean;
+		SetVariation(index: number, textureIndex?: number): boolean;
 	}
 
 	enum LeaveVehicleFlags {
@@ -937,8 +1422,8 @@
 	}
 
 	class Model {
-		readonly Hash: number;
 		NativeValue: number;
+		readonly Hash: number;
 		readonly IsValid: boolean;
 		readonly IsInCdImage: boolean;
 		readonly IsLoaded: boolean;
@@ -947,14 +1432,20 @@
 		readonly IsBike: boolean;
 		readonly IsBoat: boolean;
 		readonly IsCar: boolean;
+		readonly IsAmphibiousCar: boolean;
+		readonly IsBlimp: boolean;
 		readonly IsCargobob: boolean;
 		readonly IsHelicopter: boolean;
+		readonly IsJetSki: boolean;
 		readonly IsPed: boolean;
 		readonly IsPlane: boolean;
 		readonly IsProp: boolean;
-		readonly IsQuadbike: boolean;
+		readonly IsQuadBike: boolean;
+		readonly IsAmphibiousQuadBike: boolean;
 		readonly IsTrain: boolean;
+		readonly IsTrailer: boolean;
 		readonly IsVehicle: boolean;
+		readonly IsAmphibiousVehicle: boolean;
 		constructor(hash: number);
 		constructor(name: string);
 		constructor(hash: GTA.PedHash);
@@ -964,6 +1455,8 @@
 		GetDimensions(minimum: any, maximum: any): void;
 		Request(): void;
 		Request(timeout: number): boolean;
+		RequestCollision(): void;
+		RequestCollision(timeout: number): boolean;
 		MarkAsNoLongerNeeded(): void;
 		Equals(model: GTA.Model): boolean;
 		Equals(obj: any): boolean;
@@ -986,16 +1479,36 @@
 		LandingOrFallingToDoom = 3
 	}
 
+	enum ParachuteTint {
+		None = -1,
+		Rainbow = 0,
+		Red = 1,
+		SeasideStripes = 2,
+		WidowMaker = 3,
+		Patriot = 4,
+		Blue = 5,
+		Black = 6,
+		Hornet = 7,
+		AirFocce = 8,
+		Desert = 9,
+		Shadow = 10,
+		HighAltitude = 11,
+		Airbone = 12,
+		Sunrise = 13
+	}
+
 	class Ped extends GTA.Entity {
 		Money: number;
 		readonly Gender: GTA.Gender;
-		MaxHealth: number;
 		Armor: number;
+		ArmorFloat: number;
 		Accuracy: number;
-		readonly Task: GTA.Tasks;
+		readonly Task: GTA.TaskInvoker;
 		readonly TaskSequenceProgress: number;
 		readonly Euphoria: GTA.NaturalMotion.Euphoria;
 		readonly Weapons: GTA.WeaponCollection;
+		readonly Style: GTA.Style;
+		readonly VehicleWeapon: GTA.VehicleWeaponHash;
 		readonly LastVehicle: GTA.Vehicle;
 		readonly CurrentVehicle: GTA.Vehicle;
 		readonly VehicleTryingToEnter: GTA.Vehicle;
@@ -1010,6 +1523,8 @@
 		readonly IsJumpingOutOfVehicle: boolean;
 		StaysInVehicleWhenJacked: boolean;
 		MaxDrivingSpeed: number;
+		InjuryHealthThreshold: number;
+		FatalInjuryHealthThreshold: number;
 		readonly IsHuman: boolean;
 		IsEnemy: boolean;
 		IsPriorityTargetForEnemies: boolean;
@@ -1052,6 +1567,11 @@
 		readonly IsInCombat: boolean;
 		readonly IsInMeleeCombat: boolean;
 		readonly IsInStealthMode: boolean;
+		readonly IsAmbientSpeechplaying: boolean;
+		readonly IsScriptedSpeechplaying: boolean;
+		readonly IsAnySpeechplaying: boolean;
+		readonly IsAmbientSpeechEnabled: boolean;
+		IsPainAudioEnabled: boolean;
 		readonly IsPlantingBomb: boolean;
 		readonly IsShooting: boolean;
 		readonly IsAiming: boolean;
@@ -1091,7 +1611,10 @@
 		RelationshipGroup: GTA.RelationshipGroup;
 		readonly IsInGroup: boolean;
 		NeverLeavesGroup: boolean;
+		readonly Bones: GTA.PedBoneCollection;
 		constructor(handle: number);
+		GetBoneCoord(boneId: GTA.Bone): GTA.Math.Vector3;
+		GetBoneCoord(boneId: GTA.Bone, offset: GTA.Math.Vector3): GTA.Math.Vector3;
 		IsInCover(): boolean;
 		IsInCover(expectUseWeapon: boolean): boolean;
 		IsInVehicle(): boolean;
@@ -1107,10 +1630,9 @@
 		GetMeleeTarget(): GTA.Ped;
 		GetKiller(): GTA.Entity;
 		Kill(): void;
+		Resurrect(): void;
 		ResetVisibleDamage(): void;
 		ClearBloodDamage(): void;
-		RandomizeOutfit(): void;
-		SetDefaultClothes(): void;
 		LeaveGroup(): void;
 		PlayAmbientSpeech(speechName: string, modifier?: GTA.SpeechModifier): void;
 		PlayAmbientSpeech(voiceName: string, speechName: string, modifier?: GTA.SpeechModifier): void;
@@ -1119,21 +1641,61 @@
 		HasBeenDamagedByAnyWeapon(): boolean;
 		HasBeenDamagedByAnyMeleeWeapon(): boolean;
 		ClearLastWeaponDamage(): void;
-		GetLastDamagedBone(): GTA.Bone;
-		ClearLastBoneDamage(): void;
-		GetBoneIndex(boneID: GTA.Bone): number;
-		GetBoneCoord(boneID: GTA.Bone): GTA.Math.Vector3;
-		GetBoneCoord(boneID: GTA.Bone, offset: GTA.Math.Vector3): GTA.Math.Vector3;
 		GetLastWeaponImpactPosition(): GTA.Math.Vector3;
 		Ragdoll(duration?: number, ragdollType?: GTA.RagdollType): void;
 		CancelRagdoll(): void;
 		GiveHelmet(canBeRemovedByPed: boolean, helmetType: GTA.HelmetType, textureIndex: number): void;
 		RemoveHelmet(instantly: boolean): void;
 		OpenParachute(): void;
+		ParachuteTo(location: GTA.Math.Vector3): void;
 		GetConfigFlag(flagID: number): boolean;
 		SetConfigFlag(flagID: number, value: boolean): void;
 		ResetConfigFlag(flagID: number): void;
 		Clone(heading?: number): GTA.Ped;
+		Exists(): boolean;
+		HasBeenDamagedBy(entity: GTA.Entity): boolean;
+	}
+
+	class PedBone extends GTA.EntityBone {
+		readonly Owner: GTA.Ped;
+		readonly IsValid: boolean;
+	}
+
+	class PedBoneCollection extends GTA.EntityBoneCollection {
+		readonly Item: GTA.PedBone;
+		readonly Core: GTA.PedBone;
+		readonly LastDamaged: GTA.PedBone;
+		ClearLastDamaged(): void;
+		GetEnumerator(): any;
+		GetEnumerator(): any;
+	}
+
+	class PedComponent implements GTA.IPedVariation {
+		readonly Count: number;
+		Index: number;
+		readonly TextureCount: number;
+		TextureIndex: number;
+		readonly HasVariations: boolean;
+		readonly HasTextureVariations: boolean;
+		readonly HasAnyVariations: boolean;
+		IsVariationValid(index: number, textureIndex?: number): boolean;
+		SetVariation(index: number, textureIndex?: number): boolean;
+		ToString(): string;
+	}
+
+	enum PedComponents {
+		Face = 0,
+		Head = 1,
+		Hair = 2,
+		Torso = 3,
+		Legs = 4,
+		Hands = 5,
+		Shoes = 6,
+		Special1 = 7,
+		Special2 = 8,
+		Special3 = 9,
+		Textures = 10,
+		Torso2 = 11
 	}
 
 	class PedGroup {
@@ -1150,11 +1712,12 @@
 		Contains(ped: GTA.Ped): boolean;
 		ToArray(includingLeader: boolean): any[];
 		ToList(includingLeader: boolean): System.Collections.Generic.List<GTA.Ped>;
+		Delete(): void;
 		Exists(): boolean;
-		Exists(pedGroup: GTA.PedGroup): boolean;
 		Equals(pedGroup: GTA.PedGroup): boolean;
 		Equals(obj: any): boolean;
 		GetHashCode(): number;
+		GetEnumerator(): any;
 		GetEnumerator(): any;
 	}
 
@@ -1163,7 +1726,7 @@
 		Franklin = 2602752943,
 		Trevor = 2608926626,
 		Abigail = 1074457665,
-		Agent = 3614493108,
+		Agent = 610988552,
 		Agent14 = 4227433577,
 		AmandaTownley = 1830688247,
 		Andreas = 1206185632,
@@ -1250,7 +1813,7 @@
 		RampHic = 1165307954,
 		RampHipster = 3740245870,
 		RampMex = 3870061732,
-		Rashkovsky = 940326374,
+		Rashkovsky = 940330470,
 		RoccoPelosi = 3585757951,
 		RussianDrunk = 1024089777,
 		ScreenWriter = 4293277303,
@@ -1446,35 +2009,37 @@
 		BikeHire01 = 1984382277,
 		BikerChic = 4198014287,
 		BoatStaff01M = 3361671816,
-		BoatStaff01F = 848542878,
+		BoatStaff01F = 848542158,
 		BurgerDrug = 2340239206,
 		CarDesignFemale01 = 606876839,
 		Chip = 610290475,
 		Claude01 = 3237179831,
-		ClubHouseBar01 = 1914945105,
-		CocaineFemale01 = 1897303236,
-		CocaineMale01 = 3455927962,
+		ClubhouseBar01 = 3287737221,
+		CocaineFemale01 = 1264941816,
+		CocaineMale01 = 1456705429,
 		ComJane = 3064628686,
-		Corpse01 = 773063444,
-		Corpse02 = 228356856,
-		CounterfeitFemale01 = 1074385436,
-		CounterfeitMale01 = 2625926338,
+		Corpse01UFY = 2624589981,
+		Corpse01UMY = 773063444,
+		Corpse02UFY = 228356856,
+		CounterfeitFemale01 = 3079205365,
+		CounterfeitMale01 = 2555758964,
 		Cyclist01 = 755956971,
 		DeadHooker = 1943971979,
-		Drowned = 1943971979,
+		Drowned = 3623056905,
 		ExArmy01 = 1161072059,
-		ExecutivePAMale01 = 983887149,
-		ExecutivePAFemale01 = 2913175640,
+		ExecutivePAMale01 = 1048844220,
+		ExecutivePAFemale01 = 1126998116,
 		ExecutivePAFemale02 = 1500695792,
 		Famdd01 = 866411749,
+		FemaleAgent = 1348537411,
 		FibArchitect = 874722259,
 		FibMugger01 = 2243544680,
 		FibSec01 = 1558115333,
 		FilmDirector = 728636342,
 		FilmNoir = 732742363,
 		Finguru01 = 1189322339,
-		ForgeryFemale01 = 3691903615,
-		ForgeryMale01 = 325317957,
+		ForgeryFemale01 = 2014985464,
+		ForgeryMale01 = 1631482011,
 		FreemodeFemale01 = 2627665880,
 		FreemodeMale01 = 1885233650,
 		Glenstank01 = 1169888870,
@@ -1496,8 +2061,8 @@
 		Mani = 3367706194,
 		Markfost = 479578891,
 		Marston01 = 943915367,
-		MethFemale01 = 3778572496,
-		MethMale01 = 1293671805,
+		MethFemale01 = 3534913217,
+		MethMale01 = 3988008767,
 		MilitaryBum = 1191548746,
 		Miranda = 1095737979,
 		Mistress = 1573528872,
@@ -1520,16 +2085,20 @@
 		RivalPaparazzi = 1624626906,
 		SecuroGuardMale01 = 3660355662,
 		ShopKeep01 = 416176080,
+		SmugMech01 = 3446096293,
 		SpyActor = 2886641112,
 		SpyActress = 1535236204,
+		StreetArt01 = 1813637474,
 		StripperLite = 695248020,
 		Taphillbilly = 2585681490,
 		Tramp01 = 1787764635,
 		VagosFun01 = 3299219389,
 		WareMechMale01 = 4154933561,
 		WillyFist = 2423691919,
-		WeedFemale01 = 1596374223,
-		WeedMale01 = 2648833641,
+		WeaponExpertMale01 = 921328393,
+		WeaponWorkerMale01 = 1099321454,
+		WeedFemale01 = 2992993187,
+		WeedMale01 = 2441008217,
 		Zombie01 = 2890614022,
 		Acult01AMM = 1413662315,
 		Acult01AMO = 1430544400,
@@ -1675,6 +2244,7 @@
 		Hairdress01SMM = 1099825042,
 		Hasjew01AMM = 1809430156,
 		Hasjew01AMY = 3782053633,
+		HeadTargets = 1173958009,
 		Highsec01SMM = 4049719826,
 		Highsec02SMM = 691061163,
 		Hiker01AFY = 813893651,
@@ -1808,6 +2378,9 @@
 		Skater02AMY = 2952446692,
 		Skidrow01AFM = 2962707003,
 		Skidrow01AMM = 32417469,
+		SlodHuman = 1057201338,
+		SlodSmallQuadped = 762327283,
+		SlodLargeQuadped = 2238511874,
 		Snowcop01SMM = 451459928,
 		Socenlat01AMM = 193817059,
 		Soucent01AFM = 1951946145,
@@ -1884,13 +2457,110 @@
 		WinClean01SMY = 1426951581,
 		Xmech01SMY = 1142162924,
 		Xmech02SMY = 3189832196,
-		Xmech02SMYMP = 1755203590,
+		Xmech02SMYMP = 1762949645,
 		Yoga01AFY = 3290105390,
 		Yoga01AMY = 2869588309
 	}
 
+	class PedProp implements GTA.IPedVariation {
+		readonly Count: number;
+		Index: number;
+		readonly TextureCount: number;
+		TextureIndex: number;
+		readonly HasVariations: boolean;
+		readonly HasTextureVariations: boolean;
+		readonly HasAnyVariations: boolean;
+		IsVariationValid(index: number, textureIndex?: number): boolean;
+		SetVariation(index: number, textureIndex?: number): boolean;
+		ToString(): string;
+	}
+
+	enum PedProps {
+		Hats = 0,
+		Glasses = 1,
+		EarPieces = 2,
+		Unknown3 = 3,
+		Unknown4 = 4,
+		Unknown5 = 5,
+		Watches = 6,
+		Wristbands = 7,
+		Unknown8 = 8,
+		Unknown9 = 9
+	}
+
+	class Pickup {
+		readonly Position: GTA.Math.Vector3;
+		readonly IsCollected: boolean;
+		constructor(handle: number);
+		Delete(): void;
+		Exists(): boolean;
+		ObjectExists(): boolean;
+		Equals(pickup: GTA.Pickup): boolean;
+		Equals(obj: any): boolean;
+		GetHashCode(): number;
+	}
+
+	class Player {
+		readonly Handle: number;
+		NativeValue: number;
+		readonly Character: GTA.Ped;
+		readonly Name: string;
+		Money: number;
+		WantedLevel: number;
+		WantedCenterPosition: GTA.Math.Vector3;
+		MaxArmor: number;
+		PrimaryParachuteTint: GTA.ParachuteTint;
+		ReserveParachuteTint: GTA.ParachuteTint;
+		CanLeaveParachuteSmokeTrail: boolean;
+		ParachuteSmokeTrailColor: System.Drawing.Color;
+		readonly IsAlive: boolean;
+		readonly IsDead: boolean;
+		readonly IsAiming: boolean;
+		readonly IsClimbing: boolean;
+		readonly IsRidingTrain: boolean;
+		readonly IsPressingHorn: boolean;
+		readonly IsPlaying: boolean;
+		IsInvincible: boolean;
+		IgnoredByPolice: boolean;
+		IgnoredByEveryone: boolean;
+		DispatchsCops: boolean;
+		CanUseCover: boolean;
+		readonly CanStartMission: boolean;
+		CanControlRagdoll: boolean;
+		CanControlCharacter: boolean;
+		readonly RemainingSprintTime: number;
+		readonly RemainingSprintStamina: number;
+		readonly RemainingUnderwaterTime: number;
+		readonly IsSpecialAbilityActive: boolean;
+		IsSpecialAbilityEnabled: boolean;
+		readonly LastVehicle: GTA.Vehicle;
+		readonly IsTargettingAnything: boolean;
+		ForcedAim: boolean;
+		constructor(handle: number);
+		ChangeModel(model: GTA.Model): boolean;
+		ChargeSpecialAbility(absoluteAmount: number): void;
+		ChargeSpecialAbility(normalizedRatio: number): void;
+		RefillSpecialAbility(): void;
+		DepleteSpecialAbility(): void;
+		IsTargetting(entity: GTA.Entity): boolean;
+		GetTargetedEntity(): GTA.Entity;
+		DisableFiringThisFrame(): void;
+		SetRunSpeedMultThisFrame(mult: number): void;
+		SetSwimSpeedMultThisFrame(mult: number): void;
+		SetFireAmmoThisFrame(): void;
+		SetExplosiveAmmoThisFrame(): void;
+		SetExplosiveMeleeThisFrame(): void;
+		SetSuperJumpThisFrame(): void;
+		SetMayNotEnterAnyVehicleThisFrame(): void;
+		SetMayOnlyEnterThisVehicleThisFrame(vehicle: GTA.Vehicle): void;
+		Equals(player: GTA.Player): boolean;
+		Equals(obj: any): boolean;
+		GetHashCode(): number;
+	}
+
 	class Prop extends GTA.Entity {
 		constructor(handle: number);
+		Exists(): boolean;
 	}
 
 	enum RadioStation {
@@ -1903,16 +2573,17 @@
 		SoulwaxFM = 6,
 		EastLosFM = 7,
 		WestCoastClassics = 8,
-		BlaineCountyRadio = 9,
-		TheBlueArk = 10,
-		WorldWideFM = 11,
-		FlyloFM = 12,
-		TheLowdown = 13,
+		TheBlueArk = 9,
+		WorldWideFM = 10,
+		FlyloFM = 11,
+		TheLowdown = 12,
+		TheLab = 13,
 		RadioMirrorPark = 14,
 		Space = 15,
 		VinewoodBoulevardRadio = 16,
-		SelfRadio = 17,
-		TheLab = 18,
+		BlondedLosSantos = 17,
+		BlaineCountyRadio = 18,
+		SelfRadio = 19,
 		RadioOff = 255
 	}
 
@@ -1924,13 +2595,14 @@
 	}
 
 	class RaycastResult {
+		readonly Result: number;
+		readonly MaterialHash: number;
 		readonly HitEntity: GTA.Entity;
 		readonly HitPosition: GTA.Math.Vector3;
 		readonly SurfaceNormal: GTA.Math.Vector3;
-		readonly DitHit: boolean;
-		readonly DitHitEntity: boolean;
-		readonly Result: number;
-		constructor(handle: number);
+		readonly DidHit: boolean;
+		readonly DidHitEntity: boolean;
+		constructor(handle: number, getMaterialHash?: boolean);
 	}
 
 	enum Relationship {
@@ -1958,6 +2630,27 @@
 		ToString(): string;
 	}
 
+	class Rope {
+		Length: number;
+		readonly VertexCount: number;
+		constructor(handle: number);
+		ResetLength(reset: boolean): void;
+		ActivatePhysics(): void;
+		AttachEntity(entity: GTA.Entity): void;
+		AttachEntity(entity: GTA.Entity, position: GTA.Math.Vector3): void;
+		AttachEntities(entityOne: GTA.Entity, entityTwo: GTA.Entity, length: number): void;
+		AttachEntities(entityOne: GTA.Entity, positionOne: GTA.Math.Vector3, entityTwo: GTA.Entity, positionTwo: GTA.Math.Vector3, length: number): void;
+		DetachEntity(entity: GTA.Entity): void;
+		PinVertex(vertex: number, position: GTA.Math.Vector3): void;
+		UnpinVertex(vertex: number): void;
+		GetVertexCoord(vertex: number): GTA.Math.Vector3;
+		Delete(): void;
+		Exists(): boolean;
+		Equals(rope: GTA.Rope): boolean;
+		Equals(obj: any): boolean;
+		GetHashCode(): number;
+	}
+
 	class Scaleform {
 		readonly Handle: number;
 		NativeValue: number;
@@ -1966,6 +2659,7 @@
 		constructor(scaleformID: string);
 		Dispose(): void;
 		CallFunction(_function: string, ..._arguments: any[]): void;
+		CallFunctionReturn(_function: string, ..._arguments: any[]): number;
 		Render2D(): void;
 		Render2DScreenSpace(location: System.Drawing.PointF, size: System.Drawing.PointF): void;
 		Render3D(position: GTA.Math.Vector3, rotation: GTA.Math.Vector3, scale: GTA.Math.Vector3): void;
@@ -2012,7 +2706,19 @@
 		ShoutedCritical = 36
 	}
 
-	class Tasks {
+	class Style {
+		readonly Item: GTA.PedProp;
+		GetAllComponents(): any[];
+		GetAllProps(): any[];
+		GetAllVariations(): any[];
+		GetEnumerator(): any;
+		RandomizeOutfit(): void;
+		SetDefaultClothes(): void;
+		RandomizeProps(): void;
+		ClearProps(): void;
+	}
+
+	class TaskInvoker {
 		AchieveHeading(heading: number, timeout?: number): void;
 		AimAt(target: GTA.Entity, duration: number): void;
 		AimAt(target: GTA.Math.Vector3, duration: number): void;
@@ -2020,12 +2726,15 @@
 		ChatTo(ped: GTA.Ped): void;
 		Jump(): void;
 		Climb(): void;
+		ClimbLadder(): void;
 		Cower(duration: number): void;
-		CruiseWithVehicle(vehicle: GTA.Vehicle, speed: number, drivingstyle?: number): void;
-		DriveTo(vehicle: GTA.Vehicle, target: GTA.Math.Vector3, radius: number, speed: number, drivingstyle?: number): void;
-		EnterAnyVehicle(seat?: GTA.VehicleSeat, timeout?: number, speed?: number, flag?: number): void;
-		EnterVehicle(vehicle: GTA.Vehicle, seat?: GTA.VehicleSeat, timeout?: number, speed?: number, flag?: number): void;
-		EveryoneLeaveVehicle(vehicle: GTA.Vehicle): void;
+		ChaseWithGroundVehicle(target: GTA.Ped): void;
+		ChaseWithHelicopter(target: GTA.Ped, offset: GTA.Math.Vector3): void;
+		ChaseWithPlane(target: GTA.Ped, offset: GTA.Math.Vector3): void;
+		CruiseWithVehicle(vehicle: GTA.Vehicle, speed: number, style?: GTA.DrivingStyle): void;
+		DriveTo(vehicle: GTA.Vehicle, target: GTA.Math.Vector3, radius: number, speed: number, style?: GTA.DrivingStyle): void;
+		EnterAnyVehicle(seat?: GTA.VehicleSeat, timeout?: number, speed?: number, flag?: GTA.EnterVehicleFlags): void;
+		EnterVehicle(vehicle: GTA.Vehicle, seat?: GTA.VehicleSeat, timeout?: number, speed?: number, flag?: GTA.EnterVehicleFlags): void;
 		FightAgainst(target: GTA.Ped): void;
 		FightAgainst(target: GTA.Ped, duration: number): void;
 		FightAgainstHatedTargets(radius: number): void;
@@ -2033,13 +2742,13 @@
 		FleeFrom(ped: GTA.Ped, duration?: number): void;
 		FleeFrom(position: GTA.Math.Vector3, duration?: number): void;
 		FollowPointRoute(...points: any[]): void;
-		FollowToOffsetFromEntity(target: GTA.Entity, offset: GTA.Math.Vector3, timeout: number, stoppingRange: number): void;
-		FollowToOffsetFromEntity(target: GTA.Entity, offset: GTA.Math.Vector3, movementSpeed: number, timeout: number, stoppingRange: number, persistFollowing: boolean): void;
-		GoTo(target: GTA.Entity): void;
-		GoTo(target: GTA.Entity, offset: GTA.Math.Vector3, timeout?: number): void;
+		FollowPointRoute(movementSpeed: number, ...points: any[]): void;
+		FollowToOffsetFromEntity(target: GTA.Entity, offset: GTA.Math.Vector3, movementSpeed: number, timeout?: number, distanceToFollow?: number, persistFollowing?: boolean): void;
+		GoTo(target: GTA.Entity, offset?: GTA.Math.Vector3, timeout?: number): void;
 		GoTo(position: GTA.Math.Vector3, ignorePaths?: boolean, timeout?: number): void;
 		GuardCurrentPosition(): void;
 		HandsUp(duration: number): void;
+		LandPlane(startPosition: GTA.Math.Vector3, touchdownPosition: GTA.Math.Vector3, plane?: GTA.Vehicle): void;
 		LeaveVehicle(flags?: GTA.LeaveVehicleFlags): void;
 		LeaveVehicle(vehicle: GTA.Vehicle, closeDoor: boolean): void;
 		LeaveVehicle(vehicle: GTA.Vehicle, flags: GTA.LeaveVehicleFlags): void;
@@ -2052,12 +2761,13 @@
 		PlayAnimation(animDict: string, animName: string, speed: number, duration: number, playbackRate: number): void;
 		PlayAnimation(animDict: string, animName: string, blendInSpeed: number, duration: number, flags: GTA.AnimationFlags): void;
 		PlayAnimation(animDict: string, animName: string, blendInSpeed: number, blendOutSpeed: number, duration: number, flags: GTA.AnimationFlags, playbackRate: number): void;
+		RappelFromHelicopter(): void;
 		ReactAndFlee(ped: GTA.Ped): void;
 		ReloadWeapon(): void;
 		RunTo(position: GTA.Math.Vector3, ignorePaths?: boolean, timeout?: number): void;
 		ShootAt(target: GTA.Ped, duration?: number, pattern?: GTA.FiringPattern): void;
 		ShootAt(position: GTA.Math.Vector3, duration?: number, pattern?: GTA.FiringPattern): void;
-		ShuffleToNextVehicleSeat(vehicle: GTA.Vehicle): void;
+		ShuffleToNextVehicleSeat(vehicle?: GTA.Vehicle): void;
 		Skydive(): void;
 		SlideTo(position: GTA.Math.Vector3, heading: number): void;
 		StandStill(duration: number): void;
@@ -2088,7 +2798,7 @@
 		readonly Handle: number;
 		readonly Count: number;
 		readonly IsClosed: boolean;
-		readonly AddTask: GTA.Tasks;
+		readonly AddTask: GTA.TaskInvoker;
 		constructor();
 		constructor(handle: number);
 		Dispose(): void;
@@ -2098,46 +2808,69 @@
 
 	class Vehicle extends GTA.Entity {
 		readonly DisplayName: string;
-		readonly FriendlyName: string;
+		readonly LocalizedName: string;
 		readonly ClassDisplayName: string;
-		readonly ClassFriendlyName: string;
+		readonly ClassLocalizedName: string;
 		readonly ClassType: GTA.VehicleClass;
 		BodyHealth: number;
 		EngineHealth: number;
 		PetrolTankHealth: number;
+		HeliMainRotorHealth: number;
+		HeliTailRotorHealth: number;
+		HeliEngineHealth: number;
+		DeluxoTransformation: number;
+		SubmarineCarTransformed: boolean;
+		readonly SubmarineCarTransformationState: GTA.VehicleSubmarineTransformationState;
+		OppressorTransformation: number;
 		FuelLevel: number;
+		OilLevel: number;
+		Gravity: number;
 		IsEngineRunning: boolean;
+		readonly IsEngineStarting: boolean;
 		IsRadioEnabled: boolean;
 		RadioStation: GTA.RadioStation;
-		Speed: number;
+		ForwardSpeed: number;
 		readonly WheelSpeed: number;
+		HeliBladesSpeed: number;
 		readonly Acceleration: number;
 		CurrentRPM: number;
 		HighGear: number;
-		readonly CurrentGear: number;
+		CurrentGear: number;
+		readonly EngineTemperature: number;
+		readonly OilVolume: number;
+		readonly PetrolTankVolume: number;
+		Clutch: number;
+		Turbo: number;
+		Gears: number;
+		NextGear: number;
+		Throttle: number;
+		ThrottlePower: number;
+		BrakePower: number;
 		SteeringAngle: number;
 		SteeringScale: number;
 		readonly HasForks: boolean;
-		HasAlarm: boolean;
-		readonly AlarmActive: boolean;
+		IsAlarmSet: boolean;
+		readonly IsAlarmSounding: boolean;
+		AlarmTimeLeft: number;
 		readonly HasSiren: boolean;
-		SirenActive: boolean;
+		IsSirenActive: boolean;
 		IsSirenSilent: boolean;
 		IsWanted: boolean;
 		ProvidesCover: boolean;
 		DropsMoneyOnExplosion: boolean;
 		PreviouslyOwnedByPlayer: boolean;
 		NeedsToBeHotwired: boolean;
-		LightsOn: boolean;
-		HighBeamsOn: boolean;
-		InteriorLightOn: boolean;
-		SearchLightOn: boolean;
-		TaxiLightOn: boolean;
-		LeftIndicatorLightOn: boolean;
-		RightIndicatorLightOn: boolean;
-		HandbrakeOn: boolean;
-		BrakeLightsOn: boolean;
+		AreLightsOn: boolean;
+		AreHighBeamsOn: boolean;
+		IsInteriorLightOn: boolean;
+		IsSearchLightOn: boolean;
+		IsTaxiLightOn: boolean;
+		IsLeftIndicatorLightOn: boolean;
+		IsRightIndicatorLightOn: boolean;
+		IsHandbrakeForcedOn: boolean;
+		AreBrakeLightsOn: boolean;
 		LightsMultiplier: number;
+		LodMultiplier: number;
 		CanBeVisiblyDamaged: boolean;
 		readonly IsDamaged: boolean;
 		IsDriveable: boolean;
@@ -2203,14 +2936,10 @@
 		TowVehicle(vehicle: GTA.Vehicle, rear: boolean): void;
 		DetachFromTowTruck(): void;
 		DetachTowedVehicle(): void;
-		ApplyDamage(position: GTA.Math.Vector3, damageAmount: number, radius: number): void;
+		Deform(position: GTA.Math.Vector3, damageAmount: number, radius: number): void;
 		CreatePedOnSeat(seat: GTA.VehicleSeat, model: GTA.Model): GTA.Ped;
 		CreateRandomPedOnSeat(seat: GTA.VehicleSeat): GTA.Ped;
-		GetModelDisplayName(vehicleModel: GTA.Model): string;
-		GetModelClass(vehicleModel: GTA.Model): GTA.VehicleClass;
-		GetClassDisplayName(vehicleClass: GTA.VehicleClass): string;
-		GetAllModelsOfClass(vehicleClass: GTA.VehicleClass): any[];
-		GetAllModels(): any[];
+		Exists(): boolean;
 	}
 
 	enum VehicleClass {
@@ -2403,7 +3132,7 @@
 
 	class VehicleDoor {
 		readonly Index: GTA.VehicleDoorIndex;
-		readonly AngleRatio: number;
+		AngleRatio: number;
 		CanBeBroken: boolean;
 		readonly IsOpen: boolean;
 		readonly IsFullyOpen: boolean;
@@ -2455,8 +3184,11 @@
 		Airtug = 1560980623,
 		Akuma = 1672195559,
 		Alpha = 767087018,
+		AlphaZ1 = 2771347558,
 		Ambulance = 1171614426,
 		Annihilator = 837858166,
+		Apc = 562680400,
+		Ardent = 159274291,
 		ArmyTanker = 3087536137,
 		ArmyTrailer = 2818520053,
 		ArmyTrailer2 = 2657817814,
@@ -2505,6 +3237,7 @@
 		BoatTrailer = 524108981,
 		BobcatXL = 1069929536,
 		Bodhi2 = 2859047862,
+		Bombushka = 4262088844,
 		Boxville = 2307837162,
 		Boxville2 = 4061868990,
 		Boxville3 = 121658888,
@@ -2534,7 +3267,9 @@
 		CableCar = 3334677549,
 		Caddy = 1147287684,
 		Caddy2 = 3757070668,
+		Caddy3 = 3525819835,
 		Camper = 1876516712,
+		Caracara = 1254014755,
 		Carbonizzare = 2072687711,
 		CarbonRS = 11251904,
 		Cargobob = 4244420235,
@@ -2545,8 +3280,10 @@
 		Casco = 941800958,
 		Cavalcade = 2006918058,
 		Cavalcade2 = 3505073125,
+		Cheburek = 3306466016,
 		Cheetah = 2983812512,
-		Chimera = 1491277511,
+		Cheetah2 = 223240013,
+		Chimera = 6774487,
 		Chino = 349605904,
 		Chino2 = 2933279331,
 		Cliffhanger = 390201602,
@@ -2566,6 +3303,7 @@
 		Crusader = 321739290,
 		Cuban800 = 3650256867,
 		Cutter = 3288047904,
+		Cyclone = 1392481335,
 		Daemon = 2006142190,
 		Daemon2 = 2890830793,
 		Defiler = 822018448,
@@ -2583,6 +3321,7 @@
 		Dodo = 3393804037,
 		Dominator = 80636076,
 		Dominator2 = 3379262425,
+		Dominator3 = 3308022675,
 		Double = 2623969160,
 		Dubsta = 1177543287,
 		Dubsta2 = 3900892662,
@@ -2592,22 +3331,26 @@
 		Dump = 2164484578,
 		Dune = 2633113103,
 		Dune2 = 534258863,
+		Dune3 = 1897744184,
 		Dune4 = 3467805257,
 		Dune5 = 3982671785,
 		Duster = 970356638,
 		Elegy = 196747873,
 		Elegy2 = 3728579874,
+		Ellie = 3027423925,
 		Emperor = 3609690755,
 		Emperor2 = 2411965148,
 		Emperor3 = 3053254478,
 		Enduro = 1753414259,
 		EntityXF = 3003014393,
+		EntityXXR = 2174267100,
 		Esskey = 2035069708,
 		Exemplar = 4289813342,
 		F620 = 3703357000,
 		Faction = 2175389151,
 		Faction2 = 2504420315,
 		Faction3 = 2255212070,
+		Fagaloa = 1617472902,
 		Faggio = 2452219115,
 		Faggio2 = 55628203,
 		Faggio3 = 3005788552,
@@ -2621,6 +3364,7 @@
 		Feltzer3 = 2728226064,
 		FireTruck = 1938952078,
 		Fixter = 3458454463,
+		FlashGT = 3035832600,
 		Flatbed = 1353720154,
 		Forklift = 1491375716,
 		FMJ = 1426219628,
@@ -2640,6 +3384,7 @@
 		Gargoyle = 741090084,
 		Gauntlet = 2494797253,
 		Gauntlet2 = 349315417,
+		GB200 = 1909189272,
 		GBurrito = 2549763894,
 		GBurrito2 = 296357396,
 		Glendale = 75131841,
@@ -2650,11 +3395,17 @@
 		Guardian = 2186977100,
 		Habanero = 884422927,
 		Hakuchou = 1265391242,
-		Hakuchou2 = 3685342204,
+		Hakuchou2 = 4039289119,
+		HalfTrack = 4262731174,
 		Handler = 444583674,
 		Hauler = 1518533038,
+		Hauler2 = 387748548,
+		Havok = 2310691317,
 		Hexer = 301427732,
 		Hotknife = 37348240,
+		HotringSabre = 1115909093,
+		Howard = 3287439187,
+		Hunter = 4252008158,
 		Huntley = 486987393,
 		Hydra = 970385471,
 		Infernus = 418536135,
@@ -2663,14 +3414,17 @@
 		Innovation = 4135840458,
 		Insurgent = 2434067162,
 		Insurgent2 = 2071877360,
+		Insurgent3 = 2370534026,
 		Intruder = 886934177,
 		Issi2 = 3117103977,
+		Issi3 = 931280609,
 		ItaliGTB = 2246633323,
 		ItaliGTB2 = 3812247419,
 		Jackal = 3670438162,
 		JB700 = 1051415893,
 		Jester = 2997294755,
 		Jester2 = 3188613414,
+		Jester3 = 4080061290,
 		Jet = 1058115860,
 		Jetmax = 861409633,
 		Journey = 4174679674,
@@ -2680,7 +3434,6 @@
 		Kuruma2 = 410882957,
 		Landstalker = 1269098716,
 		Lazer = 3013282534,
-		LE7B = 3062131285,
 		Lectro = 640818791,
 		Lguard = 469291905,
 		Limo2 = 4180339789,
@@ -2700,11 +3453,16 @@
 		Mesa = 914654722,
 		Mesa2 = 3546958660,
 		Mesa3 = 2230595153,
+		MetroTrain = 868868440,
+		Michelli = 1046206681,
+		Microlight = 2531412055,
 		Miljet = 165154707,
 		Minivan = 3984502180,
 		Minivan2 = 3168702960,
 		Mixer = 3510150843,
 		Mixer2 = 475220373,
+		Mogul = 3545667823,
+		Molotok = 1565978651,
 		Monroe = 3861591579,
 		Monster = 3449006043,
 		Moonbeam = 525509695,
@@ -2718,10 +3476,13 @@
 		Nero2 = 1093792632,
 		Nightblade = 2688780135,
 		Nightshade = 2351681756,
+		NightShark = 433954513,
 		Nimbus = 2999939664,
 		Ninef = 1032823388,
 		Ninef2 = 2833484545,
+		Nokota = 1036591958,
 		Omnis = 3517794615,
+		Oppressor = 884483972,
 		Oracle = 1348744438,
 		Oracle2 = 3783366066,
 		Osiris = 1987142870,
@@ -2737,6 +3498,7 @@
 		Pfister811 = 2465164804,
 		Phantom = 2157618379,
 		Phantom2 = 2645431192,
+		Phantom3 = 177270108,
 		Phoenix = 2199527893,
 		Picador = 1507916787,
 		Pigalle = 1078682497,
@@ -2760,6 +3522,7 @@
 		Primo2 = 2254540506,
 		PropTrailer = 356391690,
 		Prototipo = 2123327359,
+		Pyro = 2908775872,
 		Radi = 2643899483,
 		RakeTrailer = 390902130,
 		RancherXL = 1645267888,
@@ -2767,21 +3530,25 @@
 		RallyTruck = 2191146052,
 		RapidGT = 2360515092,
 		RapidGT2 = 1737773231,
+		RapidGT3 = 2049897956,
 		Raptor = 3620039993,
 		RatBike = 1873600305,
 		RatLoader = 3627815886,
 		RatLoader2 = 3705788919,
+		RE7B = 3062131285,
 		Reaper = 234062309,
 		Rebel = 3087195462,
 		Rebel2 = 2249373259,
 		Regina = 4280472072,
 		RentalBus = 3196165219,
+		Retinue = 1841130506,
 		Rhapsody = 841808271,
 		Rhino = 782665360,
 		Riot = 3089277354,
 		Ripley = 3448987385,
 		Rocoto = 2136773105,
 		Romero = 627094268,
+		Rogue = 3319621991,
 		Rubble = 2589662668,
 		Ruffian = 3401388520,
 		Ruiner = 4067225593,
@@ -2809,9 +3576,11 @@
 		Schwarzer = 3548084598,
 		Scorcher = 4108429845,
 		Scrap = 2594165727,
+		Seabreeze = 3902291871,
 		Seashark = 3264692260,
 		Seashark2 = 3678636260,
 		Seashark3 = 3983945033,
+		SeaSparrow = 3568198617,
 		Seminole = 1221512915,
 		Sentinel = 1349725314,
 		Sentinel2 = 873639469,
@@ -2837,6 +3606,7 @@
 		Stalion = 1923400478,
 		Stalion2 = 3893323758,
 		Stanier = 2817386317,
+		Starling = 2594093022,
 		Stinger = 1545842587,
 		StingerGT = 2196019706,
 		Stockade = 1747439474,
@@ -2861,19 +3631,24 @@
 		T20 = 1663218586,
 		Taco = 1951180813,
 		Tailgater = 3286105550,
+		Taipan = 3160260734,
 		Tampa = 972671128,
 		Tampa2 = 3223586949,
+		Tampa3 = 3084515313,
 		Tanker = 3564062519,
 		Tanker2 = 1956216962,
 		TankerCar = 586013744,
 		Taxi = 3338918751,
 		Technical = 2198148358,
 		Technical2 = 1180875963,
+		Technical3 = 1356124575,
 		Tempesta = 272929391,
+		Tezeract = 1031562256,
 		Thrust = 1836027715,
 		TipTruck = 48339065,
 		TipTruck2 = 3347205726,
 		Titan = 1981688531,
+		Torero = 1504306544,
 		Tornado = 464687292,
 		Tornado2 = 1531094468,
 		Tornado3 = 1762279763,
@@ -2892,10 +3667,13 @@
 		Tractor2 = 2218488798,
 		Tractor3 = 1445631933,
 		TrailerLogs = 2016027501,
+		TrailerLarge = 1502869817,
 		Trailers = 3417488910,
 		Trailers2 = 2715434129,
 		Trailers3 = 2236089197,
+		Trailers4 = 3194418602,
 		TrailerSmall = 712162987,
+		TrailerSmall2 = 2413121211,
 		Trash = 1917016601,
 		Trash2 = 3039269212,
 		TRFlat = 2942498482,
@@ -2908,18 +3686,18 @@
 		Tropic2 = 1448677353,
 		Tropos = 1887331236,
 		Tug = 2194326579,
+		Tula = 1043222410,
 		Turismor = 408192225,
 		Turismo2 = 3312836369,
 		TVTrailer = 2524324030,
+		Tyrant = 3918533058,
 		Tyrus = 2067820283,
 		UtilityTruck = 516990260,
 		UtilityTruck2 = 887537515,
 		UtilityTruck3 = 2132890591,
-		UtilliTruck = 516990260,
-		UtilliTruck2 = 887537515,
-		UtilliTruck3 = 2132890591,
 		Vacca = 338562499,
 		Vader = 4154065143,
+		Vagner = 1939284556,
 		Valkyrie = 2694714877,
 		Valkyrie2 = 1543134283,
 		Velum = 2621610858,
@@ -2927,10 +3705,12 @@
 		Verlierer2 = 1102544804,
 		Vestra = 1341619767,
 		Vigero = 3469130167,
+		Vigilante = 3052358707,
 		Vindicator = 2941886209,
 		Virgo = 3796912450,
 		Virgo2 = 3395457658,
 		Virgo3 = 16646064,
+		Visione = 3296789504,
 		Volatus = 2449479409,
 		Voltic = 2672523198,
 		Voltic2 = 989294410,
@@ -2943,10 +3723,11 @@
 		Windsor = 1581459400,
 		Windsor2 = 2364918497,
 		Wolfsbane = 3676349299,
+		XA21 = 917809321,
 		XLS = 1203490606,
 		XLS2 = 3862958888,
 		Youga = 65402552,
-		Youga2 = 3685342204,
+		Youga2 = 1026149675,
 		Zentorno = 2891838741,
 		Zion = 3172678083,
 		Zion2 = 3101863448,
@@ -2986,7 +3767,7 @@
 	}
 
 	class VehicleModCollection {
-		readonly Item: GTA.VehicleMod;
+		readonly Item: GTA.VehicleToggleMod;
 		WheelType: GTA.VehicleWheelType;
 		readonly AllowedWheelTypes: any[];
 		readonly LocalizedWheelTypeName: string;
@@ -3107,6 +3888,14 @@
 		ExtraSeat12 = 14
 	}
 
+	enum VehicleSubmarineTransformationState {
+		None = -1,
+		NotTransformed = 0,
+		TransformingToSubmarine = 1,
+		Transformed = 2,
+		TransformingToNormal = 3
+	}
+
 	class VehicleToggleMod {
 		readonly ModType: GTA.VehicleToggleModType;
 		IsInstalled: boolean;
@@ -3119,6 +3908,21 @@
 		Turbo = 18,
 		TireSmoke = 20,
 		XenonHeadlights = 22
+	}
+
+	enum VehicleWeaponHash {
+		Invalid = -1,
+		Tank = 1945616459,
+		SpaceRocket = -123497569,
+		PlaneRocket = -821520672,
+		PlayerLaser = -268631733,
+		PlayerBullet = 1259576109,
+		PlayerBuzzard = 1186503822,
+		PlayerHunter = -1625648674,
+		PlayerLazer = -494786007,
+		EnemyLaser = 1566990507,
+		SearchLight = -844344963,
+		Radar = -764006018
 	}
 
 	class VehicleWheel {
@@ -3187,7 +3991,8 @@
 	class Weapon {
 		readonly Hash: GTA.WeaponHash;
 		readonly IsPresent: boolean;
-		readonly Name: string;
+		readonly DisplayName: string;
+		readonly LocalizedName: string;
 		readonly Model: GTA.Model;
 		Tint: GTA.WeaponTint;
 		readonly Group: GTA.WeaponGroup;
@@ -3199,14 +4004,26 @@
 		InfiniteAmmo: boolean;
 		InfiniteAmmoClip: boolean;
 		readonly CanUseOnParachute: boolean;
-		readonly MaxComponents: number;
-		GetComponent(index: number): GTA.WeaponComponent;
-		GetComponentName(component: GTA.WeaponComponent): string;
-		SetComponent(component: GTA.WeaponComponent, active: boolean): void;
-		IsComponentActive(component: GTA.WeaponComponent): boolean;
-		GetDisplayNameFromHash(hash: GTA.WeaponHash): string;
-		GetComponentsFromHash(hash: GTA.WeaponHash): any[];
-		GetComponentDisplayNameFromHash(hash: GTA.WeaponHash, component: GTA.WeaponComponent): string;
+		readonly Components: GTA.WeaponComponentCollection;
+	}
+
+	class WeaponAsset {
+		readonly Hash: number;
+		NativeValue: number;
+		readonly IsValid: boolean;
+		readonly IsLoaded: boolean;
+		readonly DisplayName: string;
+		readonly LocalizedName: string;
+		constructor(hash: number);
+		constructor(hash: number);
+		constructor(hash: GTA.WeaponHash);
+		Request(): void;
+		Request(timeout: number): boolean;
+		Dismiss(): void;
+		Equals(weaponAsset: GTA.WeaponAsset): boolean;
+		Equals(obj: any): boolean;
+		GetHashCode(): number;
+		ToString(): string;
 	}
 
 	class WeaponCollection {
@@ -3226,7 +4043,28 @@
 		RemoveAll(): void;
 	}
 
-	enum WeaponComponent {
+	class WeaponComponent {
+		readonly ComponentHash: GTA.WeaponComponentHash;
+		Active: boolean;
+		readonly DisplayName: string;
+		readonly LocalizedName: string;
+		readonly AttachmentPoint: GTA.ComponentAttachmentPoint;
+	}
+
+	class WeaponComponentCollection {
+		readonly Item: GTA.WeaponComponent;
+		readonly Count: number;
+		readonly ClipVariationsCount: number;
+		readonly ScopeVariationsCount: number;
+		GetEnumerator(): any;
+		GetClipComponent(index: number): GTA.WeaponComponent;
+		GetScopeComponent(index: number): GTA.WeaponComponent;
+		GetSuppressorComponent(): GTA.WeaponComponent;
+		GetFlashLightComponent(): GTA.WeaponComponent;
+		GetLuxuryFinishComponent(): GTA.WeaponComponent;
+	}
+
+	enum WeaponComponentHash {
 		AdvancedRifleClip01 = 4203716879,
 		AdvancedRifleClip02 = 2395064697,
 		AdvancedRifleVarmodLuxe = 930927479,
@@ -3313,6 +4151,7 @@
 		MarksmanPistolClip01 = 3416146413,
 		MarksmanRifleClip01 = 3627761985,
 		MarksmanRifleClip02 = 3439143621,
+		MarksmanRifleVarmodLuxe = 371102273,
 		MicroSMGClip01 = 3410538224,
 		MicroSMGClip02 = 283556395,
 		MicroSMGVarmodLuxe = 1215999497,
@@ -3339,8 +4178,8 @@
 		SNSPistolClip01 = 4169150169,
 		SNSPistolClip02 = 2063610803,
 		SNSPistolVarmodLowrider = 2150886575,
-		SawnoffShotgunClip01 = 3352699429,
-		SawnoffShotgunVarmodLuxe = 2242268665,
+		SawnOffShotgunClip01 = 3352699429,
+		SawnOffShotgunVarmodLuxe = 2242268665,
 		SniperRifleClip01 = 2613461129,
 		SniperRifleVarmodLuxe = 1077065191,
 		SpecialCarbineClip01 = 3334989185,
@@ -3360,10 +4199,15 @@
 		Melee = 3566412244,
 		Pistol = 416676503,
 		SMG = 3337201093,
-		AssaultRifle = 3352383570,
+		AssaultRifle = 970310034,
+		DigiScanner = 3539449195,
+		FireExtinguisher = 4257178988,
 		MG = 1159398588,
+		NightVision = 3493187224,
+		Parachute = 431593103,
 		Shotgun = 860033945,
 		Sniper = 3082541095,
+		Stungun = 690389602,
 		Heavy = 2725924767,
 		Thrown = 1548507267,
 		PetrolCan = 1595662460
@@ -3438,7 +4282,14 @@
 		Ball = 600439132,
 		Flare = 1233104067,
 		NightVision = 2803906140,
-		Parachute = 4222310262
+		Parachute = 4222310262,
+		SweeperShotgun = 317205821,
+		BattleAxe = 3441901897,
+		CompactGrenadeLauncher = 125959754,
+		MiniSMG = 3173288789,
+		PipeBomb = 3125143736,
+		PoolCue = 2484171525,
+		Wrench = 419712736
 	}
 
 	enum WeaponTint {

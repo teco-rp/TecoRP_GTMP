@@ -1,10 +1,25 @@
 ﻿declare namespace NativeUI {
 
+	class BarTimerBar extends NativeUI.TimerBarBase {
+		Percentage: number;
+		BackgroundColor: System.Drawing.Color;
+		ForegroundColor: System.Drawing.Color;
+		constructor(label: string);
+		Draw(interval: number, offset: System.Drawing.Size): void;
+	}
+
 	class CheckboxChangeEvent {
 		constructor(object: any, method: any);
 		Invoke(sender: NativeUI.UIMenu, checkboxItem: NativeUI.UIMenuCheckboxItem, Checked: boolean): void;
 		BeginInvoke(sender: NativeUI.UIMenu, checkboxItem: NativeUI.UIMenuCheckboxItem, Checked: boolean, callback: System.AsyncCallback, object: any): System.IAsyncResult;
 		EndInvoke(result: System.IAsyncResult): void;
+	}
+
+	class DynamicListItemChangedEvent {
+		constructor(object: any, method: any);
+		Invoke(sender: NativeUI.UIMenuDynamicListItem, goRight: boolean): string;
+		BeginInvoke(sender: NativeUI.UIMenuDynamicListItem, goRight: boolean, callback: System.AsyncCallback, object: any): System.IAsyncResult;
+		EndInvoke(result: System.IAsyncResult): string;
 	}
 
 	class IndexChangedEvent {
@@ -72,39 +87,11 @@
 		EndInvoke(result: System.IAsyncResult): void;
 	}
 
-	class MenuPool {
-		MouseEdgeEnabled: boolean;
-		ControlDisablingEnabled: boolean;
-		ResetCursorOnOpen: boolean;
-		FormatDescriptions: boolean;
-		AUDIO_LIBRARY: string;
-		AUDIO_UPDOWN: string;
-		AUDIO_SELECT: string;
-		AUDIO_BACK: string;
-		AUDIO_ERROR: string;
-		WidthOffset: number;
-		CounterPretext: string;
-		DisableInstructionalButtons: boolean;
-		constructor();
-		Add(menu: NativeUI.UIMenu): void;
-		AddSubMenu(menu: NativeUI.UIMenu, text: string): NativeUI.UIMenu;
-		AddSubMenu(menu: NativeUI.UIMenu, text: string, description: string): NativeUI.UIMenu;
-		RefreshIndex(): void;
-		ToList(): System.Collections.Generic.List<NativeUI.UIMenu>;
-		ProcessControl(): void;
-		ProcessKey(key: System.Windows.Forms.Keys): void;
-		ProcessMouse(): void;
-		Draw(): void;
-		IsAnyMenuOpen(): boolean;
-		ProcessMenus(): void;
-		CloseAllMenus(): void;
-		SetBannerType(bannerType: NativeUI.Sprite): void;
-		SetBannerType(bannerType: NativeUI.UIResRectangle): void;
-		SetBannerType(bannerPath: string): void;
-		SetKey(menuControl: NativeUI.UIMenu.MenuControls, control: GTA.Control): void;
-		SetKey(menuControl: NativeUI.UIMenu.MenuControls, control: GTA.Control, controllerIndex: number): void;
-		SetKey(menuControl: NativeUI.UIMenu.MenuControls, control: System.Windows.Forms.Keys): void;
-		ResetKey(menuControl: NativeUI.UIMenu.MenuControls): void;
+	class MenuVisibilityChangedEvent {
+		constructor(object: any, method: any);
+		Invoke(sender: NativeUI.UIMenu, visible: boolean): void;
+		BeginInvoke(sender: NativeUI.UIMenu, visible: boolean, callback: System.AsyncCallback, object: any): System.IAsyncResult;
+		EndInvoke(result: System.IAsyncResult): void;
 	}
 
 	class Sprite {
@@ -112,50 +99,52 @@
 		constructor(textureDict: string, textureName: string, position: System.Drawing.Point, size: System.Drawing.Size, heading: number, color: System.Drawing.Color);
 		constructor(textureDict: string, textureName: string, position: System.Drawing.Point, size: System.Drawing.Size);
 		Draw(): void;
-		DrawTexture(path: string, position: System.Drawing.Point, size: System.Drawing.Size, rotation: number, color: System.Drawing.Color): void;
-		DrawTexture(path: string, position: System.Drawing.Point, size: System.Drawing.Size): void;
-		WriteFileFromResources(yourAssembly: any, fullResourceName: string): string;
-		WriteFileFromResources(yourAssembly: any, fullResourceName: string, savePath: string): string;
+	}
+
+	class TextTimerBar extends NativeUI.TimerBarBase {
+		Text: string;
+		TextColor: System.Drawing.Color;
+		constructor(label: string, text: string);
+		Draw(interval: number, offset: System.Drawing.Size): void;
+	}
+
+	class TimerBarBase {
+		Label: string;
+		Color: System.Drawing.Color;
+		Offset: number;
+		constructor(label: string);
+		Draw(interval: number, offset: System.Drawing.Size): void;
 	}
 
 	class UIMenu {
-		readonly Children: System.Collections.Generic.Dictionary<NativeUI.UIMenuItem, NativeUI.UIMenu>;
+		readonly Offset: System.Drawing.Point;
 		readonly WidthOffset: number;
-		Visible: boolean;
-		CurrentSelection: number;
-		readonly IsUsingController: boolean;
+		readonly Children: System.Collections.Generic.Dictionary<NativeUI.UIMenuItem, NativeUI.UIMenu>;
 		readonly Size: number;
 		readonly Title: NativeUI.UIResText;
 		readonly Subtitle: NativeUI.UIResText;
 		CounterPretext: string;
 		ParentMenu: NativeUI.UIMenu;
 		ParentItem: NativeUI.UIMenuItem;
+		Visible: boolean;
+		CurrentSelection: number;
 		OnIndexChange: IEvent<(sender: NativeUI.UIMenu, newIndex: number) => void>;
 		OnListChange: IEvent<(sender: NativeUI.UIMenu, listItem: NativeUI.UIMenuListItem, newIndex: number) => void>;
 		OnCheckboxChange: IEvent<(sender: NativeUI.UIMenu, checkboxItem: NativeUI.UIMenuCheckboxItem, Checked: boolean) => void>;
 		OnItemSelect: IEvent<(sender: NativeUI.UIMenu, selectedItem: NativeUI.UIMenuItem, index: number) => void>;
 		OnMenuClose: IEvent<(sender: NativeUI.UIMenu) => void>;
+		OnMenuVisibilityChanged: IEvent<(sender: NativeUI.UIMenu, visible: boolean) => void>;
 		OnMenuChange: IEvent<(oldMenu: NativeUI.UIMenu, newMenu: NativeUI.UIMenu, forward: boolean) => void>;
 		constructor(title: string, subtitle: string);
 		constructor(title: string, subtitle: string, offset: System.Drawing.Point);
 		constructor(title: string, subtitle: string, offset: System.Drawing.Point, customBanner: string);
 		constructor(title: string, subtitle: string, offset: System.Drawing.Point, spriteLibrary: string, spriteName: string);
-		SetMenuWidthOffset(widthOffset: number): void;
-		DisEnableControls(enable: boolean): void;
-		DisableInstructionalButtons(disable: boolean): void;
 		SetBannerType(spriteBanner: NativeUI.Sprite): void;
 		SetBannerType(rectangle: NativeUI.UIResRectangle): void;
 		SetBannerType(pathToCustomSprite: string): void;
 		AddItem(item: NativeUI.UIMenuItem): void;
 		InsertItem(item: NativeUI.UIMenuItem, position: number): void;
 		RemoveItemAt(index: number): void;
-		RefreshIndex(): void;
-		Clear(): void;
-		Draw(): void;
-		GetScreenResolutionMantainRatio(): System.Drawing.SizeF;
-		IsMouseInBounds(topLeft: System.Drawing.Point, boxSize: System.Drawing.Size): boolean;
-		IsMouseInListItemArrows(item: NativeUI.UIMenuListItem, topLeft: System.Drawing.Point, safezone: System.Drawing.Point): number;
-		GetSafezoneBounds(): System.Drawing.Point;
 		GoUpOverflow(): void;
 		GoUp(): void;
 		GoDownOverflow(): void;
@@ -166,19 +155,24 @@
 		GoBack(): void;
 		BindMenuToItem(menuToBind: NativeUI.UIMenu, itemToBindTo: NativeUI.UIMenuItem): void;
 		ReleaseMenuFromItem(releaseFrom: NativeUI.UIMenuItem): boolean;
-		ProcessMouse(): void;
+		DisEnableControls(enable: boolean): void;
+		DisableInstructionalButtons(disable: boolean): void;
 		SetKey(control: NativeUI.UIMenu.MenuControls, keyToSet: System.Windows.Forms.Keys): void;
-		SetKey(control: NativeUI.UIMenu.MenuControls, gtaControl: GTA.Control): void;
-		SetKey(control: NativeUI.UIMenu.MenuControls, gtaControl: GTA.Control, controlIndex: number): void;
+		SetKey(control: NativeUI.UIMenu.MenuControls, gtaControl: GTA.Control, controlIndex?: number): void;
 		ResetKey(control: NativeUI.UIMenu.MenuControls): void;
 		HasControlJustBeenPressed(control: NativeUI.UIMenu.MenuControls, key?: System.Windows.Forms.Keys): boolean;
 		HasControlJustBeenReleased(control: NativeUI.UIMenu.MenuControls, key?: System.Windows.Forms.Keys): boolean;
 		IsControlBeingPressed(control: NativeUI.UIMenu.MenuControls, key?: System.Windows.Forms.Keys): boolean;
-		ProcessControl(key?: System.Windows.Forms.Keys): void;
-		ProcessKey(key: System.Windows.Forms.Keys): void;
 		AddInstructionalButton(button: NativeUI.InstructionalButton): void;
 		RemoveInstructionalButton(button: NativeUI.InstructionalButton): void;
+		SetMenuWidthOffset(widthOffset: number): void;
+		RefreshIndex(): void;
+		Clear(): void;
+		HideMenu(): void;
 		UpdateScaleform(): void;
+		Draw(): void;
+		ProcessControl(): void;
+		ProcessMouse(): void;
 	}
 
 	class UIMenuCheckboxItem extends NativeUI.UIMenuItem {
@@ -202,6 +196,19 @@
 		constructor(label: string, color: System.Drawing.Color, highlightColor: System.Drawing.Color);
 		constructor(label: string, description: string, color: System.Drawing.Color, highlightColor: System.Drawing.Color);
 		Draw(): void;
+	}
+
+	class UIMenuDynamicListItem extends NativeUI.UIMenuItem {
+		CurrentListItem: string;
+		OnDynamicListItemChanged: IEvent<(sender: NativeUI.UIMenuDynamicListItem, goRight: boolean) => void>;
+		constructor(text: string, startingItem: string);
+		constructor(text: string, description: string, startingItem: string);
+		ProcessControl(control: NativeUI.UIMenu.MenuControls): boolean;
+		Position(y: number): void;
+		Draw(): void;
+		SetRightBadge(badge: NativeUI.UIMenuItem.BadgeStyle): void;
+		SetRightLabel(text: string): void;
+		CurrentItem(): string;
 	}
 
 	class UIMenuItem {
@@ -232,6 +239,7 @@
 		OnListChanged: IEvent<(sender: NativeUI.UIMenuListItem, newIndex: number) => void>;
 		constructor(text: string, items: System.Collections.Generic.List<any>, index: number);
 		constructor(text: string, items: System.Collections.Generic.List<any>, index: number, description: string);
+		CurrentItem(): string;
 		Position(y: number): void;
 		ItemToIndex(item: any): number;
 		IndexToItem(index: number): any;
@@ -256,9 +264,6 @@
 		constructor(caption: string, position: System.Drawing.Point, scale: number);
 		constructor(caption: string, position: System.Drawing.Point, scale: number, color: System.Drawing.Color);
 		constructor(caption: string, position: System.Drawing.Point, scale: number, color: System.Drawing.Color, font: GTA.UI.Font, justify: NativeUI.UIResText.Alignment);
-		AddLongString(str: string): void;
-		MeasureStringWidth(str: string, font: GTA.UI.Font, scale: number): number;
-		MeasureStringWidthNoConvert(str: string, font: GTA.UI.Font, scale: number): number;
 		Draw(offset: System.Drawing.SizeF): void;
 	}
 
