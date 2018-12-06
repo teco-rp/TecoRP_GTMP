@@ -22,7 +22,8 @@ API.onKeyDown.connect(function (Player, args) {
         API.triggerServerEvent("crafting_open_key");
     }
 });
-API.onUpdate.connect(function ()
-{
-    API.drawMenu(crafting_menu);
-});
+//TODO: [Deprecated] Check after test
+//API.onUpdate.connect(function ()
+//{
+//    API.drawMenu(crafting_menu);
+//});

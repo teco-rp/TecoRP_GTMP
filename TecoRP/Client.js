@@ -1,11 +1,8 @@
-﻿/// <reference path="types-gt-mp/index.d.ts" />
-
+/// <reference path="types-gt-mp/index.d.ts" />
 //-------------CUSTOM-RETURN-MENU-------------
 var custom_menu = API.createMenu("MENU", "AÇIKLAMA", 100, 100, 6);
 custom_menu.Visible = false;
 custom_menu.ResetKey(menuControl.Back);
-
-
 var IDList;
 var retunName = "";
 API.onServerEventTrigger.connect(function (name, args) {
@@ -21,19 +18,16 @@ API.onServerEventTrigger.connect(function (name, args) {
         custom_menu.Visible = true;
     }
 });
-custom_menu.OnItemSelect.connect(function (sender, item, index)
-{
+custom_menu.OnItemSelect.connect(function (sender, item, index) {
     API.triggerServerEvent(retunName, IDList[index]);
     custom_menu.Visible = false;
     custom_menu.Clear();
     API.showCursor(false);
 });
-
 //TODO: [Deprecated] Check after test
 //API.onUpdate.connect(function () {
 //    API.drawMenu(custom_menu);
 //});
-
 API.onKeyDown.connect(function (Player, args) {
     if (custom_menu.Visible == true && args.KeyCode == Keys.Escape) {
         custom_menu.Visible = false;
@@ -41,3 +35,4 @@ API.onKeyDown.connect(function (Player, args) {
         custom_menu.Clear();
     }
 });
+//# sourceMappingURL=Client.js.map

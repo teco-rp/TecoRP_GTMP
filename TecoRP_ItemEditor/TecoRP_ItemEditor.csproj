@@ -33,16 +33,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="GrandTheftMultiplayer.Server, Version=0.1.513.481, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\Enis\Desktop\GT-MP\GrandTheftMultiplayer.Server.exe</HintPath>
+    <Reference Include="GrandTheftMultiplayer.Server, Version=0.1.798.595, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\grandtheftmultiplayer.api.0.1.798.595\lib\net452\GrandTheftMultiplayer.Server.exe</HintPath>
     </Reference>
-    <Reference Include="GrandTheftMultiplayer.Shared, Version=0.1.489.410, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\Enis\Desktop\GT-MP\GrandTheftMultiplayer.Shared.dll</HintPath>
+    <Reference Include="GrandTheftMultiplayer.Shared, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\grandtheftmultiplayer.api.0.1.798.595\lib\net452\GrandTheftMultiplayer.Shared.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -145,6 +143,36 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Ekran Alıntısı2.PNG" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="types-gt-mp\Declarations.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Client.Contracts.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Client.GUI.CEF.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Client.Javascript.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Client.Javascript.ScriptContext.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Client.Models.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Client.Models.Game.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Client.Sound.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Client.Sync.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Shared.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Shared.Math.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\GTA.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\GTA.Math.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\GTA.Native.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\GTA.NaturalMotion.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\GTA.UI.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\index.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\Microsoft.ClearScript.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\NativeUI.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\NativeUI.UIMenu.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\NativeUI.UIMenuDynamicListItem.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\NativeUI.UIMenuItem.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\NativeUI.UIResText.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\System.Collections.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\System.Collections.Generic.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\System.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\System.Drawing.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\System.Windows.Forms.d.ts" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

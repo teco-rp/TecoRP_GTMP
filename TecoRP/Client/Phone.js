@@ -194,12 +194,13 @@ API.onKeyDown.connect(function (Player, args) {
     }
 });
 
-API.onUpdate.connect(function () {
-    API.drawMenu(phone_menu);
-    API.drawMenu(phonebook_menu);
-    API.drawMenu(phone_gps_menu);
-    API.drawMenu(phone_downloadapp_menu);
-    API.drawMenu(phone_emlakci_menu);
-});
+//TODO: [Deprecated] Check after test
+//API.onUpdate.connect(function () {
+//    API.drawMenu(phone_menu);
+//    API.drawMenu(phonebook_menu);
+//    API.drawMenu(phone_gps_menu);
+//    API.drawMenu(phone_downloadapp_menu);
+//    API.drawMenu(phone_emlakci_menu);
+//});
 
 //------------------PHONEBOOK-----------------------

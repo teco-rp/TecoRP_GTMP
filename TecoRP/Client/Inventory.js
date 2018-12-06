@@ -99,11 +99,11 @@ API.onKeyDown.connect(function (Player, args) {
 
 });
 
-
-API.onUpdate.connect(function () {
-    API.drawMenu(inventory_menu);
-    API.drawMenu(player_selection_menu);
-});
+//TODO: [Deprecated] Check after test
+//API.onUpdate.connect(function () {
+//    API.drawMenu(inventory_menu);
+//    API.drawMenu(player_selection_menu);
+//});
 
 
 
@@ -139,6 +139,7 @@ API.onKeyDown.connect(function (Player, args) {
         players_menu.Clear();
     }
 });
-API.onUpdate.connect(function () {
-    API.drawMenu(players_menu);
-});
+//TODO: [Deprecated] Check after test
+//API.onUpdate.connect(function () {
+//    API.drawMenu(players_menu);
+//});

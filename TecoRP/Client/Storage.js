@@ -36,6 +36,8 @@ API.onKeyDown.connect(function (Player, args) {
         storage_menu.Clear();
     }
 });
-API.onUpdate.connect(function () {
-    API.drawMenu(storage_menu);
-});
+
+//TODO: [Deprecated] Check after test
+//API.onUpdate.connect(function () {
+//    API.drawMenu(storage_menu);
+//});

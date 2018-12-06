@@ -33,8 +33,10 @@ API.onKeyDown.connect(function (Player, args) {
         vault_menu.Clear();
     }
 });
-API.onUpdate.connect(function () {
-    if (vault_menu.Visible) {
-        API.drawMenu(vault_menu);
-    }
-});
+
+//TODO: [Deprecated] Check after test
+//API.onUpdate.connect(function () {
+//    if (vault_menu.Visible) {
+//        API.drawMenu(vault_menu);
+//    }
+//});

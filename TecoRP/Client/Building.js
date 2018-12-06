@@ -57,8 +57,10 @@ API.onKeyDown.connect(function (Player, args) {
         API.triggerServerEvent("return_building_ring", BuildingId, building_menu.CurrentSelection);
     }
 });
-API.onUpdate.connect(function () {
-    if (building_menu.Visible) {
-        API.drawMenu(building_menu);
-    }
-});
+
+//TODO: [Deprecated] Check after test
+//API.onUpdate.connect(function () {
+//    if (building_menu.Visible) {
+//        API.drawMenu(building_menu);
+//    }
+//});

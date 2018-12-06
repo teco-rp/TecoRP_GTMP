@@ -33,6 +33,8 @@ API.onKeyDown.connect(function (Player, args) {
  
     }
 });
-API.onUpdate.connect(function () {
-    API.drawMenu(shop_menu);
-});
+
+//TODO: [Deprecated] Check after test
+//API.onUpdate.connect(function () {
+//    API.drawMenu(shop_menu);
+//});

@@ -36,8 +36,9 @@ job_kamyon_selector_menu.OnItemSelect.connect(function (sender, item, index) {
     API.showCursor(false);
 });
 
-API.onUpdate.connect(function () {
-    API.drawMenu(job_tir_selector_menu);
-    API.drawMenu(job_kamyon_selector_menu);
-});
+//TODO: [Deprecated] Check after test
+//API.onUpdate.connect(function () {
+//    API.drawMenu(job_tir_selector_menu);
+//    API.drawMenu(job_kamyon_selector_menu);
+//});
 //--------------------------------------
