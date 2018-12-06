@@ -1,9 +1,8 @@
-﻿let menuPool = null;
+﻿let menu = null;
 
 API.onServerEventTrigger.connect(function (name, args) {
     if (name == "my_vehicles") {
-        menuPool = API.getMenuPool();
-        let menu = API.createMenu("Araçlarım", 0, 0, 6);
+        menu = API.createMenu("Araçlarım", 0, 0, 6);
         let item0 = API.createMenuItem(args[0], "");
         let item1 = API.createMenuItem(args[1], "");
         let item2 = API.createMenuItem(args[2], "");
@@ -36,7 +35,7 @@ API.onServerEventTrigger.connect(function (name, args) {
         if (args[0] != "") { menu.AddItem(item2); }
         if (args[0] != "") { menu.AddItem(item3); }
         if (args[0] != "") { menu.AddItem(item4); }
-        menuPool.Add(menu);
+        menu.Add(menu);
 
         menu.Visible = true;
     }
@@ -49,8 +48,8 @@ API.onServerEventTrigger.connect(function (name, args) {
 });
 
 
-API.onUpdate.connect(function () {
-    if (menuPool != null) {
-        menuPool.ProcessMenus();
-    }
-});
+//API.onUpdate.connect(function () {
+//    if (menu != null) {
+//        menuPool.ProcessMenus();
+//    }
+//});
