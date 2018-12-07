@@ -30,9 +30,5 @@ API.onKeyDown.connect(function (Player, args) {
         inventory_menu.Clear();
     }
 });
-//TODO: [Deprecated] Check after test
-//API.onUpdate.connect(function () {
-//    API.drawMenu(inventory_menu);
-//});
 
 //-----------------------------------------------------

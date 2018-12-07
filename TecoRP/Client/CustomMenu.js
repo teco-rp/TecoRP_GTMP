@@ -33,11 +33,6 @@ custom_menu.OnItemSelect.connect(function (sender, item, index) {
 
 });
 
-//TODO: [Deprecated] Check after test
-//API.onUpdate.connect(function () {
-//    API.drawMenu(custom_menu);
-//});
-
 API.onKeyDown.connect(function (Player, args) {
     if (custom_menu.Visible == true && args.KeyCode == Keys.Escape) {
         custom_menu.Visible = false;

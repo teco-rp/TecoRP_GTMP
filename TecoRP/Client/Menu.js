@@ -35,7 +35,6 @@ API.onServerEventTrigger.connect(function (name, args) {
         if (args[0] != "") { menu.AddItem(item2); }
         if (args[0] != "") { menu.AddItem(item3); }
         if (args[0] != "") { menu.AddItem(item4); }
-        menu.Add(menu);
 
         menu.Visible = true;
     }

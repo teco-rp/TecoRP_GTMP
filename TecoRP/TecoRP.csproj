@@ -34,10 +34,12 @@
       <HintPath>..\packages\BCrypt-Official.0.1.109\lib\BCrypt.Net.dll</HintPath>
     </Reference>
     <Reference Include="GrandTheftMultiplayer.Server, Version=0.1.798.595, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\grandtheftmultiplayer.api.0.1.798.595\lib\net452\GrandTheftMultiplayer.Server.exe</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>D:\Server\GrandTheftMultiplayer.Server.exe</HintPath>
     </Reference>
     <Reference Include="GrandTheftMultiplayer.Shared, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\grandtheftmultiplayer.api.0.1.798.595\lib\net452\GrandTheftMultiplayer.Shared.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>D:\Server\GrandTheftMultiplayer.Shared.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -192,34 +194,6 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Client.ts" />
-    <TypeScriptCompile Include="types-gt-mp\Declarations.d.ts" />
-    <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Client.Contracts.d.ts" />
-    <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Client.GUI.CEF.d.ts" />
-    <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Client.Javascript.d.ts" />
-    <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Client.Javascript.ScriptContext.d.ts" />
-    <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Client.Models.d.ts" />
-    <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Client.Models.Game.d.ts" />
-    <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Client.Sound.d.ts" />
-    <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Client.Sync.d.ts" />
-    <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Shared.d.ts" />
-    <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Shared.Math.d.ts" />
-    <TypeScriptCompile Include="types-gt-mp\GTA.d.ts" />
-    <TypeScriptCompile Include="types-gt-mp\GTA.Math.d.ts" />
-    <TypeScriptCompile Include="types-gt-mp\GTA.Native.d.ts" />
-    <TypeScriptCompile Include="types-gt-mp\GTA.NaturalMotion.d.ts" />
-    <TypeScriptCompile Include="types-gt-mp\GTA.UI.d.ts" />
-    <TypeScriptCompile Include="types-gt-mp\index.d.ts" />
-    <TypeScriptCompile Include="types-gt-mp\Microsoft.ClearScript.d.ts" />
-    <TypeScriptCompile Include="types-gt-mp\NativeUI.d.ts" />
-    <TypeScriptCompile Include="types-gt-mp\NativeUI.UIMenu.d.ts" />
-    <TypeScriptCompile Include="types-gt-mp\NativeUI.UIMenuDynamicListItem.d.ts" />
-    <TypeScriptCompile Include="types-gt-mp\NativeUI.UIMenuItem.d.ts" />
-    <TypeScriptCompile Include="types-gt-mp\NativeUI.UIResText.d.ts" />
-    <TypeScriptCompile Include="types-gt-mp\System.Collections.d.ts" />
-    <TypeScriptCompile Include="types-gt-mp\System.Collections.Generic.d.ts" />
-    <TypeScriptCompile Include="types-gt-mp\System.d.ts" />
-    <TypeScriptCompile Include="types-gt-mp\System.Drawing.d.ts" />
-    <TypeScriptCompile Include="types-gt-mp\System.Windows.Forms.d.ts" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -41,10 +41,6 @@ bank_menu.OnItemSelect.connect(function (sender, item, index) {
 
 });
 
-//TODO: [Deprecated] Check after test
-//API.onUpdate.connect(function () {
-//    API.drawMenu(bank_menu);
-//});
 
 API.onKeyDown.connect(function (Player, args) {
     if (args.KeyCode == Keys.Escape && bank_menu.Visible == true) {

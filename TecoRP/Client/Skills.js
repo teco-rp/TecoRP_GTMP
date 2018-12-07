@@ -14,10 +14,6 @@ API.onServerEventTrigger.connect(function (name, args) {
     }
 });
 
-//TODO: [Deprecated] Check after test
-//API.onUpdate.connect(function () {
-//    API.drawMenu(skill_menu);
-//});
 
 API.onKeyDown.connect(function (Player, args) {
     if (skill_menu.Visible == true && args.KeyCode == Keys.Escape) {

@@ -25,6 +25,7 @@ namespace TecoRP.Managers
             API.onClientEventTrigger += API_onClientEventTrigger;
             
             API.onPlayerExitVehicle += API_onPlayerExitVehicle;
+            API.onPlayerEnterVehicle += API_onPlayerEnterVehicle1;
             API.onPlayerEnterVehicle += API_onPlayerEnterVehicle;
             API.onVehicleDoorBreak += API_onVehicleDoorBreak;
             VehicleSpawn();
@@ -77,6 +78,7 @@ namespace TecoRP.Managers
                 try
                 {
                     SaveVehicleFuel(sender, Convert.ToInt32(arguments[0]), (NetHandle)arguments[1]);
+                    API.consoleOutput("VEHICLE FUEL RETURNED AS : "+ arguments[0]);
                 }
                 catch (Exception ex)
                 {
@@ -170,6 +172,8 @@ namespace TecoRP.Managers
 
         private void API_onPlayerEnterVehicle(Client player, GrandTheftMultiplayer.Shared.NetHandle vehicle,int seat)
         {
+            API.shared.consoleOutput($"Player {player.socialClubName} has entered {vehicle} vehicle");
+
             foreach (var item in db_SaleVehicles.currentSaleVehicleList.Items)
             {
                 if (Vector3.Distance(player.position, new Vector3(item.Position.X, item.Position.Y, item.Position.Z)) <= 1)
@@ -183,10 +187,10 @@ namespace TecoRP.Managers
             player.seatbelt = false;
         }
 
-        private void API_onPlayerEnterVehicle1(Client player, NetHandle vehicle)
+        private void API_onPlayerEnterVehicle1(Client player, NetHandle vehicle, int seat)
         {
             var _vehicle = db_Vehicles.FindNearestVehicle(player.position);
-            // API.shared.consoleOutput("fuel veh is null: " + (_vehicle == null).ToString());
+            API.shared.consoleOutput($"Player {player.socialClubName} has entered {vehicle} vehicle");
 
             if (API.getVehicleClass(_vehicle.VehicleModelId) == 13) { return; }
 

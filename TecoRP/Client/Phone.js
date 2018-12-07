@@ -60,8 +60,8 @@ API.onServerEventTrigger.connect(function (name, args) {
         for (var i = 0; i < args[0]; i++) {
             phone_menu.AddItem(API.createMenuItem(args[1][i], ""));
         }
-        //API.showCursor(true);
         phone_menu.Visible = true;
+        API.showCursor(false);
     }
 
     if (name == "phone_contacts") {
@@ -194,13 +194,5 @@ API.onKeyDown.connect(function (Player, args) {
     }
 });
 
-//TODO: [Deprecated] Check after test
-//API.onUpdate.connect(function () {
-//    API.drawMenu(phone_menu);
-//    API.drawMenu(phonebook_menu);
-//    API.drawMenu(phone_gps_menu);
-//    API.drawMenu(phone_downloadapp_menu);
-//    API.drawMenu(phone_emlakci_menu);
-//});
 
 //------------------PHONEBOOK-----------------------

@@ -37,7 +37,3 @@ API.onKeyDown.connect(function (Player, args) {
 
 });
 
-//TODO: [Deprecated] Check after test
-//API.onUpdate.connect(function () {
-//    API.drawMenu(player_selector_menu);
-//});

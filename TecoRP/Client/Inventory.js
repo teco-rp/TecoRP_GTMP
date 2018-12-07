@@ -99,14 +99,6 @@ API.onKeyDown.connect(function (Player, args) {
 
 });
 
-//TODO: [Deprecated] Check after test
-//API.onUpdate.connect(function () {
-//    API.drawMenu(inventory_menu);
-//    API.drawMenu(player_selection_menu);
-//});
-
-
-
 
 //----------------GIVE---ITEM-------------------
 var players_menu = API.createMenu("Envanter", "Eşyayı vermek istediğiniz kişiyi seçin |", 0, 0, 4);
@@ -139,7 +131,3 @@ API.onKeyDown.connect(function (Player, args) {
         players_menu.Clear();
     }
 });
-//TODO: [Deprecated] Check after test
-//API.onUpdate.connect(function () {
-//    API.drawMenu(players_menu);
-//});
