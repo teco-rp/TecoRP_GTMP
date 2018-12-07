@@ -129,7 +129,7 @@ namespace TecoRP.Models
     public class StorageList
     {
         public List<ClientItem> Items { get; set; }
-        public StorageList(){ Items = new List<Models.ClientItem>(); }
+        public StorageList(){ Items = new List<ClientItem>(); }
     }
 
     public class TradeModel
@@ -226,6 +226,7 @@ namespace TecoRP.Models
         [Description("E-Ticaret")]
         Eticaret,
     }
+    
     public enum Operator
     {
         Vodacell,

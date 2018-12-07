@@ -318,9 +318,11 @@ namespace TecoRP.Users
         public static void RevivePlayer(Client player)
         {
             API.shared.setEntityData(player, "Dead", false);
+            API.shared.setEntityData(player, "DeadSeconds", 0);
             API.shared.stopPlayerAnimation(player);
             API.shared.setEntityInvincible(player, false);
             API.shared.freezePlayer(player, false);
+            db_Accounts.SavePlayerAccount(player);
         }
     }
 }

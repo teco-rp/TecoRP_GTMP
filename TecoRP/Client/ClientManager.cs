@@ -371,8 +371,12 @@ namespace TecoRP.Clients
         }
         public static void ShowCustomMenu(Client sender, List<string> names, List<string> descs, List<int> IDs,object customArgs, string title = "MENU", string subTitle = "", string returnName = "")
         {
-
             API.shared.triggerClientEvent(sender, "open_custom_menu", names.Count, names.ToArray(), descs.ToArray(), IDs.ToArray(),customArgs,returnName,title,subTitle);
+        }
+
+        public static void OpenOperatorMenu(Client player,string operatorName, string pricingSentence)
+        {
+            API.shared.triggerClientEvent(player, "open_operator_menu", operatorName, pricingSentence);
         }
     }
 }

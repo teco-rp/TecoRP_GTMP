@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -28,6 +29,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="BCrypt.Net, Version=0.1.5073.29922, Culture=neutral, PublicKeyToken=6bcd409ee6bc9292, processorArchitecture=MSIL">
@@ -41,8 +43,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>D:\Server\GrandTheftMultiplayer.Shared.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.4.4.12\lib\net45\NLog.dll</HintPath>
@@ -153,6 +155,8 @@
     <Compile Include="Models\Vehicles.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Managers\RPGManager.cs" />
+    <Compile Include="Repository\Base\IBaseRepository.cs" />
+    <Compile Include="Repository\Base\JsonRepositoryBase.cs" />
     <Compile Include="Users\Animation.cs" />
     <Compile Include="Users\MedicalCommands.cs" />
     <Compile Include="Users\PoliceCommands.cs" />
@@ -174,6 +178,7 @@
     <Content Include="Client\Menu.js" />
     <Content Include="Client\OnSearchPlayer.js" />
     <Content Include="Client\Phone.js" />
+    <Content Include="Client\PhoneOperatorMenu.js" />
     <Content Include="Client\Shop.js" />
     <Content Include="Client\Shortcuts.js" />
     <Content Include="Client\Skills.js" />

@@ -5,7 +5,15 @@
     }
 
     if (name == "set_character_sex") {
-        API.triggerServerEvent("return_character_sex", API.getUserInput("kadın", 5), args[0]);
+        var selectionMenu = API.createMenu("Cinsiyet", "Karakterinizin cinsiyetini seçiniz.", 100, 100, 6);
+        selectionMenu.AddItem(API.createMenuItem("Kadın", ""));
+        selectionMenu.AddItem(API.createMenuItem("Erkek", ""));
+        selectionMenu.Visible = true;
+
+        selectionMenu.OnItemSelect.connect(function (sender, item, index) {
+            API.triggerServerEvent("return_character_sex", index == 0 ? "Kadın" : "Erkek", args[0]);
+            selectionMenu.Visible = false;
+        });
     }
 
     if (name == "snow_all") {

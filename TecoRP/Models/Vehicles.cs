@@ -12,84 +12,89 @@ namespace TecoRP.Models
 {
     public class Vehicle
     {
-        [XmlIgnore]
-        public GrandTheftMultiplayer.Server.Elements.Vehicle VehicleOnMap{ get; set; }
-        [XmlElement("VehId")]
+        [JsonIgnore]
+        public GrandTheftMultiplayer.Server.Elements.Vehicle VehicleOnMap { get; set; }
+        //-------------------------------------------------------------------
+        [JsonProperty(PropertyName = "id")]
         public long VehicleId { get; set; }
-        [XmlAttribute("Livery")]
+        //-------------------------------------------------------------------
+        [JsonProperty(PropertyName = "li")]
         public int Livery { get; set; } = 0;
-
-        [XmlElement("VehModel")]
+        //-------------------------------------------------------------------
+        [JsonProperty(PropertyName = "model")]
         public VehicleHash VehicleModelId { get; set; }
-        [XmlElement("VehOwner")]
+        //-------------------------------------------------------------------
+        [JsonProperty(PropertyName = "owner")]
         public string OwnerSocialClubName { get; set; }
-
-        [XmlAttribute("PastMinutes")]
+        //-------------------------------------------------------------------
+        [JsonProperty(PropertyName = "pm")]
         public int PastMinutes { get; set; } = 0;
-        [XmlAttribute("Tax")]
+        //-------------------------------------------------------------------
+        [JsonProperty(PropertyName = "tax")]
         public float Tax { get; set; } = 0;
+        //-------------------------------------------------------------------
+        [JsonProperty(PropertyName = "tb")]
         public bool IsBlockedForTax { get; set; } = false;
-        [XmlElement("Plate")]
+        //-------------------------------------------------------------------
+        [JsonProperty(PropertyName = "p")]
         public string Plate { get; set; }
-        [XmlElement("faction")]
+        //-------------------------------------------------------------------
+        [JsonProperty(PropertyName = "f")]
         public int FactionId { get; set; } = -1;
-
-        [XmlElement("job")]
+        //-------------------------------------------------------------------
+        [JsonProperty(PropertyName = "j")]
         public int JobId { get; set; } = -1;
-        [XmlAttribute("RentedTime")]
+        //-------------------------------------------------------------------
+        [JsonProperty(PropertyName = "rt")]
         public DateTime RentedTime { get; set; }
-        [XmlAttribute("RentedPlayer")]
-        public string RentedPlayerSocialClubId { get; set; } 
-
-        [XmlElement("Color_1")]
+        //-------------------------------------------------------------------
+        [JsonProperty(PropertyName = "rOwner")]
+        public string RentedPlayerSocialClubId { get; set; }
+        //-------------------------------------------------------------------
+        [JsonProperty(PropertyName = "c1")]
         public int Color1 { get; set; }
-        [XmlElement("Color_2")]
+        //-------------------------------------------------------------------
+        [JsonProperty(PropertyName = "c2")]
         public int Color2 { get; set; }
-        [XmlElement("Mod_Color_1")]
-        public int mod_color1 { get; set; }
-        [XmlElement("Mod_Color_2")]
-        public int mod_color2 { get; set; }
-        [XmlElement("Mods")]
+        //-------------------------------------------------------------------
+        [JsonProperty(PropertyName = "mc1")]
+        public int ModColor1 { get; set; }
+        //-------------------------------------------------------------------
+        [JsonProperty(PropertyName = "mc2")]
+        public int ModColor2 { get; set; }
+        //-------------------------------------------------------------------
+        [JsonProperty(PropertyName = "mods")]
         public int[] Mods { get; set; } = new int[70];
-
-        [XmlElement("IsLocked")]
+        //-------------------------------------------------------------------
+        [JsonProperty(PropertyName = "l")]
         public bool IsLocked { get; set; }
-        [XmlElement("Fuel")]
+        //-------------------------------------------------------------------
+        [JsonProperty(PropertyName = "fuel")]
         public float Fuel { get; set; }
-        [XmlElement("LastPosition")]
+        //-------------------------------------------------------------------
+        [JsonProperty(PropertyName = "lp")]
         public Vector3 LastPosition { get; set; }
-        [XmlElement("Quaternation")]
+        //-------------------------------------------------------------------
+        [JsonProperty(PropertyName = "lr")]
         public Vector3 LastRotation { get; set; }
-        [XmlAttribute("Dimension")]
+        //-------------------------------------------------------------------
+        [JsonProperty(PropertyName = "d")]
         public int Dimension { get; set; } = 0;
-        [XmlElement("Baggage")]
-        public string BaggageItems { get; set; }
-        [XmlElement("MaxBaggageCount")]
+        //-------------------------------------------------------------------
+        [JsonProperty(PropertyName = "b")]
+        public StorageList BaggageItems { get; set; }
+        //-------------------------------------------------------------------
+        [JsonProperty(PropertyName = "mb")]
         public int MaxBaggageCount { get; set; } = 10;
-        [XmlElement("Torpedo")]
-        public string TorpedoItems { get; set; } 
-        [XmlElement("MaxTorpedoCount")]
+        //-------------------------------------------------------------------
+        [JsonProperty(PropertyName = "t")]
+        public StorageList TorpedoItems { get; set; }
+        //-------------------------------------------------------------------
+        [JsonProperty(PropertyName = "mt")]
         public int MaxTorpedoCount { get; set; } = 5;
-
-        [XmlElement("Damage")]
-        public string  SpecifiedDamage { get; set; } //JSON - SpecifiedValueForDamage
-
-        public int GetBaggageItemsCount()
-        {
-            if (!String.IsNullOrEmpty(BaggageItems))
-            {
-                return JsonConvert.DeserializeObject<StorageList>(BaggageItems).Items.Count;
-            }
-            return 0;
-        }
-        public int GetTorpedoItemsCount()
-        {
-            if (!String.IsNullOrEmpty(BaggageItems))
-            {
-                return JsonConvert.DeserializeObject<StorageList>(TorpedoItems).Items.Count;
-            }
-            return 0;
-        }
+        //-------------------------------------------------------------------
+        [JsonProperty(PropertyName = "dg")]
+        public SpecifiedValueForDamage SpecifiedDamage { get; set; } //JSON - SpecifiedValueForDamage
     }
 
 

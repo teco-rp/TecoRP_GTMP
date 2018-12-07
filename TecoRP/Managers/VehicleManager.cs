@@ -23,7 +23,7 @@ namespace TecoRP.Managers
         {
 
             API.onClientEventTrigger += API_onClientEventTrigger;
-            
+
             API.onPlayerExitVehicle += API_onPlayerExitVehicle;
             API.onPlayerEnterVehicle += API_onPlayerEnterVehicle1;
             API.onPlayerEnterVehicle += API_onPlayerEnterVehicle;
@@ -78,7 +78,7 @@ namespace TecoRP.Managers
                 try
                 {
                     SaveVehicleFuel(sender, Convert.ToInt32(arguments[0]), (NetHandle)arguments[1]);
-                    API.consoleOutput("VEHICLE FUEL RETURNED AS : "+ arguments[0]);
+                    API.consoleOutput("VEHICLE FUEL RETURNED AS : " + arguments[0]);
                 }
                 catch (Exception ex)
                 {
@@ -170,7 +170,7 @@ namespace TecoRP.Managers
             }
         }
 
-        private void API_onPlayerEnterVehicle(Client player, GrandTheftMultiplayer.Shared.NetHandle vehicle,int seat)
+        private void API_onPlayerEnterVehicle(Client player, GrandTheftMultiplayer.Shared.NetHandle vehicle, int seat)
         {
             API.shared.consoleOutput($"Player {player.socialClubName} has entered {vehicle} vehicle");
 
@@ -182,7 +182,7 @@ namespace TecoRP.Managers
                 }
             }
         }
-        private void API_onPlayerExitVehicle(Client player, NetHandle vehicle,int seat)
+        private void API_onPlayerExitVehicle(Client player, NetHandle vehicle, int seat)
         {
             player.seatbelt = false;
         }
@@ -197,7 +197,7 @@ namespace TecoRP.Managers
             if (_vehicle != null)
             {
 
-                //API.consoleOutput("Vehicle JOB: " + db_Vehicles.currentVehList.Items[_Index].JobId);
+                //API.consoleOutput("Vehicle JOB: " + db_Vehicles.GetAll()[_Index].JobId);
                 if (_vehicle.JobId <= 0)
                 {
                     if (player.vehicleSeat == -1)
@@ -330,7 +330,7 @@ namespace TecoRP.Managers
         [Command("kilit", "/kilit")]
         public void LockCar(Client sender)
         {
-            foreach (var itemVeh in db_Vehicles.currentVehList.Items)
+            foreach (var itemVeh in db_Vehicles.GetAll())
             {
                 if (Vector3.Distance(sender.position, itemVeh.VehicleOnMap.position) < 10 && (itemVeh.OwnerSocialClubName == sender.socialClubName || itemVeh.FactionId == API.getEntityData(sender, "FactionId") || API.getEntityData(itemVeh.VehicleOnMap, Job_TirManager.JOB_VEHICLE) == API.getEntityData(sender, "ID") || itemVeh.RentedPlayerSocialClubId == sender.socialClubName))
                 {
@@ -413,7 +413,7 @@ namespace TecoRP.Managers
         [Command("vehid", "/vehid ~y~ Yakındaki aracın ID'sini gösterir.")]
         public void GetVehicleId(Client sender)
         {
-            foreach (var itemVeh in db_Vehicles.currentVehList.Items)
+            foreach (var itemVeh in db_Vehicles.GetAll())
             {
                 if (Vector3.Distance(sender.position, itemVeh.VehicleOnMap.position) < 6)
                 {
@@ -526,20 +526,20 @@ namespace TecoRP.Managers
                         }
                         if ("kirala".StartsWith(type.ToLower()))
                         {
-                            if (vehicle.Interaction.Rent && vehicle.Price.Rent>0)
+                            if (vehicle.Interaction.Rent && vehicle.Price.Rent > 0)
                             {
-                                if (!InventoryManager.IsEnoughMoney(sender,vehicle.Price.Rent))
+                                if (!InventoryManager.IsEnoughMoney(sender, vehicle.Price.Rent))
                                 {
-                                    API.shared.sendChatMessageToPlayer(sender,$"~r~HATA: ~s~Bu aracı kiralamak için en az ~r~{vehicle.Price.Rent}$ ~s~paranız olmalıdır.");
+                                    API.shared.sendChatMessageToPlayer(sender, $"~r~HATA: ~s~Bu aracı kiralamak için en az ~r~{vehicle.Price.Rent}$ ~s~paranız olmalıdır.");
                                     return;
                                 }
 
                                 InventoryManager.AddMoneyToPlayer(sender, -1 * vehicle.Price.Rent);
-                                
-                                db_Vehicles.CreateRentedVehicle(vehicle.VehicleModel,sender.socialClubName, vehicle.DeliverPosition.ToVector3(), vehicle.DeliverRotation.ToVector3(), vehicle.DeliverDimension);
+
+                                db_Vehicles.CreateRentedVehicle(vehicle.VehicleModel, sender.socialClubName, vehicle.DeliverPosition.ToVector3(), vehicle.DeliverRotation.ToVector3(), vehicle.DeliverDimension);
                                 return;
                             }
-                            API.shared.sendChatMessageToPlayer(sender,"~r~HATA: ~s~Bu araç kiralanmak için değil.");
+                            API.shared.sendChatMessageToPlayer(sender, "~r~HATA: ~s~Bu araç kiralanmak için değil.");
                         }
                     }
                     _Index++;
@@ -840,38 +840,32 @@ namespace TecoRP.Managers
             if (API.shared.getVehicleClass(_vehicle.VehicleModelId) == 13 || API.shared.getVehicleClass(_vehicle.VehicleModelId) == 8) { API.shared.sendChatMessageToPlayer(sender, "~r~UYARI: ~s~Bu aracın bagajı yok."); return; }
             if ((API.shared.getVehicleDoorState(_vehicle.VehicleOnMap, 5) || API.shared.isVehicleDoorBroken(_vehicle.VehicleOnMap, 5)) && Vector3.Distance(_vehicle.VehicleOnMap.position, sender.position) < 3.5f)
             {
-                StorageList _baggage = new StorageList();
-                if (!String.IsNullOrEmpty(_vehicle.BaggageItems))
-                {
-                    _baggage = API.shared.fromJson(_vehicle.BaggageItems).ToObject<StorageList>();
-                }
-
                 List<string> names = new List<string>();
                 List<string> descs = new List<string>();
                 for (int i = 0; i < _vehicle.MaxBaggageCount; i++)
                 {
                     try
                     {
-                        var gameItem = db_Items.GetItemById(_baggage.Items[i].ItemId);
+                        var gameItem = db_Items.GetItemById(_vehicle.BaggageItems.Items[i].ItemId);
                         names.Add(gameItem.Name);
                         descs.Add(gameItem.Description);
                     }
-                    catch (Exception ex)
+                    catch (ArgumentOutOfRangeException)
                     {
-                        if (ex.GetType() == typeof(ArgumentOutOfRangeException))
-                        {
-                            names.Add("--EŞYA KOY--");
-                            descs.Add("Bu slota eşya koymak için seçin");
-                            break;
-                        }
-                        if (ex.GetType() == typeof(NullReferenceException))
-                        {
-                            API.shared.consoleOutput(LogCat.Fatal, ex.ToString());
-                            continue;
-                        }
-                        API.shared.consoleOutput(LogCat.Fatal, ex.ToString());
+                        names.Add("--EŞYA KOY--");
+                        descs.Add("Bu slota eşya koymak için seçin");
+                        break;
+                    }
+                    catch (NullReferenceException ex)
+                    {
+                        API.shared.consoleOutput(LogCat.Error, ex.ToString());
+                    }
+                    catch(Exception ex)
+                    {
+                        API.shared.consoleOutput(LogCat.Error, ex.ToString());
                     }
                 }
+                API.shared.consoleOutput($"{names.Count} baggage items found for {_vehicle.VehicleModelId}({_vehicle.VehicleId}) vehicle.");
                 Clients.ClientManager.ShowStorageMenuToPlayer(sender, names, descs, _vehicle.VehicleModelId + " Bagajı", "vehicleB", (int)_vehicle.VehicleId);
             }
             else
@@ -884,26 +878,21 @@ namespace TecoRP.Managers
         {
             if (sender.isInVehicle)
             {
-                //GT:MP 'G' ile araca binme bug'ı giderilinceye kadar
+                //TODO: GT:MP 'G' ile araca binme bug'ı giderilinceye kadar
                 if (sender.vehicleSeat == -1 /*|| sender.vehicleSeat == 0*/)
                 {
                     var _vehicle = db_Vehicles.FindNearestVehicle(sender.position);
-                    StorageList _torpedo = new Models.StorageList();
-                    API.shared.consoleOutput(_vehicle.TorpedoItems);
-                    if (!String.IsNullOrEmpty(_vehicle.TorpedoItems))
-                    {
-                        _torpedo = (StorageList)API.shared.fromJson(_vehicle.TorpedoItems).ToObject<StorageList>();
-                    }
+
                     #region Listeleme
                     List<string> names = new List<string>();
                     List<string> descs = new List<string>();
 
-                    API.shared.consoleOutput("COUNT: " + _torpedo.Items.Count);
+                    API.shared.consoleOutput("COUNT: " + _vehicle.TorpedoItems.Items.Count);
                     for (int i = 0; i < _vehicle.MaxBaggageCount; i++)
                     {
                         try
                         {
-                            var gameItem = db_Items.GetItemById(_torpedo.Items[i].ItemId);
+                            var gameItem = db_Items.GetItemById(_vehicle.TorpedoItems.Items[i].ItemId);
                             names.Add(gameItem.Name);
 
                             descs.Add(gameItem.Description);
@@ -946,13 +935,8 @@ namespace TecoRP.Managers
             var _vehicle = db_Vehicles.GetVehicle(vehId);
             if (_vehicle != null)
             {
-                StorageList _baggage = new StorageList();
-                if (!String.IsNullOrEmpty(_vehicle.BaggageItems))
-                {
-                    _baggage = API.shared.fromJson(_vehicle.BaggageItems).ToObject<StorageList>();
-                }
 
-                if (_baggage.Items.Count <= index)
+                if (_vehicle.BaggageItems.Items.Count <= index)
                 {
 
                     Clients.ClientManager.ShowInventoryForSelection(sender, "vehicleB", Convert.ToInt32(_vehicle.VehicleId));
@@ -961,14 +945,12 @@ namespace TecoRP.Managers
                 }
                 else
                 {
-                    var takenItem = _baggage.Items[index];
+                    var takenItem = _vehicle.BaggageItems.Items[index];
                     if (InventoryManager.AddItemToPlayerInventory(sender, takenItem))
                     {
-                        _baggage.Items.RemoveAt(index);
+                        _vehicle.BaggageItems.Items.RemoveAt(index);
                     }
                 }
-
-                _vehicle.BaggageItems = API.shared.toJson(_baggage);
             }
             else
             {
@@ -980,35 +962,26 @@ namespace TecoRP.Managers
             var _vehicle = db_Vehicles.GetVehicle(vehId);
             if (_vehicle != null)
             {
-                StorageList _torpedo = new StorageList();
-                if (!String.IsNullOrEmpty(_vehicle.TorpedoItems))
-                {
-                    _torpedo = API.shared.fromJson(_vehicle.TorpedoItems).ToObject<StorageList>();
-                }
-
-                if (_torpedo.Items.Count <= index)
+                if (_vehicle.TorpedoItems.Items.Count <= index)
                 {
                     //EŞYA KOYMA
                     API.shared.consoleOutput("TRİGGERED EŞYA KOYMA");
                     Clients.ClientManager.ShowInventoryForSelection(sender, "vehicleT", Convert.ToInt32(_vehicle.VehicleId));
                     return;
-
                 }
                 else
                 {
                     //EŞYA ALMA
-                    var takenItem = _torpedo.Items[index];
+                    var takenItem = _vehicle.TorpedoItems.Items[index];
                     if (InventoryManager.AddItemToPlayerInventory(sender, takenItem))
                     {
-                        _torpedo.Items.RemoveAt(index);
+                        _vehicle.TorpedoItems.Items.RemoveAt(index);
                     }
                     else
                     {
                         API.shared.sendChatMessageToPlayer(sender, "~r~HATA: ~s~Envanterinizde daha fazla yer yok.");
                     }
                 }
-
-                _vehicle.TorpedoItems = API.shared.toJson(_torpedo);
             }
             else
             {
@@ -1071,15 +1044,10 @@ namespace TecoRP.Managers
             var _vehicle = db_Vehicles.GetVehicle(vehId);
             if (_vehicle != null)
             {
-                StorageList _baggage = new StorageList();
-                if (!String.IsNullOrEmpty(_vehicle.BaggageItems))
+                if (_vehicle.BaggageItems.Items.Count < _vehicle.MaxBaggageCount)
                 {
-                    _baggage = API.shared.fromJson(_vehicle.BaggageItems).ToObject<StorageList>();
-                }
-                if (_baggage.Items.Count < _vehicle.MaxBaggageCount)
-                {
-                    _baggage.Items.Add(_clientItem);
-                    _vehicle.BaggageItems = API.shared.toJson(_baggage);
+                    _vehicle.BaggageItems.Items.Add(_clientItem);
+                    db_Vehicles.SaveChanges();
                     return true;
                 }
                 else
@@ -1097,23 +1065,15 @@ namespace TecoRP.Managers
         {
             if (_vehicle != null)
             {
-                StorageList _baggage = new StorageList();
-                if (!String.IsNullOrEmpty(_vehicle.BaggageItems))
+                if (_vehicle.BaggageItems.Items.Count + 1 < _vehicle.MaxBaggageCount)
                 {
-                    _baggage = API.shared.fromJson(_vehicle.BaggageItems).ToObject<StorageList>();
-                }
-                if (_baggage.Items.Count + 1 < _vehicle.MaxBaggageCount)
-                {
-                    _baggage.Items.Add(_clientItem);
-                    _vehicle.BaggageItems = API.shared.toJson(_baggage);
+                    _vehicle.BaggageItems.Items.Add(_clientItem);
                     return true;
                 }
                 else
                 {
                     return false;
                 }
-
-
             }
             else
             {
@@ -1126,15 +1086,9 @@ namespace TecoRP.Managers
             var _vehicle = db_Vehicles.GetVehicle(vehId);
             if (_vehicle != null)
             {
-                StorageList _torpedo = new StorageList();
-                if (!String.IsNullOrEmpty(_vehicle.TorpedoItems))
+                if (_vehicle.BaggageItems.Items.Count < _vehicle.MaxTorpedoCount)
                 {
-                    _torpedo = API.shared.fromJson(_vehicle.TorpedoItems).ToObject<StorageList>();
-                }
-                if (_torpedo.Items.Count < _vehicle.MaxTorpedoCount)
-                {
-                    _torpedo.Items.Add(_clientItem);
-                    _vehicle.TorpedoItems = API.shared.toJson(_torpedo);
+                    _vehicle.BaggageItems.Items.Add(_clientItem);
                     return true;
                 }
                 return false;
@@ -1147,7 +1101,7 @@ namespace TecoRP.Managers
         }
         public static Models.Vehicle FindVehicleByGameVehicle(GrandTheftMultiplayer.Server.Elements.Vehicle _vehicle)
         {
-            foreach (var item in db_Vehicles.currentVehList.Items)
+            foreach (var item in db_Vehicles.GetAll())
             {
                 if (item.VehicleOnMap == _vehicle)
                 {

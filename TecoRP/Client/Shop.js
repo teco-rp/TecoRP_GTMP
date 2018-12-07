@@ -19,7 +19,7 @@ API.onServerEventTrigger.connect(function (name, args) {
 
 shop_menu.OnItemSelect.connect(function (sender, item, index) {
     API.triggerServerEvent("shop_item_selected", shopId,index);
-    shop_menu.Visible = false
+    shop_menu.Visible = false;
     API.showCursor(false);
     shop_menu.Clear();
 

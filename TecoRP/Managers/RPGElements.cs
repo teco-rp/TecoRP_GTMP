@@ -137,7 +137,7 @@ namespace TecoRP.Managers
                 OutOfWeatherTime:
 
 
-                foreach (var itemVeh in db_Vehicles.currentVehList.Items)
+                foreach (var itemVeh in db_Vehicles.GetAll())
                 {
                     if (itemVeh.IsBlockedForTax == false && itemVeh.PastMinutes % 60 == 0)
                     {

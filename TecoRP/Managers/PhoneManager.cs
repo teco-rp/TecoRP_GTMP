@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TecoRP.Clients;
 using TecoRP.Database;
 using TecoRP.Models;
 using TecoRP.Users;
@@ -31,7 +32,7 @@ namespace TecoRP.Managers
         public PhoneManager()
         {
             API.onClientEventTrigger += API_onClientEventTrigger;
-            
+            API.onClientEventTrigger += (s, e, args) => this.GetType().GetMethod(e)?.Invoke(this, parameters: new object[] { s, args });
         }
 
         private void API_onClientEventTrigger(Client sender, string eventName, params object[] arguments)
@@ -46,7 +47,7 @@ namespace TecoRP.Managers
             if (eventName == "return_phone_sms")
             {
                 //API.playPlayerAnimation(sender, (int)(AnimationFlags.Loop | AnimationFlags.OnlyAnimateUpperBody | AnimationFlags.AllowPlayerControl), "cellphone@", "f_cellphone_text_in");
-               // try { Convert.ToInt32(arguments[0]); } catch (Exception) { API.sendChatMessageToPlayer(sender, "~r~HATA: ~w~Telefon numarası yalnızca sayılardan oluşabilir."); return; }
+                // try { Convert.ToInt32(arguments[0]); } catch (Exception) { API.sendChatMessageToPlayer(sender, "~r~HATA: ~w~Telefon numarası yalnızca sayılardan oluşabilir."); return; }
                 SMSonPhone(sender, arguments[0].ToString(), arguments[1].ToString(), Convert.ToInt32(arguments[2]));
                 Animation.AnimationStop(sender);
             }
@@ -143,7 +144,7 @@ namespace TecoRP.Managers
         [Command("ara", "/ara [numara]")]
         public void CallWithPhone(Client sender, string number)
         {
-            
+
             if (API.hasEntityData(sender, "ringing") || API.hasEntityData(sender, "OnCall"))
             {
                 API.sendChatMessageToPlayer(sender, "~r~HATA: ~w~Başka bir görüşmedeyken bunu yapamazsınız. ~y~(( /h ))");
@@ -153,22 +154,23 @@ namespace TecoRP.Managers
             var _phone = (SpecifiedValuePhone)API.fromJson(_inventory.ItemList.FirstOrDefault(x => PhoneIdList.Contains(x.ItemId) && (API.fromJson(x.SpecifiedValue).ToObject<SpecifiedValuePhone>() as SpecifiedValuePhone).FlightMode == false).SpecifiedValue).ToObject<SpecifiedValuePhone>();
             if (_phone != null)
             {
-                API.consoleOutput("number: "+number);
+                API.consoleOutput("number: " + number);
                 if (number == "123")
                 {
                     API.sendChatMessageToPlayer(sender, "~g~Hattınızda : " + _phone.InternetBalance + " mb internet " + _phone.Balance + " puan konuşma hakkı bulunmaktadır.");
                     return;
-                }else
+                }
+                else
                 if (number == "100")
                 {
                     API.sendChatMessageToPlayer(sender, "~y~[TAKSİ]:~s~ Taksi hattı buyrun.");
-                    API.setEntityData(sender, "100",true);
+                    API.setEntityData(sender, "100", true);
                     return;
                 }
                 if (number == "911")
                 {
                     API.sendChatMessageToPlayer(sender, "~g~[911] Bağlanmak istediğiniz departmanı belirleyin. ((LSMD / LSPD))");
-                    API.shared.setEntityData(sender, "911",true);
+                    API.shared.setEntityData(sender, "911", true);
                     return;
                 }
                 if (_phone.Balance > 0)
@@ -328,7 +330,7 @@ namespace TecoRP.Managers
                 }
                 catch (Exception ex)
                 {
-                    API.consoleOutput(LogCat.Warn,ex.ToString());
+                    API.consoleOutput(LogCat.Warn, ex.ToString());
                 }
                 return;
             }
@@ -361,7 +363,7 @@ namespace TecoRP.Managers
                 API.sendChatMessageToPlayer(_player, "~y~Çağrıyı karşı taraf sonlandırdı. ~r~*");
 
                 if (API.hasEntityData(sender, "Cuffed") && (bool)API.getEntityData(sender, "Cuffed")) return;
-                    API.stopPlayerAnimation(sender);
+                API.stopPlayerAnimation(sender);
             }
             else
             {
@@ -446,208 +448,203 @@ namespace TecoRP.Managers
                 API.sendChatMessageToPlayer(sender, "~r~HATA: ~s~Telefonunuz yok.");
             }
         }
-        [Command("hat", "/hat [fiyatlandirma/satinal/konusma/internet]", GreedyArg = true)]
-        public void OnGSMOperator(Client sender, string commandParam)
+        [Command("hat", "/hat")]
+        public void OnGSMOperator(Client sender)
         {
             foreach (var itemOperatorShop in db_PhoneOperatorShop.CurrentOperatorShop.Item1)
             {
                 if (Vector3.Distance(itemOperatorShop.Position, sender.position) < 2)
                 {
-                    if ("fiyatlandirma".StartsWith(commandParam.ToLower()))
+                    string pricing = null;
+
+                    switch (itemOperatorShop.OperatorType)
                     {
-                        switch (itemOperatorShop.OperatorType)
-                        {
-                            case Operator.Vodacell:
-                                API.sendChatMessageToPlayer(sender, "~g~Yeni hat: 50$ | Konuşma Puanı : 2 / 1$  | İnternet : 100mb / 10$");
-                                return;
-                            case Operator.LosTelecom:
-                                API.sendChatMessageToPlayer(sender, "~g~Yeni hat: 65$ | Konuşma Puanı : 5 / 1$  | İnternet : 100mb / 15$");
-                                return; ;
-                            default:
-                                break;
-                        }
+                        case Operator.Vodacell:
+                            pricing = "~g~Yeni hat: 50$ | Konuşma Puanı : 2 / 1$  | İnternet : 100mb / 10$";
+                            break;
+                        case Operator.LosTelecom:
+                            pricing = "~g~Yeni hat: 65$ | Konuşma Puanı : 5 / 1$  | İnternet : 100mb / 15$";
+                            break;
+                        default:
+                            break;
                     }
-                    else
-                    if ("satinal".StartsWith(commandParam.ToLower()))
-                    {
-                        int money = API.getEntityData(sender, "Money");
-                        if (money < (itemOperatorShop.OperatorType == Operator.Vodacell ? 50 : 65))
-                        {
-                            API.sendChatMessageToPlayer(sender, "~r~HATA: ~s~Bu hattı alabilmek için yeterli paranız bulunmuyor.");
-                            return;
-                        }
-                        var _inventory = (Inventory)API.getEntityData(sender, "inventory");
-                        if (_inventory.ItemList.Where(x => PhoneIdList.Contains(x.ItemId) && ((API.fromJson(x.SpecifiedValue).ToObject<SpecifiedValuePhone>() as SpecifiedValuePhone).FlightMode == true)).Count() > 1)
-                        {
-                            API.sendChatMessageToPlayer(sender, "~r~UYARI: ~s~Envanterinizde birden fazla telefonunuz var.\nLütfen yalnızca hattınızı bağlamak istediğiniz telefonu uçak moduna alınız.");
-                        }
-                        else
-                        {
-                            try
-                            {
-                                Random r = new Random();
-                                List<char> dateTimeFormat = new List<char> { 'M', 'M', 'd', 'm', 'H', 'd', 'H', 'm', 's', 's' };
-                                var _Index = _inventory.ItemList.IndexOf(_inventory.ItemList.FirstOrDefault(x => PhoneIdList.Contains(x.ItemId) && (API.fromJson(x.SpecifiedValue).ToObject<SpecifiedValuePhone>() as SpecifiedValuePhone).FlightMode == true));
-                                if (_Index < 0) { API.sendChatMessageToPlayer(sender, "~UYARI:~ ~s~Lütfen sim kartınızı bağlayacağınız telefonu uçak moduna alınız."); return; }
-                                var _phone = (SpecifiedValuePhone)API.fromJson(_inventory.ItemList[_Index].SpecifiedValue).ToObject<SpecifiedValuePhone>();
-                                _phone.AutoInternetPay = false;
-                                _phone.FlightMode = false;
-                                string generatedDateFormat = "";
-                                for (int i = 0; i < 10; i++)
-                                {
-                                    int index = r.Next(0, dateTimeFormat.Count);
-                                    generatedDateFormat += dateTimeFormat[index].ToString();
-                                    dateTimeFormat.RemoveAt(index);
-                                }
-                                string generatedPhoneNumber = DateTime.Now.ToString(generatedDateFormat);
-                                _phone.PhoneNumber = generatedPhoneNumber.Length > 10 ? generatedPhoneNumber.Substring(0, 10) : generatedPhoneNumber;
-                                //_phone.PhoneNumber = DateTime.Now.ToString("dmssHHff");
-                                _phone.PhoneOperator = itemOperatorShop.OperatorType;
-                                _phone.InternetBalance = 150;
-                                _phone.Balance = 20;
-                                _inventory.ItemList[_Index].SpecifiedValue = API.toJson(_phone);
-                                API.sendChatMessageToPlayer(sender, $"~g~Telefonunuza başlangıç hediyesi olarak {_phone.Balance} puan ve {_phone.InternetBalance} mb eklendi.");
-                                API.sendChatMessageToPlayer(sender, $"~g~911'i arayarak acil servise,100'ü arayarak Taksi Merkezine, 123'ü arayarak kalan kullanım haklarınıza ulaşabilirsiniz.");
-                                if (API.hasEntityData(sender, "PhoneNumbers")) { List<string> numbers = API.getEntityData(sender, "PhoneNumbers"); numbers.Add(_phone.PhoneNumber); }
-                                API.setEntityData(sender, "PhoneNumbers", new List<string> { _phone.PhoneNumber });
-                                money -= (itemOperatorShop.OperatorType == Operator.Vodacell ? 50 : 65);
-                                API.setEntityData(sender, "inventory", _inventory);
-                                API.setEntityData(sender, "Money", money);
-                                API.triggerClientEvent(sender, "update_money_display", money);
-
-                                #region AboutMission
-                                int missionNumber = (API.hasEntityData(sender, "Mission") ? API.getEntityData(sender, "Mission") : 0);
-                                if (missionNumber == 3)
-                                {
-                                    Clients.ClientManager.RemoveMissionMarker(sender);
-                                    API.setEntityData(sender, "Mission", 4);
-                                    UserCommands.TriggerUserMission(sender);
-                                }
-                                #endregion
-
-                            }
-                            catch (Exception ex)
-                            {
-                                API.consoleOutput(LogCat.Warn, ex.ToString());
-                                API.sendChatMessageToPlayer(sender, "~r~HATA: ~s~İşlem gerçekleştirilemedi.");
-                            }
-                            return;
-                        }
-
-                    }
-                    else
-                    if (commandParam.ToLower().StartsWith("konusma"))
-                    {
-                        if (!(commandParam.Split(' ').Length > 1))
-                        {
-                            API.sendChatMessageToPlayer(sender, "/hat [Konusma] [KontorSayisi]"); return;
-                        }
-                        int value = 0;
-                        try { value = Convert.ToInt32(commandParam.Split(' ')[1]); } catch (Exception) { API.sendChatMessageToPlayer(sender, "~r~HATA: ~w~Girdiğiniz değer sayı olmalı."); return; }
-                        int money = API.getEntityData(sender, "Money");
-                        if (money >= (itemOperatorShop.OperatorType == Operator.Vodacell ? value / 2 : value / 5))
-                        {
-
-                            var _inventory = (Inventory)API.getEntityData(sender, "inventory");
-                            if (_inventory.ItemList.Where(x => PhoneIdList.Contains(x.ItemId) && ((API.fromJson(x.SpecifiedValue).ToObject<SpecifiedValuePhone>() as SpecifiedValuePhone).PhoneOperator == itemOperatorShop.OperatorType)).Count() > 1)
-                            {
-                                API.sendChatMessageToPlayer(sender, "~r~UYARI: ~s~Envanterinizde birden fazla aynı operatöre ait telefonunuz var.\nLütfen işlem yalnızca işlem yapmak istediğiniz telefonunuz açık olsun. Diğerlerini uçak moduna alın."); return;
-                            }
-                            else
-                            {
-
-                            }
-                            if (_inventory.ItemList.Where(x => PhoneIdList.Contains(x.ItemId) && ((API.fromJson(x.SpecifiedValue).ToObject<SpecifiedValuePhone>() as SpecifiedValuePhone).PhoneOperator == itemOperatorShop.OperatorType)).Count() > 1)
-                            {
-                                API.sendChatMessageToPlayer(sender, "~r~UYARI: ~s~Envanterinizde birden fazla aynı operatöre ait telefonunuz var.\nLütfen işlem yalnızca işlem yapmak istediğiniz telefonunuz açık olsun. Diğerlerini uçak moduna alın.");
-                            }
-                            else
-                            {
-                                int _Index = 0;
-                                foreach (var itemInvItem in _inventory.ItemList)
-                                {
-                                    if (itemInvItem.SpecifiedValue != null && PhoneIdList.Contains(itemInvItem.ItemId))
-                                    {
-                                        var _phone = (SpecifiedValuePhone)API.fromJson(itemInvItem.SpecifiedValue).ToObject<SpecifiedValuePhone>();
-                                        if (_phone.PhoneOperator == itemOperatorShop.OperatorType && _phone.FlightMode == false)
-                                        {
-                                            _phone.Balance += value;
-                                            money -= (itemOperatorShop.OperatorType == Operator.Vodacell ? Convert.ToInt32((value / 2)) : Convert.ToInt32(value / 5));
-                                            API.setEntityData(sender, "Money", money);
-                                            API.triggerClientEvent(sender, "update_money_display", money);
-                                            _inventory.ItemList[_Index].SpecifiedValue = API.toJson(_phone);
-                                            API.setEntityData(sender, "inventory", _inventory);
-                                            API.sendChatMessageToPlayer(sender, "~g~Başarıyla hesabınıza " + value + " puanlık konuşma yüklendi.");
-                                            API.sendNotificationToPlayer(sender, "~r~-" + (itemOperatorShop.OperatorType == Operator.Vodacell ? Convert.ToInt32((value / 2)) : Convert.ToInt32(value / 5)) + "$", true);
-                                            return;
-                                        }
-                                    }
-                                    _Index++;
-                                }
-                            }
-
-
-
-                        }
-                        else
-                        {
-                            API.sendChatMessageToPlayer(sender, "~r~HATA: ~s~Bu kadar alabilmek için paranız yetersiz.");
-                        }
-
-
-                    }
-                    else
-                    if (commandParam.ToLower().StartsWith("internet"))
-                    {
-                        if (!(commandParam.Split(' ').Length > 1))
-                        {
-                            API.sendChatMessageToPlayer(sender, "//hat [internet] [mb sayisi]"); return;
-                        }
-
-                        int value = 0;
-                        try { value = Convert.ToInt32(commandParam.Split(' ')[1]); } catch (Exception) { API.sendChatMessageToPlayer(sender, "~r~HATA: ~w~Girdiğiniz değer sayı olmalı."); }
-                        int money = API.getEntityData(sender, "Money");
-                        if (money >= (itemOperatorShop.OperatorType == Operator.Vodacell ? value * 0.10f : value * 0.15f))
-                        {
-                            var _inventory = (Inventory)API.getEntityData(sender, "inventory");
-                            if (_inventory.ItemList.Where(x => PhoneIdList.Contains(x.ItemId) && ((API.fromJson(x.SpecifiedValue).ToObject<SpecifiedValuePhone>() as SpecifiedValuePhone).PhoneOperator == itemOperatorShop.OperatorType)).Count() > 1)
-                            {
-                                API.sendChatMessageToPlayer(sender, "~r~UYARI: ~s~Envanterinizde birden fazla aynı operatöre ait telefonunuz var.\nLütfen işlem yalnızca işlem yapmak istediğiniz telefonunuz açık olsun. Diğerlerini uçak moduna alın.");
-                            }
-                            else
-                            {
-                                int _Index = 0;
-                                foreach (var itemInvItem in _inventory.ItemList)
-                                {
-                                    if (itemInvItem.SpecifiedValue != null && PhoneIdList.Contains(itemInvItem.ItemId))
-                                    {
-                                        var _phone = (SpecifiedValuePhone)API.fromJson(itemInvItem.SpecifiedValue).ToObject<SpecifiedValuePhone>();
-                                        if (_phone.PhoneOperator == itemOperatorShop.OperatorType && _phone.FlightMode == false)
-                                        {
-                                            _phone.InternetBalance += value;
-                                            money -= (itemOperatorShop.OperatorType == Operator.Vodacell ? Convert.ToInt32((value * 0.10f)) : Convert.ToInt32(value * 0.15f));
-                                            API.setEntityData(sender, "Money", money);
-                                            API.triggerClientEvent(sender, "update_money_display", money);
-                                            _inventory.ItemList[_Index].SpecifiedValue = API.toJson(_phone);
-                                            API.setEntityData(sender, "inventory", _inventory);
-                                            API.sendChatMessageToPlayer(sender, "~g~Başarıyla hesabınıza " + value + "mb internet yüklendi.");
-                                            API.sendNotificationToPlayer(sender, "~r~-" + (itemOperatorShop.OperatorType == Operator.Vodacell ? Convert.ToInt32((value * 0.10f)) : Convert.ToInt32(value * 0.15f)) + "$", true);
-                                            return;
-                                        }
-                                    }
-                                    _Index++;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            API.sendChatMessageToPlayer(sender, "~r~HATA: ~s~Bu kadar alabilmek için paranız yetersiz.");
-                        }
-                    }
+                    ClientManager.OpenOperatorMenu(sender, itemOperatorShop.OperatorType.ToString(), pricing);
                     return;
                 }
             }
             API.sendChatMessageToPlayer(sender, "~r~UYARI: ~s~Herhangi bir operatör satış noktasında değilsiniz.");
+        }
+
+        public void BuySimCard(Client sender, params object[] args)
+        {
+            API.shared.consoleOutput("Buy SimCard Triggered on Server-Side with arguments: " + string.Join(" | ",args));
+            Operator operatorType = (Operator)Enum.Parse(typeof(Operator), args[0].ToString());
+
+            int money = API.getEntityData(sender, "Money");
+            if (money < (operatorType == Operator.Vodacell ? 50 : 65))
+            {
+                API.sendChatMessageToPlayer(sender, "~r~HATA: ~s~Bu hattı alabilmek için yeterli paranız bulunmuyor.");
+                return;
+            }
+            var _inventory = (Inventory)API.getEntityData(sender, "inventory");
+            if (_inventory.ItemList.Where(x => PhoneIdList.Contains(x.ItemId) && ((API.fromJson(x.SpecifiedValue).ToObject<SpecifiedValuePhone>() as SpecifiedValuePhone).FlightMode == true)).Count() > 1)
+            {
+                API.sendChatMessageToPlayer(sender, "~r~UYARI: ~s~Envanterinizde birden fazla telefonunuz var.\nLütfen yalnızca hattınızı bağlamak istediğiniz telefonu uçak moduna alınız.");
+            }
+            else
+            {
+                try
+                {
+                    Random r = new Random();
+                    List<char> dateTimeFormat = new List<char> { 'M', 'M', 'd', 'm', 'H', 'd', 'H', 'm', 's', 's' };
+                    var _Index = _inventory.ItemList.IndexOf(_inventory.ItemList.FirstOrDefault(x => PhoneIdList.Contains(x.ItemId) && (API.fromJson(x.SpecifiedValue).ToObject<SpecifiedValuePhone>() as SpecifiedValuePhone).FlightMode == true));
+                    if (_Index < 0) { API.sendChatMessageToPlayer(sender, "~UYARI:~ ~s~Lütfen sim kartınızı bağlayacağınız telefonu uçak moduna alınız."); return; }
+                    var _phone = (SpecifiedValuePhone)API.fromJson(_inventory.ItemList[_Index].SpecifiedValue).ToObject<SpecifiedValuePhone>();
+                    _phone.AutoInternetPay = false;
+                    _phone.FlightMode = false;
+                    string generatedDateFormat = "";
+                    for (int i = 0; i < 10; i++)
+                    {
+                        int index = r.Next(0, dateTimeFormat.Count);
+                        generatedDateFormat += dateTimeFormat[index].ToString();
+                        dateTimeFormat.RemoveAt(index);
+                    }
+                    string generatedPhoneNumber = DateTime.Now.ToString(generatedDateFormat);
+                    _phone.PhoneNumber = generatedPhoneNumber.Length > 10 ? generatedPhoneNumber.Substring(0, 10) : generatedPhoneNumber;
+                    //_phone.PhoneNumber = DateTime.Now.ToString("dmssHHff");
+                    _phone.PhoneOperator = operatorType;
+                    _phone.InternetBalance = 150;
+                    _phone.Balance = 20;
+                    _inventory.ItemList[_Index].SpecifiedValue = API.toJson(_phone);
+                    API.sendChatMessageToPlayer(sender, $"~g~Telefonunuza başlangıç hediyesi olarak {_phone.Balance} puan ve {_phone.InternetBalance} mb eklendi.");
+                    API.sendChatMessageToPlayer(sender, $"~g~911'i arayarak acil servise,100'ü arayarak Taksi Merkezine, 123'ü arayarak kalan kullanım haklarınıza ulaşabilirsiniz.");
+                    if (API.hasEntityData(sender, "PhoneNumbers")) { List<string> numbers = API.getEntityData(sender, "PhoneNumbers"); numbers.Add(_phone.PhoneNumber); }
+                    API.setEntityData(sender, "PhoneNumbers", new List<string> { _phone.PhoneNumber });
+                    money -= (operatorType == Operator.Vodacell ? 50 : 65);
+                    API.setEntityData(sender, "inventory", _inventory);
+                    API.setEntityData(sender, "Money", money);
+                    API.triggerClientEvent(sender, "update_money_display", money);
+
+                    #region AboutMission
+                    int missionNumber = (API.hasEntityData(sender, "Mission") ? API.getEntityData(sender, "Mission") : 0);
+                    if (missionNumber == 3)
+                    {
+                        Clients.ClientManager.RemoveMissionMarker(sender);
+                        API.setEntityData(sender, "Mission", 4);
+                        UserCommands.TriggerUserMission(sender);
+                    }
+                    #endregion
+
+                }
+                catch (Exception ex)
+                {
+                    API.consoleOutput(LogCat.Warn, ex.ToString());
+                    API.sendChatMessageToPlayer(sender, "~r~HATA: ~s~İşlem gerçekleştirilemedi.");
+                }
+                return;
+            }
+        }
+
+        public void BuyCalling(Client sender, params object[] args)
+        {
+            API.shared.consoleOutput("Buy Calling Triggered on Server-Side with arguments: " + string.Join(" | ",args));
+            int value = 0;
+            Operator operatorType = (Operator)Enum.Parse(typeof(Operator), args[0].ToString());
+            try { value = Convert.ToInt32(args[1]); } catch (Exception) { API.sendChatMessageToPlayer(sender, "~r~HATA: ~w~Girdiğiniz değer sayı olmalı."); return; }
+            int money = API.getEntityData(sender, "Money");
+            if (money >= (operatorType == Operator.Vodacell ? value / 2 : value / 5))
+            {
+
+                var _inventory = (Inventory)API.getEntityData(sender, "inventory");
+                if (_inventory.ItemList.Where(x => PhoneIdList.Contains(x.ItemId) && ((API.fromJson(x.SpecifiedValue).ToObject<SpecifiedValuePhone>() as SpecifiedValuePhone).PhoneOperator == operatorType)).Count() > 1)
+                {
+                    API.sendChatMessageToPlayer(sender, "~r~UYARI: ~s~Envanterinizde birden fazla aynı operatöre ait telefonunuz var.\nLütfen işlem yalnızca işlem yapmak istediğiniz telefonunuz açık olsun. Diğerlerini uçak moduna alın."); return;
+                }
+                else
+                {
+
+                }
+                if (_inventory.ItemList.Where(x => PhoneIdList.Contains(x.ItemId) && ((API.fromJson(x.SpecifiedValue).ToObject<SpecifiedValuePhone>() as SpecifiedValuePhone).PhoneOperator == operatorType)).Count() > 1)
+                {
+                    API.sendChatMessageToPlayer(sender, "~r~UYARI: ~s~Envanterinizde birden fazla aynı operatöre ait telefonunuz var.\nLütfen işlem yalnızca işlem yapmak istediğiniz telefonunuz açık olsun. Diğerlerini uçak moduna alın.");
+                }
+                else
+                {
+                    int _Index = 0;
+                    foreach (var itemInvItem in _inventory.ItemList)
+                    {
+                        if (itemInvItem.SpecifiedValue != null && PhoneIdList.Contains(itemInvItem.ItemId))
+                        {
+                            var _phone = (SpecifiedValuePhone)API.fromJson(itemInvItem.SpecifiedValue).ToObject<SpecifiedValuePhone>();
+                            if (_phone.PhoneOperator == operatorType && _phone.FlightMode == false)
+                            {
+                                _phone.Balance += value;
+                                money -= (operatorType == Operator.Vodacell ? Convert.ToInt32((value / 2)) : Convert.ToInt32(value / 5));
+                                API.setEntityData(sender, "Money", money);
+                                API.triggerClientEvent(sender, "update_money_display", money);
+                                _inventory.ItemList[_Index].SpecifiedValue = API.toJson(_phone);
+                                API.setEntityData(sender, "inventory", _inventory);
+                                API.sendChatMessageToPlayer(sender, "~g~Başarıyla hesabınıza " + value + " puanlık konuşma yüklendi.");
+                                API.sendNotificationToPlayer(sender, "~r~-" + (operatorType == Operator.Vodacell ? Convert.ToInt32((value / 2)) : Convert.ToInt32(value / 5)) + "$", true);
+                                return;
+                            }
+                        }
+                        _Index++;
+                    }
+                }
+
+
+
+            }
+            else
+            {
+                API.sendChatMessageToPlayer(sender, "~r~HATA: ~s~Bu kadar alabilmek için paranız yetersiz.");
+            }
+        }
+        public void BuyInternet(Client sender, params object[] args)
+        {
+            API.shared.consoleOutput("Buy Internet Triggered on Server-Side with arguments: " + string.Join(" | ", args));
+
+            int value = 0;
+            Operator operatorType = (Operator)Enum.Parse(typeof(Operator), args[0].ToString());
+            try { value = Convert.ToInt32(args[1]); } catch (Exception) { API.sendChatMessageToPlayer(sender, "~r~HATA: ~w~Girdiğiniz değer sayı olmalı."); }
+            int money = API.getEntityData(sender, "Money");
+            if (money >= (operatorType == Operator.Vodacell ? value * 0.10f : value * 0.15f))
+            {
+                var _inventory = (Inventory)API.getEntityData(sender, "inventory");
+                if (_inventory.ItemList.Where(x => PhoneIdList.Contains(x.ItemId) && ((API.fromJson(x.SpecifiedValue).ToObject<SpecifiedValuePhone>() as SpecifiedValuePhone).PhoneOperator == operatorType)).Count() > 1)
+                {
+                    API.sendChatMessageToPlayer(sender, "~r~UYARI: ~s~Envanterinizde birden fazla aynı operatöre ait telefonunuz var.\nLütfen işlem yalnızca işlem yapmak istediğiniz telefonunuz açık olsun. Diğerlerini uçak moduna alın.");
+                }
+                else
+                {
+                    int _Index = 0;
+                    foreach (var itemInvItem in _inventory.ItemList)
+                    {
+                        if (itemInvItem.SpecifiedValue != null && PhoneIdList.Contains(itemInvItem.ItemId))
+                        {
+                            var _phone = (SpecifiedValuePhone)API.fromJson(itemInvItem.SpecifiedValue).ToObject<SpecifiedValuePhone>();
+                            if (_phone.PhoneOperator == operatorType && _phone.FlightMode == false)
+                            {
+                                _phone.InternetBalance += value;
+                                money -= (operatorType == Operator.Vodacell ? Convert.ToInt32((value * 0.10f)) : Convert.ToInt32(value * 0.15f));
+                                API.setEntityData(sender, "Money", money);
+                                API.triggerClientEvent(sender, "update_money_display", money);
+                                _inventory.ItemList[_Index].SpecifiedValue = API.toJson(_phone);
+                                API.setEntityData(sender, "inventory", _inventory);
+                                API.sendChatMessageToPlayer(sender, "~g~Başarıyla hesabınıza " + value + "mb internet yüklendi.");
+                                API.sendNotificationToPlayer(sender, "~r~-" + (operatorType == Operator.Vodacell ? Convert.ToInt32((value * 0.10f)) : Convert.ToInt32(value * 0.15f)) + "$", true);
+                                return;
+                            }
+                        }
+                        _Index++;
+                    }
+                }
+            }
+            else
+            {
+                API.sendChatMessageToPlayer(sender, "~r~HATA: ~s~Bu kadar alabilmek için paranız yetersiz.");
+            }
         }
         public void BuyInternetCreditsForPhone(Client sender, int value, int model_phone_id)
         {
@@ -958,7 +955,7 @@ namespace TecoRP.Managers
                     {
                         if (_phone.InternetBalance > 24)
                         {
-                            if (Convert.ToInt32(db_Items.GetItemById( _inventory.ItemList[_Index].ItemId).Value_0) > _phone.Applications.Count)
+                            if (Convert.ToInt32(db_Items.GetItemById(_inventory.ItemList[_Index].ItemId).Value_0) > _phone.Applications.Count)
                             {
                                 _phone.Applications.Add((Application)item);
                                 _phone.InternetBalance -= 25;
@@ -1068,7 +1065,7 @@ namespace TecoRP.Managers
                     var housesToList = db_Houses.CurrentHousesDict.Values.Where(x => x.IsSelling = true).OrderBy(x => Vector3.Distance(sender.position, x.EntrancePosition));
                     foreach (var item in housesToList)
                     {
-                        names.Add("~y~(" + item.HouseId + ")~s~" + item.Name+" | $" + item.Price);
+                        names.Add("~y~(" + item.HouseId + ")~s~" + item.Name + " | $" + item.Price);
                         descriptions.Add("Buradan uzaklığı: " + Vector3.Distance(sender.position, item.EntrancePosition));
                     }
                     API.triggerClientEvent(sender, "phone_emlakci_open", names.Count, names.ToArray(), descriptions.ToArray());
@@ -1101,7 +1098,7 @@ namespace TecoRP.Managers
                     var housesToList = db_Houses.CurrentHousesDict.Values.Where(x => x.IsSelling = true).OrderByDescending(x => Vector3.Distance(sender.position, x.EntrancePosition));
                     foreach (var item in housesToList)
                     {
-                        names.Add("~y~(" + item.HouseId + ")~s~" + item.Name +" | $" + item.Price);
+                        names.Add("~y~(" + item.HouseId + ")~s~" + item.Name + " | $" + item.Price);
                         descriptions.Add("Buradan uzaklığı: " + Vector3.Distance(sender.position, item.EntrancePosition));
                     }
                     API.triggerClientEvent(sender, "phone_emlakci_open", names.Count, names.ToArray(), descriptions.ToArray());
@@ -1165,7 +1162,7 @@ namespace TecoRP.Managers
         {
             API.shared.setEntityData(player, "PhoneNumbers", _numbers);
         }
-        public static void AddPhoneNumberToPlayer(Client player,string number)
+        public static void AddPhoneNumberToPlayer(Client player, string number)
         {
             var numbers = GetPhoneNumbers(player);
             numbers.Add(number);
@@ -1173,7 +1170,7 @@ namespace TecoRP.Managers
         }
         public static void AddPhoneNumberToPlayer(Client player, ClientItem clientItem)
         {
-            if(clientItem == null) { API.shared.consoleOutput(LogCat.Warn,"AddPhoneNumbers | ClientItem NULL"); return; }
+            if (clientItem == null) { API.shared.consoleOutput(LogCat.Warn, "AddPhoneNumbers | ClientItem NULL"); return; }
             SpecifiedValuePhone _phone = (SpecifiedValuePhone)(String.IsNullOrEmpty(clientItem.SpecifiedValue) ? new SpecifiedValuePhone() : API.shared.fromJson(clientItem.SpecifiedValue).ToObject<SpecifiedValuePhone>());
             if (!String.IsNullOrEmpty(_phone.PhoneNumber))
             {
@@ -1181,14 +1178,14 @@ namespace TecoRP.Managers
             }
             else
             {
-                API.shared.consoleOutput(LogCat.Warn,"Add Phone Number, number in phone is null");
+                API.shared.consoleOutput(LogCat.Warn, "Add Phone Number, number in phone is null");
             }
         }
         public static void RemoveNumberFromPlayer(Client player, string number)
         {
             var numbers = GetPhoneNumbers(player);
             numbers.Remove(number);
-            UpdatePhoneNumbers(player,numbers);
+            UpdatePhoneNumbers(player, numbers);
         }
         public static void RemoveNumberFromPlayer(Client player, ClientItem clientItem)
         {

@@ -201,7 +201,7 @@ namespace TecoRP.Users
             }
             else if (eventName == "return_character_sex")
             {
-                API.consoleOutput("return_character_sex");
+                API.consoleOutput("return_character_sex with");
                 sender.freeze(false);
                 API.setEntityInvincible(sender, false);
                 if (Convert.ToBoolean(arguments[1]))
@@ -211,7 +211,7 @@ namespace TecoRP.Users
                 db_Accounts.LoadPlayerAccount(sender);
 
                 var _inventory = (Inventory)API.getEntityData(sender, "inventory");
-                bool isMale = (arguments[0].ToString().StartsWith("k") || arguments[0].ToString().StartsWith("g")) ? false : true;
+                bool isMale = (arguments[0].ToString().StartsWith("k",StringComparison.InvariantCultureIgnoreCase) || arguments[0].ToString().StartsWith("g", StringComparison.InvariantCultureIgnoreCase)) ? false : true;
                 if (isMale)
                 {
                     API.setEntityData(sender, "Gender", true);

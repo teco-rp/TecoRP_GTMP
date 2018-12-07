@@ -442,11 +442,11 @@ namespace TecoRP.Admin
             }
             if ("vehicles".StartsWith(type.ToLower()))
             {
-                for (int i = 0; i < db_Vehicles.currentVehList.Items.Count; i++)
+                for (int i = 0; i < db_Vehicles.GetAll().Count; i++)
                 {
-                    db_Vehicles.currentVehList.Items[i].VehicleId = (i + 1);
-                    db_Vehicles.currentVehList.Items[i].Plate = "LS-" + (i + 1);
-                    API.setVehicleNumberPlate(db_Vehicles.currentVehList.Items[i].VehicleOnMap, "LS-" + (i + 1));
+                    db_Vehicles.GetAll()[i].VehicleId = (i + 1);
+                    db_Vehicles.GetAll()[i].Plate = "LS-" + (i + 1);
+                    API.setVehicleNumberPlate(db_Vehicles.GetAll()[i].VehicleOnMap, "LS-" + (i + 1));
                 }
                 db_Vehicles.SaveChanges();
             }
@@ -966,7 +966,7 @@ namespace TecoRP.Admin
                             if (player != null)
                             {
                                 if (db_Vehicles.CreateVehicle(_RequestedVehicle, player))
-                                    API.setPlayerIntoVehicle(player, db_Vehicles.currentVehList.Items.LastOrDefault().VehicleOnMap, -1);
+                                    API.setPlayerIntoVehicle(player, db_Vehicles.GetAll().LastOrDefault().VehicleOnMap, -1);
                                 else
                                     API.sendChatMessageToPlayer(sender, "~r~HATA: ~s~Hatalı parametre");
                             }
@@ -1384,7 +1384,7 @@ namespace TecoRP.Admin
                     Database.db_Vehicles dbVeh = new Database.db_Vehicles();
                     if (db_Vehicles.CreateVehicle(_RequestedVehicle, sender.position, sender.rotation, sender.dimension))
                     {
-                        API.setPlayerIntoVehicle(sender, db_Vehicles.currentVehList.Items.LastOrDefault().VehicleOnMap, -1);
+                        API.setPlayerIntoVehicle(sender, db_Vehicles.GetAll().LastOrDefault().VehicleOnMap, -1);
                     }
                     else
                     {
@@ -2973,7 +2973,7 @@ namespace TecoRP.Admin
             if (!(API.getEntityData(sender, "AdminLevel") >= 1)) { API.sendChatMessageToPlayer(sender, "~r~HATA: ~w~Bunun için yetkiniz yok."); return; }
             if ("fuels".StartsWith(type.ToLower()))
             {
-                foreach (var itemVeh in db_Vehicles.currentVehList.Items)
+                foreach (var itemVeh in db_Vehicles.GetAll())
                 {
                     itemVeh.Fuel = 100;
                 }
@@ -3199,7 +3199,7 @@ namespace TecoRP.Admin
         public void ResetTaxes(Client sender)
         {
             if (!(API.getEntityData(sender, "AdminLevel") >= 2)) { API.sendChatMessageToPlayer(sender, "~r~HATA: ~w~Bunun için yetkiniz yok."); return; }
-            foreach (var itemVeh in db_Vehicles.currentVehList.Items)
+            foreach (var itemVeh in db_Vehicles.GetAll())
             {
                 itemVeh.Tax = 0;
                 itemVeh.IsBlockedForTax = false;
