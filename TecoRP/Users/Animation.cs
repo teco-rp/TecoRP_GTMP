@@ -114,11 +114,23 @@ namespace TecoRP.Users
             }
         }
 
+        public static void WearBag(Client player, int bagObjId)
+        {
+            var bag = API.shared.getEntityData(player, "bag");
+            if (bag == null)
+                bag = API.shared.createObject(bagObjId, player.position, player.rotation, player.dimension);
+            API.attachEntityToEntity(bag, player, "IK_Root", new Vector3(0, -0.15f, 0.35f), new Vector3(0, 0, 180));
+        
+            API.setEntityData(player, "bag", bag);
+        }
+
         public static void WearWeapon(Client player, int weaponObjId, int weaponType)
         {
             if (weaponType > 4 || weaponType < 1) { return; }
             RemoveObjectIfHasSame(player, weaponType);
-            var prop = API.shared.createObject(weaponObjId, API.shared.getEntityPosition(player.handle), new Vector3());
+            var prop = API.shared.getEntityData(player, $"w_{weaponType}");
+            if (prop == null)
+                prop = API.shared.createObject(weaponObjId, API.shared.getEntityPosition(player.handle), new Vector3());
             API.shared.setEntityData(player, $"w_{weaponType}", prop); // puts key like "w_1" / "w_2"
             switch (weaponType)
             {
@@ -297,12 +309,12 @@ namespace TecoRP.Users
 
         public static void AnimationStop(Client sender)
         {
-            if (!IsPlayerAvailableForAnim(sender,false))
+            if (!IsPlayerAvailableForAnim(sender, false))
                 return;
             API.shared.stopPlayerAnimation(sender);
             CloseMobilePhone(sender);
         }
-        public static bool IsPlayerAvailableForAnim(Client sender,bool checkInVehicle = true)
+        public static bool IsPlayerAvailableForAnim(Client sender, bool checkInVehicle = true)
         {
             if (API.shared.getEntityData(sender, "Cuffed") == true)
             {

@@ -158,6 +158,7 @@ namespace TecoRP.Managers
                 {
 
                     TextLabel _textLabel = API.getEntityData(player, "TalkLabel");
+                    API.shared.attachEntityToEntity(_textLabel, player, "IK_ROOT", new Vector3(0, 0, 1), new Vector3());
                     Task.Run(async () =>
                     {
                         _textLabel.position = player.position;
@@ -355,11 +356,12 @@ namespace TecoRP.Managers
             }
         }
 
-        public static void CreatePlayerTalkLabel(Client player)
+        public static TextLabel CreatePlayerTalkLabel(Client player)
         {
             var _textLabel = API.shared.createTextLabel("", player.position, 30, 0.5f, false, player.dimension);
             API.shared.attachEntityToEntity(_textLabel, player, "IK_ROOT", new Vector3(0, 0, 1), new Vector3());
             API.shared.setEntityData(player, "TalkLabel", _textLabel);
+            return _textLabel;
         }
         public static void SendAllPlayersInFaction(int factionId, string text)
         {

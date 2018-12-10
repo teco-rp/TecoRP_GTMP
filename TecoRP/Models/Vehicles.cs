@@ -82,7 +82,7 @@ namespace TecoRP.Models
         public int Dimension { get; set; } = 0;
         //-------------------------------------------------------------------
         [JsonProperty(PropertyName = "b")]
-        public StorageList BaggageItems { get; set; }
+        public StorageList BaggageItems { get; set; } = new StorageList();
         //-------------------------------------------------------------------
         [JsonProperty(PropertyName = "mb")]
         public int MaxBaggageCount { get; set; } = 10;

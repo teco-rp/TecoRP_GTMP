@@ -57,7 +57,7 @@ namespace TecoRP.Database
                 socialClubName = player.socialClubName,
                 Password = API.shared.getHashSHA256(password),
                 Money = 750,
-                LastPosition = new GrandTheftMultiplayer.Shared.Math.Vector3 { X = -813, Y = -141, Z = 20 },
+                LastPosition = new GrandTheftMultiplayer.Shared.Math.Vector3 { X = -801, Y = -102, Z = 37 },
                 ArmorLevel = 0,
                 HealthLevel = 100,
                 BankMoney = 0,

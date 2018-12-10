@@ -862,7 +862,7 @@ namespace TecoRP.Managers
                     }
                     catch(Exception ex)
                     {
-                        API.shared.consoleOutput(LogCat.Error, ex.ToString());
+                        API.shared.consoleOutput(LogCat.Error, ex?.ToString());
                     }
                 }
                 API.shared.consoleOutput($"{names.Count} baggage items found for {_vehicle.VehicleModelId}({_vehicle.VehicleId}) vehicle.");

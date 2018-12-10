@@ -265,10 +265,10 @@ namespace TecoRP.Managers
                             return;
                         }
 
-                        var guns = db_Items.GameItems.Values.Where(w => w.Type == ItemType.Weapon && _inventory.ItemList.Any(a=>a.ItemId == w.ID));
+                        var guns = db_Items.GameItems.Values.Where(w => w.Type == ItemType.Weapon && _inventory.ItemList.Any(a => a.ItemId == w.ID));
                         foreach (var item in _inventory.ItemList)
                         {
-                            if (guns.Any(a=>a.ID == item.ItemId))
+                            if (guns.Any(a => a.ID == item.ItemId))
                             {
 
                                 if (item.ItemId == usedItem.ID) { item.Equipped = true; Animation.RemovePlayerWeapon(sender, Convert.ToInt32(usedItem.Value_2)); continue; }
@@ -286,7 +286,7 @@ namespace TecoRP.Managers
                         var _WeaponSpecified = String.IsNullOrEmpty(usedItemInInventory.SpecifiedValue) ? new SpecifiedValueWeapon { Ammo = Convert.ToInt32(usedItem.Value_1), WeaponTint = WeaponTint.Normal } : (SpecifiedValueWeapon)API.fromJson(usedItemInInventory.SpecifiedValue).ToObject<SpecifiedValueWeapon>();
                         API.removeAllPlayerWeapons(sender);
                         //OLD
-                        API.givePlayerWeapon(sender, API.weaponNameToModel(usedItem.Value_0), (_WeaponSpecified.Ammo < Convert.ToInt32(usedItem.Value_1) ? Convert.ToInt32(usedItem.Value_1) : _WeaponSpecified.Ammo),true, true);
+                        API.givePlayerWeapon(sender, API.weaponNameToModel(usedItem.Value_0), (_WeaponSpecified.Ammo < Convert.ToInt32(usedItem.Value_1) ? Convert.ToInt32(usedItem.Value_1) : _WeaponSpecified.Ammo), true, true);
                         API.setPlayerWeaponTint(sender, API.weaponNameToModel(usedItem.Value_0), _WeaponSpecified.WeaponTint);
                         API.setEntityData(sender, "inventory", _inventory);
                         #endregion
@@ -302,7 +302,7 @@ namespace TecoRP.Managers
                             var equippedWeaponItem = _inventory.ItemList.FirstOrDefault(x => x.Equipped == true && WeaponsInGame.Contains(x.ItemId));
                             if (equippedWeaponItem == null)
                             {
-                                API.sendChatMessageToPlayer(sender,"Boyayabilmek için önce silahınızı elinize almalısınız.");
+                                API.sendChatMessageToPlayer(sender, "Boyayabilmek için önce silahınızı elinize almalısınız.");
                                 return;
                             }
                             API.setPlayerWeaponTint(sender, _currentWeapon, (WeaponTint)Enum.Parse(typeof(WeaponTint), usedItem.Value_0));
@@ -354,7 +354,7 @@ namespace TecoRP.Managers
                                 if (API.getPlayerWeaponAmmo(sender, itemWeapon) < Convert.ToInt32(usedItem.Value_1))
                                 {
                                     API.setPlayerWeaponAmmo(sender, itemWeapon, Convert.ToInt32(usedItem.Value_1));
-                                   
+
                                     //API.givePlayerWeapon(sender, itemWeapon, Convert.ToInt32(usedItem.Value_1),true, true);
                                     rpgMgr.Me(sender, " elindeki " + itemWeapon.ToString() + " isimli silahının şarjörünü değiştirir.");
                                     goto BreakPoint;
@@ -368,9 +368,9 @@ namespace TecoRP.Managers
                         }
 
                         API.sendChatMessageToPlayer(sender, "~r~UYARI: ~s~Elinizde bu şarjörü takabilecek silahınız yok. "); return;
-                        //API.setPlayerWeaponAmmo(sender, API.getPlayerCurrentWeapon(sender), API.getPlayerWeaponAmmo(sender, API.getPlayerCurrentWeapon(sender)) + Convert.ToInt32(usedItem.Value_0));
-                        #endregion
-                        BreakPoint:
+                    //API.setPlayerWeaponAmmo(sender, API.getPlayerCurrentWeapon(sender), API.getPlayerWeaponAmmo(sender, API.getPlayerCurrentWeapon(sender)) + Convert.ToInt32(usedItem.Value_0));
+                    #endregion
+                    BreakPoint:
                         break;
                     //-----------------------------
                     case ItemType.License:
@@ -528,7 +528,7 @@ namespace TecoRP.Managers
                                     }
                                 }
                                 API.sendChatMessageToPlayer(sender, "~y~Etrafınızda lastiği değiştirilmesi gereken bir araç bulunmuyor.");
-                                Point:
+                            Point:
                                 break;
                             }
                             else
@@ -1356,14 +1356,17 @@ namespace TecoRP.Managers
                         switch (gameItem.Type)
                         {
                             case ItemType.Bag:
-                                var bag = API.shared.createObject(gameItem.ObjectId, sender.position, sender.rotation, sender.dimension);
+                                var bag = API.shared.getEntityData(sender, "bag");
+                                if (bag == null)
+                                    bag = API.shared.createObject(gameItem.ObjectId, sender.position, sender.rotation, sender.dimension);
+
                                 API.shared.attachEntityToEntity(bag, sender, "IK_Root", new Vector3(0, -0.15f, 0.35f), new Vector3(0, 0, 180));
                                 API.shared.setEntityData(sender, "bag", bag);
                                 break;
                             case ItemType.Weapon:
                                 SpecifiedValueWeapon _weaponSpec = String.IsNullOrEmpty(item.SpecifiedValue) ? new SpecifiedValueWeapon { Ammo = 0, WeaponTint = WeaponTint.Normal } : (SpecifiedValueWeapon)API.shared.fromJson(item.SpecifiedValue).ToObject<SpecifiedValueWeapon>();
                                 //OLD
-                                API.shared.givePlayerWeapon(sender, API.shared.weaponNameToModel(gameItem.Value_0), _weaponSpec.Ammo,true, true);
+                                API.shared.givePlayerWeapon(sender, API.shared.weaponNameToModel(gameItem.Value_0), _weaponSpec.Ammo, true, true);
                                 API.shared.setPlayerWeaponTint(sender, API.shared.getPlayerWeapons(sender).FirstOrDefault(), _weaponSpec.WeaponTint);
                                 break;
                             case ItemType.License:
@@ -1527,6 +1530,19 @@ namespace TecoRP.Managers
         public void Ammo(Client sender)
         {
             API.sendChatMessageToPlayer(sender, "Mermisi: " + API.getPlayerWeaponAmmo(sender, sender.currentWeapon));
+        }
+
+        public static void CheckPlayerAttachedItems(Client player)
+        {
+            var inventory = GetPlayerInventory(player);
+            foreach (var item in inventory.ItemList)
+            {
+                var clientItem = db_Items.GameItems[item.ItemId];
+                if (!item.Equipped && clientItem.Type == ItemType.Weapon)
+                    Animation.WearWeapon(player, clientItem.ObjectId, Convert.ToInt32(clientItem.Value_2));
+                if (item.Equipped && clientItem.Type == ItemType.Bag)
+                    Animation.WearBag(player, clientItem.ObjectId);
+            }
         }
     }
 }

@@ -995,7 +995,7 @@ namespace TecoRP.Admin
                     {
                         //OLD
                         //API.givePlayerWeapon(item, API.weaponNameToModel(value), 99999, false, false);
-                        API.givePlayerWeapon(item, API.weaponNameToModel(value), 99999,true, true);
+                        API.givePlayerWeapon(item, API.weaponNameToModel(value), 99999,true,true);
                     }
                 }
             }

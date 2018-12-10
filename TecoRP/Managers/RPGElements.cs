@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using TecoRP.Database;
 using GrandTheftMultiplayer.Server.Elements;
+using TecoRP.Users;
 
 namespace TecoRP.Managers
 {
@@ -30,6 +31,7 @@ namespace TecoRP.Managers
                     {
                         if (API.shared.getEntityData(itemPlayer, "LOGGED_IN") != null && API.shared.getEntityData(itemPlayer, "LOGGED_IN") == true)
                         {
+                            InventoryManager.CheckPlayerAttachedItems(itemPlayer);
                             float _Hunger = Convert.ToSingle(API.getEntityData(itemPlayer, "Hunger"));
                             float _Thirsty = Convert.ToSingle(API.getEntityData(itemPlayer, "Thirsty"));
                             int _playingMinutes = Convert.ToInt32(API.getEntityData(itemPlayer, "playingMinutes"));
