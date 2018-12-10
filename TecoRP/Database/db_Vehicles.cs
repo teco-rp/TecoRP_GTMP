@@ -534,20 +534,22 @@ namespace TecoRP.Database
 
         }
 
+        /// <summary>
+        /// This sukcs. Saves all vehicled including Job & Faction vehicles.
+        /// </summary>
         public static void UpdateAndSaveChanges()
         {
-            foreach (var itemVeh in _repository.Current)
-                try
-                {
-                    UpdateVehicleToModel(itemVeh);
-                }
-                catch (Exception ex)
-                {
-                    API.shared.consoleOutput(LogCat.Fatal, itemVeh.VehicleOnMap.model + " araç kaydedilirken hata: \n" + ex.ToString());
-                }
+            //foreach (var itemVeh in _repository.Current)
+            //    try
+            //    {
+            //        UpdateVehicleToModel(itemVeh);
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        API.shared.consoleOutput(LogCat.Fatal, itemVeh.VehicleOnMap.model + " araç kaydedilirken hata: \n" + ex.ToString());
+            //    }
 
-            API.shared.consoleOutput(_repository.Current.Count + " araç kaydedildi.");
-
+            //API.shared.consoleOutput(_repository.Current.Count + " araç kaydedildi.");
         }
     }
 }

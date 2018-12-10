@@ -101,7 +101,7 @@ namespace TecoRP.Managers
             Task.Run(async () =>
             {
                 API.consoleOutput("Vehicle Task Başladı.");
-                baslangic:
+                Start:
                 #region Weather&Time
                 API.setTime(DateTime.Now.Hour, DateTime.Now.Minute);
 
@@ -165,7 +165,7 @@ namespace TecoRP.Managers
                 db_Vehicles.SaveChanges();
                 //API.consoleOutput("__________________________Minute Task____________________");
                 await Task.Delay(60000);
-                goto baslangic;
+                goto Start;
             });
 
             Task.Run(async () =>
