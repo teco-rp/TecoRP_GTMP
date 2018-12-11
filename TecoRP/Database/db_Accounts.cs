@@ -12,6 +12,7 @@ using TecoRP.Models;
 using GrandTheftMultiplayer.Server.Constant;
 using System.Web;
 using Newtonsoft.Json;
+using TecoRP.Helpers;
 
 namespace TecoRP.Database
 {
@@ -56,7 +57,7 @@ namespace TecoRP.Database
             {
                 socialClubName = player.socialClubName,
                 Password = API.shared.getHashSHA256(password),
-                Money = 750,
+                Money = 1250,
                 LastPosition = new GrandTheftMultiplayer.Shared.Math.Vector3 { X = -801, Y = -102, Z = 37 },
                 ArmorLevel = 0,
                 HealthLevel = 100,
@@ -123,7 +124,8 @@ namespace TecoRP.Database
                 API.shared.consoleOutput(LogCat.Fatal, $"LoadPlayerInventory | {player.socialClubName} | {API.shared.getEntityData(player,"ID")} | {ex.ToString()}");
 
             }
-            API.shared.setEntityData(player, "LOGGED_IN", true);
+            player.SetLoggedIn(true);
+            //API.shared.setEntityData(player, "LOGGED_IN", true);
         }
         private static void LoadPlayerData(Client player)
         {

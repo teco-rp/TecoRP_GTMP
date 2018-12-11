@@ -47,6 +47,7 @@ namespace TecoRP.Models
         public int DeadSeconds { get; set; } = 0;
         public bool Cuffed { get; set; } = false;
         public List<Jobs> JobAbilities { get; set; }
+        public ClothingData ClothingData { get; set; } = new ClothingData();
 
         public User() { JobAbilities = new List<Jobs>(); }
         public int GetAge()
@@ -65,6 +66,14 @@ namespace TecoRP.Models
         {
             return Managers.JobManager.ToJobName(JobId);
         }
+    }
+
+    public class ClothingData
+    {
+        public int Head { get; set; }
+        public int Eyes { get; set; }
+        public int Hair { get; set; }
+        public int HairColor { get; set; }
     }
 
     public class Jobs

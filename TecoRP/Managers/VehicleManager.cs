@@ -174,13 +174,23 @@ namespace TecoRP.Managers
         {
             API.shared.consoleOutput($"Player {player.socialClubName} has entered {vehicle} vehicle");
 
-            foreach (var item in db_SaleVehicles.currentSaleVehicleList.Items)
+            var vehIndex = SaleVehicleManager.FindIndex(vehicle);
+            if (vehIndex != -1)
             {
-                if (Vector3.Distance(player.position, new Vector3(item.Position.X, item.Position.Y, item.Position.Z)) <= 1)
-                {
-                    API.sendChatMessageToPlayer(player, "~b~Bu araç alınabilir veya kiralanabilir. ~h~/arac");
-                }
+                var veh = db_SaleVehicles.currentSaleVehicleList.Items[vehIndex];
+
+                if (veh.Interaction.Rent)
+                    API.sendChatMessageToPlayer(player, $"~b~Bu araç ${veh.Price.Rent} ödeyerek kiralanabilir. ~h~/arac kirala");
+
+                if(veh.Interaction.Buy && veh.Price.Buy > 0 )
+                    API.sendChatMessageToPlayer(player, $"~b~Bu araç ${veh.Price.Buy} ödeyerek satın alınabilir. ~h~/arac satinal");
             }
+            //foreach (var item in db_SaleVehicles.currentSaleVehicleList.Items)
+            //{
+            //    if (Vector3.Distance(player.position, new Vector3(item.Position.X, item.Position.Y, item.Position.Z)) <= 1)
+            //    {
+            //    }
+            //}
         }
         private void API_onPlayerExitVehicle(Client player, NetHandle vehicle, int seat)
         {
@@ -189,9 +199,10 @@ namespace TecoRP.Managers
 
         private void API_onPlayerEnterVehicle1(Client player, NetHandle vehicle, int seat)
         {
-            var _vehicle = db_Vehicles.FindNearestVehicle(player.position);
+            var _vehicle = db_Vehicles.FindVehicle(vehicle);
             API.shared.consoleOutput($"Player {player.socialClubName} has entered {vehicle} vehicle");
-
+            if (_vehicle == null)
+                return;
             if (API.getVehicleClass(_vehicle.VehicleModelId) == 13) { return; }
 
             if (_vehicle != null)
@@ -275,10 +286,10 @@ namespace TecoRP.Managers
             {
                 if (sender.isInVehicle)
                 {
-
                     if (API.getPlayerVehicleSeat(sender) == -1)
                     {
-                        var _vehicle = db_Vehicles.FindNearestVehicle(sender.position);
+                        var _vehicle = db_Vehicles.FindVehicle(sender.vehicle.handle);
+                        if (_vehicle == null) return;
                         if (API.getVehicleClass(_vehicle.VehicleModelId) == 13) return;
                         if (_vehicle.IsBlockedForTax) { API.sendChatMessageToPlayer(sender, "~s~UYARI: ~s~Aracınız, vergisi ödenmediğinden mühürlenmiştir."); return; }
                         if (db_Vehicles.IsPlayersVehicleById(sender, _vehicle.VehicleId)
@@ -860,7 +871,7 @@ namespace TecoRP.Managers
                     {
                         API.shared.consoleOutput(LogCat.Error, ex.ToString());
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         API.shared.consoleOutput(LogCat.Error, ex?.ToString());
                     }

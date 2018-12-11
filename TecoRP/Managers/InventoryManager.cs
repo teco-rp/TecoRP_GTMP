@@ -11,6 +11,7 @@ using TecoRP.Models;
 using TecoRP.Users;
 using System.Threading.Tasks;
 using GrandTheftMultiplayer.Shared;
+using TecoRP.Helpers;
 
 namespace TecoRP.Managers
 {
@@ -687,7 +688,7 @@ namespace TecoRP.Managers
                                 {
                                     Clients.ClientManager.RemoveMissionMarker(sender);
                                     API.setEntityData(sender, "Mission", 3);
-                                    UserCommands.TriggerUserMission(sender);
+                                    UserManager.TriggerUserMission(sender);
                                 }
 
                                 #endregion
@@ -703,7 +704,7 @@ namespace TecoRP.Managers
                                 {
                                     Clients.ClientManager.RemoveMissionMarker(sender);
                                     API.setEntityData(sender, "Mission", 2);
-                                    UserCommands.TriggerUserMission(sender);
+                                    UserManager.TriggerUserMission(sender);
                                 }
                                 #endregion 
                                 return;
@@ -1397,11 +1398,35 @@ namespace TecoRP.Managers
                                     API.shared.setEntityData(sender, "E", true);
                                 }
                                 break;
-                            default:
+                            case ItemType.Mask:
+                                break;
+                            case ItemType.Legs:
+                                break;
+                            case ItemType.Bags:
+                                break;
+                            case ItemType.Feet:
+                                break;
+                            case ItemType.Accessories:
+                                break;
+                            case ItemType.Undershirt:
+                                sender.WearUndershirt(gameItem);
+                                break;
+                            case ItemType.Tops:
+                                sender.WearTops(gameItem);
                                 break;
                         }
                     }
 
+                }
+                else
+                {
+                    var gameItem = db_Items.GetItemById(item.ItemId);
+                    switch (gameItem.Type)
+                    {
+                        case ItemType.Weapon:
+                            Animation.WearWeapon(sender, gameItem.ObjectId, Convert.ToInt32(gameItem.Value_2));
+                            break;
+                    }
                 }
             }
         }

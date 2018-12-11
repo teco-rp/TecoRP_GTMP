@@ -11,6 +11,7 @@ using TecoRP.Database;
 using TecoRP.Managers;
 using TecoRP.Models;
 using System.Threading.Tasks;
+using TecoRP.Helpers;
 
 namespace TecoRP.Users
 {
@@ -18,7 +19,7 @@ namespace TecoRP.Users
     public class UserCommands : Script
     {
         RPGManager rpgMgr = new RPGManager();
-
+        static Random random = new Random();
         public const string IDENTITY_B = "IDENTITY_BIRTHDATE";
         public const string IDENTITY_O = "IDENTITY_ORIGIN";
 
@@ -75,106 +76,12 @@ namespace TecoRP.Users
         #endregion
         public UserCommands()
         {
-            API.onPlayerDisconnected += API_onPlayerDisconnected;
             API.onClientEventTrigger += API_onClientEventTrigger;
-            API.onPlayerConnected += API_onPlayerConnected;
-            API.onPlayerFinishedDownload += API_onPlayerFinishedDownload;
-
-
             db_Shops.GetAll();
-
-
         }
+   
 
 
-
-        private void API_onPlayerConnected(Client player)
-        {
-            CheckPlayerIfIsInWhiteList(player);
-            #region IDVerme
-            var players = API.getAllPlayers();
-            for (int i = 0; i <= players.Count; i++)
-            {
-                if (!db_Accounts.IsPlayerOnline(i))
-                {
-                    API.setEntityData(player, "ID", i);
-                    break;
-                }
-            }
-            API.consoleOutput("PLAYER CONNECTED ID : " + API.getEntityData(player, "ID"));
-
-            #endregion
-
-            RPGManager.CreatePlayerTalkLabel(player);
-        }
-        private void API_onPlayerFinishedDownload(Client player)
-        {
-            API.consoleOutput("ONPLAYERFINISHEDDOWNLOAD " + player.socialClubName);
-            API.shared.setEntityData(player, "FINISHED_DOWNLOAD", true);
-            if (!db_Accounts.DoesAccountExist(player.socialClubName))
-            {
-                GoToRegistrationPosition(player);
-                API.triggerClientEvent(player, "set_character_name", true);
-            }
-            else
-            {
-                db_Accounts.LoadPlayerAccount(player);
-
-                player.dimension = API.getEntityData(player, "Dimension");
-                API.sendChatMessageToPlayer(player, "~g~Başarıyla giriş yaptınız.");
-                API.sendChatMessageToPlayer(player, "~y~/? ~s~Komutu ile soru sorabilir. ~y~/rapor ~s~Komutu ile karşılaştığınız sıkıntıları rapor edebilirsiniz.");
-                player.position = API.getEntityData(player, "LastPosition");
-                int money = API.getEntityData(player, "Money");
-                API.triggerClientEvent(player, "update_money_display", money);
-                player.health = API.getEntityData(player, "HealthLevel");
-                player.armor = API.getEntityData(player, "ArmorLevel");
-                player.nametag = "(" + API.getEntityData(player, "ID") + ") " + API.getEntityData(player, "CharacterName");
-                //if (API.getEntityData(player, "FactionId") == 1) player.nametagColor = new GrandTheftMultiplayer.Server.Constant.Color { alpha = 255, blue = 255, green = 0, red = 0 };
-                player.setSkin(API.getEntityData(player, "Skin"));
-                float _Hunger = Convert.ToInt32(API.getEntityData(player, "Hunger"));
-                float _Thirsty = Convert.ToInt32(API.getEntityData(player, "Thirsty"));
-                API.triggerClientEvent(player, "update_hungerthirsty", _Hunger, _Thirsty);
-                if (String.IsNullOrEmpty(player.nametag) || player.nametag == "")
-                {
-                    API.triggerClientEvent(player, "set_character_name", false);
-                }
-
-                API.setPlayerWantedLevel(player, API.getEntityData(player, "WantedLevel"));
-
-                var _inventory = (Inventory)API.getEntityData(player, "inventory");
-                List<string> numbers = new List<string>();
-                foreach (var item in _inventory.ItemList.Where(x => PhoneManager.PhoneIdList.Contains(x.ItemId)))
-                {
-                    SpecifiedValuePhone _phone = API.fromJson(item.SpecifiedValue).ToObject<SpecifiedValuePhone>();
-                    if (_phone.FlightMode == false)
-                    {
-                        numbers.Add(_phone.PhoneNumber);
-                    }
-                }
-                API.setEntityData(player, "PhoneNumbers", numbers);
-
-                TriggerUserMission(player);
-
-                InventoryManager.LoadPlayerEquippedItems(player);
-                MedicalCommands.CheckIfPlayerIsDead(player);
-                PoliceCommands.CheckPlayerCuffed(player);
-                #region Security
-                if (player.socialClubName.ToLower() == "watwall" || player.socialClubName.ToLower() == "basgandomatez")
-                {
-                    API.setEntityData(player, "AdminLevel", (byte)9);
-                    API.sendChatMessageToPlayer(player, "Ooooo " + player.socialClubName + " hoşgeldiniz.");
-                }
-                #endregion
-            }
-        }
-
-        public void GoToRegistrationPosition(Client player)
-        {
-            player.freeze(true);
-            player.position = new Vector3(850, 1035, 286);
-            player.rotation = new Vector3(0, 0, 17);
-            player.dimension = 1;
-        }
         private void API_onClientEventTrigger(Client sender, string eventName, params object[] arguments)
         {
             if (eventName == "key_F")
@@ -184,119 +91,10 @@ namespace TecoRP.Users
                     EnterBuilding(sender);
                 }
             }
-
-            #region return_character_name
-            if (eventName == "return_character_name")
-            {
-                API.consoleOutput("return_character_name");
-                if (String.IsNullOrEmpty(arguments[0].ToString()) || !(arguments[0].ToString().Contains(" ")))
-                {
-                    API.sendChatMessageToPlayer(sender, "~r~Lütfen adınızı \"İsim Soyisim\" formatında giriniz.");
-                    API.triggerClientEvent(sender, "set_character_name", true);
-                    return;
-                }
-                API.setEntityData(sender, "CharacterName", arguments[0].ToString());
-                API.triggerClientEvent(sender, "set_character_sex", true);
-
-            }
-            else if (eventName == "return_character_sex")
-            {
-                API.consoleOutput("return_character_sex with");
-                sender.freeze(false);
-                API.setEntityInvincible(sender, false);
-                if (Convert.ToBoolean(arguments[1]))
-                {
-                    db_Accounts.CreatePlayerAccount(sender, "000");
-                }
-                db_Accounts.LoadPlayerAccount(sender);
-
-                var _inventory = (Inventory)API.getEntityData(sender, "inventory");
-                bool isMale = (arguments[0].ToString().StartsWith("k",StringComparison.InvariantCultureIgnoreCase) || arguments[0].ToString().StartsWith("g", StringComparison.InvariantCultureIgnoreCase)) ? false : true;
-                if (isMale)
-                {
-                    API.setEntityData(sender, "Gender", true);
-                    _inventory.ItemList.Add(new ClientItem { Count = 1, Equipped = true, ItemId = 2221 });
-                    sender.setSkin(PedHash.Salton01AMM);
-                    API.setEntityData(sender, "Skin", PedHash.Salton01AMM);
-                }
-                else
-                {
-                    API.setEntityData(sender, "Gender", false);
-                    _inventory.ItemList.Add(new ClientItem { Count = 1, Equipped = true, ItemId = 2168 });
-                    sender.setSkin(PedHash.Abigail);
-                    API.setEntityData(sender, "Skin", PedHash.Abigail);
-                }
-                sender.dimension = API.getEntityData(sender, "Dimension");
-                API.sendChatMessageToPlayer(sender, "~g~Başarıyla giriş yaptınız.");
-                sender.position = API.getEntityData(sender, "LastPosition");
-                int money = API.getEntityData(sender, "Money");
-                API.triggerClientEvent(sender, "update_money_display", money);
-                sender.health = API.getEntityData(sender, "HealthLevel");
-                sender.armor = API.getEntityData(sender, "ArmorLevel");
-                sender.nametag = "(" + API.getEntityData(sender, "ID") + ") " + API.getEntityData(sender, "CharacterName");
-
-                float _Hunger = Convert.ToInt32(API.getEntityData(sender, "Hunger"));
-                float _Thirsty = Convert.ToInt32(API.getEntityData(sender, "Thirsty"));
-                API.triggerClientEvent(sender, "update_hungerthirsty", _Hunger, _Thirsty);
-            }
-
-            TriggerUserMission(sender);
-            #endregion
-
         }
+        
 
-        ~UserCommands()
-        {
-            foreach (var player in API.getAllPlayers())
-            {
-                API.setEntityData(player, "LastPosition", player.position);
-                API.setEntityData(player, "HealthLevel", player.health);
-                db_Accounts.SavePlayerAccount(player);
-            }
-        }
-
-
-
-
-        private void API_onPlayerDisconnected(Client player, string reason)
-        {
-            if (API.hasEntityData(player, "LOGGED_IN") && Convert.ToBoolean(API.getEntityData(player, "LOGGED_IN")))
-            {
-                lock (player)
-                {
-                    try
-                    {
-                        InventoryManager.RemovePlayerEquippedItems(player);
-                        int IdLenght = Convert.ToString(API.getEntityData(player, "ID")).Length;
-                        API.setEntityData(player, "LastPosition", player.position);
-                        API.setEntityData(player, "HealthLevel", player.health);
-                        API.setEntityData(player, "Dimension", player.dimension);
-                        API.setEntityData(player, "CharacterName", player.nametag.Remove(0, IdLenght + 3));
-                        db_Accounts.SavePlayerAccount(player);
-                    }
-                    catch (Exception ex)
-                    {
-                        API.shared.consoleOutput("Player Save Hatası." + ex.ToString());
-                    }
-                }
-            }
-        }
-
-        public void CheckPlayerIfIsInWhiteList(Client sender)
-        {
-            var _Whitelist = db_WhiteList.GetAllowedPlayers();
-            if (_Whitelist.IsEnabled)
-            {
-                if (!_Whitelist.Users.Select(s => s.SocialClubName).Contains(sender.socialClubName))
-                {
-                    API.shared.consoleOutput("WHITELIST REDDEDİLDİ : " + sender.socialClubName);
-                    API.sendChatMessageToPlayer(sender, "~r~HATA: ~s~Erişiminiz bulunmuyor.");
-                    API.shared.sendNotificationToPlayer(sender, "~r~Başvurunuz henüz kabul edilmemiş veya onaylanmamış.");
-                    API.kickPlayer(sender, "Oyuna girmek için başvuru yapmalısınız.");
-                }
-            }
-        }
-
+      
         [Command("otur", "/otur [1-6]")]
         public void SitAnimation(Client sender, int anim)
         {
@@ -837,7 +635,7 @@ namespace TecoRP.Users
                         API.shared.sendChatMessageToPlayer(player, "Yetkili: ~y~Buyrun, kimliğiniz.  ~w~(( Kimliğiniz envanterinize eklendi.))");
                         Clients.ClientManager.RemoveMissionMarker(player);
                         API.shared.setEntityData(player, "Mission", 1);
-                        TriggerUserMission(player);
+                        UserManager.TriggerUserMission(player);
                         db_Accounts.SavePlayerAccount(player);
                     }
                     else
@@ -851,114 +649,6 @@ namespace TecoRP.Users
             }
         }
 
-        public static void TriggerUserMission(Client sender)
-        {
-            if (API.shared.hasEntityData(sender, "Mission"))
-            {
-                int missionNumber = API.shared.getEntityData(sender, "Mission");
-                switch (missionNumber)
-                {
-                    case 0:
-                        var LicenseTaking = db_LicensePoints.CurrentLicenseTakings.Item1.FirstOrDefault(x => x.LicenseType == 1);
-                        if (LicenseTaking != null)
-                        {
-                            if (LicenseTaking.Dimension == 0)
-                            {
-                                Clients.ClientManager.ShowMissionMarker(sender, LicenseTaking.Position.X, LicenseTaking.Position.Y, LicenseTaking.Position.Z, 0);
-                            }
-                            else
-                            {
-                                int i = 0; int _nearestIndex = 0; float lastDistance = float.MaxValue;
-                                foreach (var itemEntrances in db_Entrances.currentEntrances.Items)
-                                {
-                                    var dist = Vector3.Distance(itemEntrances.InteriorPosition, LicenseTaking.Position);
-                                    if (dist < lastDistance && itemEntrances.InteriorDimension == LicenseTaking.Dimension)
-                                    {
-                                        _nearestIndex = i;
-                                    }
-                                    lastDistance = dist;
-                                    i++;
-                                }
-                                var pos = db_Entrances.currentEntrances.Items[_nearestIndex].EntrancePosition;
-                                Clients.ClientManager.ShowMissionMarker(sender, pos.X, pos.Y, pos.Z, 0);
-                            }
-                        }
-                        else
-                        {
-                            API.shared.consoleOutput("Kimlik alma noktası eklenmemiş. [ LicenseTaking  (TypeID:1)]");
-                        }
-
-                        break;
-
-                    case 1:
-
-
-                        var shop = db_Shops.GetShop(18);
-                        if (shop != null)
-                        {
-                            var pos = shop.Position;
-                            Clients.ClientManager.ShowMissionMarker(sender, pos.X, pos.Y, pos.Z, 1);
-                            return;
-                        }
-                        else
-                        {
-                            var skinItemList = db_Items.GameItems.Values.Where(w => w.Type == ItemType.Skin).Select(s => s.ID);
-                            foreach (var itemShops in db_Shops.CurrentShopsList)
-                            {
-                                foreach (var itemSaleList in itemShops.Key.SaleItemList)
-                                {
-                                    if (skinItemList.Contains(itemSaleList.GameItemId))
-                                    {
-                                        Clients.ClientManager.ShowMissionMarker(sender, itemShops.Key.Position.X, itemShops.Key.Position.Y, itemShops.Key.Position.Z, 1);
-                                        return;
-                                    }
-                                }
-                            }
-                        }
-
-                        break;
-                    case 2:
-                        if (db_Shops.CurrentShopsList.Count > 0)
-                        {
-                            var phoneItemList = db_Items.GameItems.Values.Where(w => w.Type == ItemType.Phone).Select(s => s.ID);
-                            foreach (var itemShops in db_Shops.CurrentShopsList)
-                            {
-                                foreach (var itemSaleList in itemShops.Key.SaleItemList)
-                                {
-                                    if (phoneItemList.Contains(itemSaleList.GameItemId))
-                                    {
-                                        Clients.ClientManager.ShowMissionMarker(sender, itemShops.Key.Position.X, itemShops.Key.Position.Y, itemShops.Key.Position.Z, 2);
-                                        return;
-                                    }
-                                }
-                            }
-                        }
-                        break;
-                    case 3:
-                        if (db_PhoneOperatorShop.CurrentOperatorShop.Item1.Count > 0)
-                        {
-                            int i = 0; int _nearestIndex = 0; float lastDistance = float.MaxValue;
-                            foreach (var itemOpShop in db_PhoneOperatorShop.CurrentOperatorShop.Item1)
-                            {
-                                var dist = Vector3.Distance(sender.position, itemOpShop.Position);
-                                if (dist < lastDistance)
-                                {
-                                    _nearestIndex = i;
-                                }
-                                lastDistance = dist;
-                                i++;
-                            }
-                            var pos = db_PhoneOperatorShop.CurrentOperatorShop.Item1[_nearestIndex].Position;
-                            Clients.ClientManager.ShowMissionMarker(sender, pos.X, pos.Y, pos.Z, 3);
-                        }
-
-                        break;
-                    default:
-
-                        break;
-                }
-            }
-        }
 
         [Command("?", "/? [Sormak istediğiniz soru cümlesi]", GreedyArg = true)]
         public void AskQuestion(Client sender, string questionSentence)

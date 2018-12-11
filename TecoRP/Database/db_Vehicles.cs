@@ -33,23 +33,10 @@ namespace TecoRP.Database
         {
             API.shared.consoleOutput("Araçlar yüklenmeye başladı.");
 
-
             foreach (var itemVeh in GetAll())
-            {
-                itemVeh.VehicleOnMap = API.shared.createVehicle(itemVeh.VehicleModelId, itemVeh.LastPosition, itemVeh.LastRotation, itemVeh.Color1, itemVeh.Color2, itemVeh.Dimension);
-                API.shared.setVehicleEngineStatus(itemVeh.VehicleOnMap, false);
-                API.shared.setVehicleLocked(itemVeh.VehicleOnMap.handle, itemVeh.IsLocked);
-                API.shared.setVehicleNumberPlate(itemVeh.VehicleOnMap.handle, itemVeh.Plate);
-                API.shared.setVehicleLivery(itemVeh.VehicleOnMap, itemVeh.Livery);
+                GenerateOnMap(itemVeh);
 
-                for (int i = 0; i < 69; i++)
-                {
-                    if (itemVeh.Mods[i] == -1) { continue; }
-                    itemVeh.VehicleOnMap.setMod(i, itemVeh.Mods[i]);
-                }
-            }
             API.shared.consoleOutput(_repository.Current.Count + " araç başarıyla yüklendi.");
-
         }
         public static void RespawnAll()
         {
@@ -58,18 +45,9 @@ namespace TecoRP.Database
                 try
                 {
                     if (API.shared.getVehicleOccupants(itemVeh.VehicleOnMap).Length > 0) continue;
-                    API.shared.deleteEntity(itemVeh.VehicleOnMap);
-                    itemVeh.VehicleOnMap = API.shared.createVehicle(itemVeh.VehicleModelId, itemVeh.LastPosition, itemVeh.LastRotation, itemVeh.Color1, itemVeh.Color2, itemVeh.Dimension);
-                    API.shared.setVehicleEngineStatus(itemVeh.VehicleOnMap, false);
-                    API.shared.setVehicleLocked(itemVeh.VehicleOnMap.handle, itemVeh.IsLocked);
-                    API.shared.setVehicleNumberPlate(itemVeh.VehicleOnMap.handle, itemVeh.Plate);
-                    API.shared.setVehicleLivery(itemVeh.VehicleOnMap, itemVeh.Livery);
 
-                    for (int i = 0; i < 69; i++)
-                    {
-                        if (itemVeh.Mods[i] == -1) { continue; }
-                        itemVeh.VehicleOnMap.setMod(i, itemVeh.Mods[i]);
-                    }
+                    RemoveFromMap(itemVeh);
+                    GenerateOnMap(itemVeh);
                 }
                 catch (Exception ex)
                 {
@@ -95,23 +73,7 @@ namespace TecoRP.Database
                     _vehicle.VehicleOnMap.numberPlate = _vehicle.Plate;
                     API.shared.setVehicleLivery(_vehicle.VehicleOnMap, _vehicle.Livery);
 
-                    #region DamageLoading
-                    if (_vehicle.SpecifiedDamage != null)
-                    {
-                        foreach (var itemDoor in _vehicle.SpecifiedDamage.BrokenDoors)
-                        {
-                            API.shared.breakVehicleDoor(_vehicle.VehicleOnMap, itemDoor, true);
-                        }
-                        foreach (var itemWindow in _vehicle.SpecifiedDamage.BrokenWindows)
-                        {
-                            API.shared.breakVehicleWindow(_vehicle.VehicleOnMap, itemWindow, true);
-                        }
-                        foreach (var itemTyre in _vehicle.SpecifiedDamage.PoppedTyres)
-                        {
-                            API.shared.popVehicleTyre(_vehicle.VehicleOnMap, itemTyre, true);
-                        }
-                    }
-                    #endregion
+
 
                     for (int i = 0; i < 69; i++)
                     {
@@ -176,6 +138,12 @@ namespace TecoRP.Database
                 return false;
             }
         }
+
+        public static Models.Vehicle FindVehicle(NetHandle handle)
+        {
+            return _repository.Current.FirstOrDefault(x => x.VehicleOnMap.handle == handle);
+        }
+
         public static Models.Vehicle FindNearestVehicle(Vector3 pos)
         {
             Models.Vehicle nearestVehicle = _repository.Current.FirstOrDefault();
@@ -369,8 +337,6 @@ namespace TecoRP.Database
             }
         }
 
-
-
         public static bool CreateVehicle(VehicleHash vehModel, Client _Owner)
         {
             try
@@ -531,7 +497,44 @@ namespace TecoRP.Database
             {
                 System.IO.Directory.CreateDirectory(dataPathTax.Split('/')[0]);
             }
+        }
 
+
+        public static Models.Vehicle GenerateOnMap(Models.Vehicle vehicle)
+        {
+            vehicle.VehicleOnMap = API.shared.createVehicle(vehicle.VehicleModelId, vehicle.LastPosition, vehicle.LastRotation, vehicle.Color1, vehicle.Color2, vehicle.Dimension);
+            API.shared.setVehicleEngineStatus(vehicle.VehicleOnMap, false);
+            API.shared.setVehicleLocked(vehicle.VehicleOnMap.handle, vehicle.IsLocked);
+            API.shared.setVehicleNumberPlate(vehicle.VehicleOnMap.handle, vehicle.Plate);
+            API.shared.setVehicleLivery(vehicle.VehicleOnMap, vehicle.Livery);
+
+            for (int i = 0; i < 69; i++)
+            {
+                if (vehicle.Mods[i] == -1) { continue; }
+                vehicle.VehicleOnMap.setMod(i, vehicle.Mods[i]);
+            }
+
+            #region DamageLoading
+            if (vehicle.SpecifiedDamage != null)
+            {
+                foreach (var itemDoor in vehicle.SpecifiedDamage.BrokenDoors)
+                    API.shared.breakVehicleDoor(vehicle.VehicleOnMap, itemDoor, true);
+
+                foreach (var itemWindow in vehicle.SpecifiedDamage.BrokenWindows)
+                    API.shared.breakVehicleWindow(vehicle.VehicleOnMap, itemWindow, true);
+
+                foreach (var itemTyre in vehicle.SpecifiedDamage.PoppedTyres)
+                    API.shared.popVehicleTyre(vehicle.VehicleOnMap, itemTyre, true);
+
+            }
+            #endregion
+            return vehicle;
+        }
+
+        public static Models.Vehicle RemoveFromMap(Models.Vehicle vehicle)
+        {
+            API.shared.deleteEntity(vehicle.VehicleOnMap.handle);
+            return vehicle;
         }
 
         /// <summary>

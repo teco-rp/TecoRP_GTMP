@@ -51,7 +51,15 @@ namespace TecoRP.Models
     /// </License>
     public enum ItemType
     {
-        None,
+        None = 0,
+        Mask = 1,
+        Torso = 3,
+        Legs = 4,
+        Bags = 5,
+        Feet = 6,
+        Accessories = 7,
+        Undershirt = 8,
+        Tops = 11,
         Drinkable,
         Eatable,
         FirstAid,
