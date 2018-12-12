@@ -1,14 +1,14 @@
 ﻿/// <reference path="types-gt-mp/index.d.ts" />
 
 var menu = null;
-var player = API.getLocalPlayer();
-var currentHead = 0, currentHair = 0, currentHairColor = 0;
+var currentHead = 0,currentEyes = 0, currentHair = 0, currentHairColor = 0;
 
 API.onServerEventTrigger.connect(function (eventName, args) {
 
 
     if (eventName == "ChooseCharacterApperance") {
 
+        var player = API.getLocalPlayer();
         menu = API.createMenu("Karakter", "Karakterinizi oluşturun.", 100, 100, 0, true);
 
         var head = new List(String);
@@ -25,11 +25,9 @@ API.onServerEventTrigger.connect(function (eventName, args) {
         }
 
         var headOptionsItem = API.createListItem("Ten", "Karakterinizin ten rengini ve ırkını ayarlayabilirsiniz.", head, 0);
-        headOptionsItem.Activated.connect(function (sender, selected) { API.sendChatMessage("head options activated triggered"); });
         headOptionsItem.OnListChanged.connect(function (sender, index) {
             currentHead = parseInt(sender.List[index]);
             API.setPlayerClothes(player, 0, currentHead, 0);
-            API.sendChatMessage("head options changed");
         });
 
         var eyes = new List(String);
@@ -39,7 +37,8 @@ API.onServerEventTrigger.connect(function (eventName, args) {
 
         var eyesOptionsItem = API.createListItem("Gözler", "Karakterinizin göz rengini değiştirebilirsiniz.", eyes, 0);
         eyesOptionsItem.OnListChanged.connect(function (sender, index) {
-            API.setPlayerEyeColor(player, parseInt(sender.List[index]));
+            currentEyes = parseInt(sender.List[index]);
+            API.setPlayerEyeColor(player, currentEyes);
         });
 
         hairs = new List(String); //36
@@ -82,7 +81,7 @@ API.onServerEventTrigger.connect(function (eventName, args) {
 
         var completeAction = API.createMenuItem("KAYDET", "");
         completeAction.Activated.connect(function (sender, item) {
-            API.triggerServerEvent("SaveCharacterApperance", currentHead, currentHair, currentHairColor);
+            API.triggerServerEvent("SaveCharacterApperance", currentHead, currentEyes, currentHair, currentHairColor);
             menu.Visible = false;
             menu = null;
         });
@@ -92,7 +91,6 @@ API.onServerEventTrigger.connect(function (eventName, args) {
         menu.AddItem(hairsOptions);
         menu.AddItem(hairColorsOptions);
         menu.AddItem(completeAction);
-
         menu.Visible = true;
     }
 });

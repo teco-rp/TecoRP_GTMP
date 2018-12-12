@@ -1401,10 +1401,12 @@ namespace TecoRP.Managers
                             case ItemType.Mask:
                                 break;
                             case ItemType.Legs:
+                                sender.WearPants(gameItem);
                                 break;
                             case ItemType.Bags:
                                 break;
                             case ItemType.Feet:
+                                sender.WearShoes(gameItem);
                                 break;
                             case ItemType.Accessories:
                                 break;

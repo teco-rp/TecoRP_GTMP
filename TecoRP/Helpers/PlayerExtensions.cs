@@ -13,7 +13,7 @@ namespace TecoRP.Helpers
     {
         public static bool IsPlayerLoggedIn(this Client client)
         {
-            return (bool)API.shared.getEntityData(client, "LOGGED_IN");
+            return (bool) (API.shared.getEntityData(client, "LOGGED_IN") ?? false);
         }
         public static Client SetLoggedIn(this Client client, bool isLoggedIn)
         {

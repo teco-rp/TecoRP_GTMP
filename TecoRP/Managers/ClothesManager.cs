@@ -8,20 +8,19 @@ using System.Text;
 using System.Threading.Tasks;
 using TecoRP.Database;
 using TecoRP.Helpers;
+using TecoRP.Managers.Base;
 using TecoRP.Models;
 
 namespace TecoRP.Managers
 {
-    public class ClothesManager : Script
+    public class ClothesManager : EventMethodTriggerBase
     {
         public ClothesManager()
         {
-            API.onClientEventTrigger += (s, eventName, args)
-                => this.GetType().GetMethod(eventName)?.Invoke(this, parameters: new object[] { s,args });
         }
 
 
-        public void SaveCharacterApperance(Client sender, object[] args)
+        public void SaveCharacterApperance(Client sender, params object[] args)
         {
             ClothingData cData = new ClothingData
             {
@@ -30,14 +29,20 @@ namespace TecoRP.Managers
                 Hair  = Convert.ToInt32(args[2]),
                 HairColor  = Convert.ToInt32(args[3]),
             };
-
-            sender.ApplyApperance(cData);
+            
             API.shared.setEntityData(sender, nameof(User.ClothingData), cData);
             db_Accounts.SavePlayerAccount(sender);
             sender.dimension = API.getEntityData(sender, "Dimension");
             sender.position = API.getEntityData(sender, "LastPosition");
             sender.freeze(false);
             sender.SetLoggedIn(true);
+            sender
+                .SetSkinByGender()
+                .UnwearTops()
+                .UnwearPants()
+                .UnwearShoes()
+                .ApplyApperance(cData);
+            InventoryManager.LoadPlayerEquippedItems(sender);
         }
 
         [Command("gorunum")]

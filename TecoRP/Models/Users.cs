@@ -14,7 +14,7 @@ namespace TecoRP.Models
     public class User
     {
         [XmlIgnore]
-        public string socialClubName { get; set; }
+        public string SocialClubName { get; set; }
         [XmlIgnore]
         public string Password { get; set; }
         public int FactionId { get; set; } = 0;
@@ -49,10 +49,28 @@ namespace TecoRP.Models
         public List<Jobs> JobAbilities { get; set; }
         public ClothingData ClothingData { get; set; } = new ClothingData();
 
-        public User() { JobAbilities = new List<Jobs>(); }
+        public User(string socialClubName)
+        {
+            JobAbilities = new List<Jobs>();
+            this.SocialClubName = socialClubName;
+            Money = 1250;
+            LastPosition = new GrandTheftMultiplayer.Shared.Math.Vector3 { X = -801, Y = -102, Z = 37 };
+            ArmorLevel = 0;
+            HealthLevel = 100;
+            BankMoney = 0;
+            Jailed = false;
+            JailedTime = 0;
+            Level = 1;
+            WantedLevel = 0;
+            Hunger = 100;
+            Thirsty = 100;
+            AdminLevel = 0;
+            playingMinutes = 0;
+            Mission = 0;
+        }
         public int GetAge()
         {
-            if (BirthDate!=null)
+            if (BirthDate != null)
             {
                 return DateTime.Now.Year - BirthDate.Year;
             }

@@ -35,23 +35,20 @@ namespace TecoRP.Managers
             }
             API.consoleOutput($"All {players.Count} players are saved successfully!");
         }
- 
+
 
         private void API_onPlayerConnected(Client player)
         {
             if (!CheckPlayerIfIsInWhiteList(player))
                 return;
 
-            player.dimension = random.Next(0, 123);
+            player.dimension = random.Next(short.MinValue, int.MaxValue);
 
             SetIdToPlayer(player);
 
 
             if (db_Accounts.DoesAccountExist(player.socialClubName))
                 db_Accounts.LoadPlayerAccount(player);
-            else
-                db_Accounts.CreatePlayerAccount(player, "1");
-
         }
 
         private void API_onPlayerFinishedDownload(Client player)
@@ -109,6 +106,7 @@ namespace TecoRP.Managers
                 return;
             }
             API.setEntityData(sender, "CharacterName", args[0].ToString());
+            sender.SetNameTagWithId();
             API.triggerClientEvent(sender, "set_character_sex", true);
         }
         //Client event
@@ -125,9 +123,10 @@ namespace TecoRP.Managers
 
             bool isMale = (args[0].ToString().StartsWith("k", StringComparison.InvariantCultureIgnoreCase) || args[0].ToString().StartsWith("g", StringComparison.InvariantCultureIgnoreCase)) ? false : true;
             API.setEntityData(sender, "Gender", isMale);
-
+            API.shared.consoleOutput("isMale is "+isMale);
+            sender.SetSkinByGender();
             SetBeginnerInventory(sender);
-            db_Accounts.SavePlayerAccount(sender);
+            //db_Accounts.SavePlayerAccount(sender);
 
             GoToApperanceSelection(sender);
         }
@@ -142,6 +141,9 @@ namespace TecoRP.Managers
         {
             player
                 .SetSkinByGender()
+                .UnwearTops()
+                .UnwearPants()
+                .UnwearShoes()
                 .ApplyApperance((ClothingData)API.getEntityData(player, nameof(User.ClothingData)));
             InventoryManager.LoadPlayerEquippedItems(player);
         }
@@ -341,6 +343,8 @@ namespace TecoRP.Managers
         }
         public static void SavePlayer(Client player)
         {
+            if (player.nametag == null)
+                throw new Exception("Player nametag is null");
             InventoryManager.RemovePlayerEquippedItems(player);
             int IdLenght = Convert.ToString(API.shared.getEntityData(player, "ID")).Length;
             API.shared.setEntityData(player, "LastPosition", player.position);

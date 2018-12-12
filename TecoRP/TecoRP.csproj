@@ -24,7 +24,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
+    <Optimize>false</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -297,7 +297,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy $(TargetDir)Client\*.* D:\Server-Stable\resources\TecoRP\Client\ /r /Y
-xcopy $(TargetDir)TecoRP.dll D:\Server-Stable\resources\TecoRP\ /r /Y
+xcopy $(TargetDir)*.dll D:\Server-Stable\resources\TecoRP\ /r /Y
 xcopy $(TargetDir)meta.xml D:\Server-Stable\resources\TecoRP\ /r /Y
 xcopy $(TargetDir)*.ogg D:\Server-Stable\resources\TecoRP\ /r /Y
 </PostBuildEvent>

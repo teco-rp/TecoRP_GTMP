@@ -20,8 +20,10 @@ namespace TecoRP.Helpers
                 player.setSkin(PedHash.FreemodeMale01);
             }
             else
+            {
                 API.shared.setEntityData(player, "Skin", PedHash.FreemodeFemale01);
                 player.setSkin(PedHash.FreemodeFemale01);
+            }
 
             return player;
         }
@@ -35,9 +37,9 @@ namespace TecoRP.Helpers
 
         public static Client WearTops(this Client player, Item item)
         {
-            player.setClothes(11, Convert.ToInt32(item.Value_0), Convert.ToInt32(item.Value_1)); 
+            player.setClothes(11, Convert.ToInt32(item.Value_0), Convert.ToInt32(item.Value_1));
             return player;
-        }       
+        }
 
         public static Client UnwearTops(this Client player)
         {
@@ -58,24 +60,54 @@ namespace TecoRP.Helpers
 
         public static Client WearUndershirt(this Client player, Item item)
         {
-            //player.setClothes(11, Convert.ToInt32(item.Value_0), Convert.ToInt32(item.Value_1)); 
+            player.setClothes(8, Convert.ToInt32(item.Value_0), Convert.ToInt32(item.Value_1));
             return player;
-        }       
+        }
 
         public static Client UnearUndershirt(this Client player)
         {
-            //if (API.shared.getEntityData(player, "Gender") == true)
-            //{
-            //    player.setClothes(3, 15, 0);
-            //    player.setClothes(8, -1, 0);
-            //    player.setClothes(11, 252, 0);
-            //}
-            //else
-            //{
-            //    player.setClothes(3, 15, 0);
-            //    player.setClothes(8, -1, 0);
-            //    player.setClothes(11, 15, 0);
-            //}
+            if (API.shared.getEntityData(player, "Gender") == true)
+            {
+                player.setClothes(8, -1, 0);
+            }
+            else
+            {
+                player.setClothes(8, -1, 0);
+            }
+            return player;
+        }
+        public static Client WearPants(this Client player, Item item)
+        {
+            player.setClothes(8, Convert.ToInt32(item.Value_0), Convert.ToInt32(item.Value_1));
+            return player;
+        }
+        public static Client UnwearPants(this Client player)
+        {
+            if (API.shared.getEntityData(player, "Gender") == true)
+            {
+                player.setClothes(4, 18, 0);
+            }
+            else
+            {
+                player.setClothes(4, 15, 0);
+            }
+            return player;
+        }
+        public static Client WearShoes(this Client player, Item item)
+        {
+            player.setClothes(6, Convert.ToInt32(item.Value_0), Convert.ToInt32(item.Value_1));
+            return player;
+        }
+        public static Client UnwearShoes(this Client player)
+        {
+            if (API.shared.getEntityData(player, "Gender") == true)
+            {
+                player.setClothes(6, 34, 0);
+            }
+            else
+            {
+                player.setClothes(6, 35, 0);
+            }
             return player;
         }
     }
