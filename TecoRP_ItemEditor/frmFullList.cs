@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using TecoRP.Models;
 
 namespace TecoRP_ItemEditor
 {
@@ -17,7 +18,7 @@ namespace TecoRP_ItemEditor
             InitializeComponent();
             dgvItemsList.DataSource = Database.db_Items.currentItems.Items;
 
-            foreach (var item in Enum.GetNames(typeof(Model.ItemType)))
+            foreach (var item in Enum.GetNames(typeof(ItemType)))
             {
                 cmbCategories.Items.Add(item);
             }
@@ -55,7 +56,7 @@ namespace TecoRP_ItemEditor
         {
             if (cmbCategories.SelectedIndex!=-1)
             {
-                Model.ItemType selectedType = (Model.ItemType)Enum.Parse(typeof(Model.ItemType), cmbCategories.SelectedItem.ToString());
+                ItemType selectedType = (ItemType)Enum.Parse(typeof(ItemType), cmbCategories.SelectedItem.ToString());
                 dgvItemsList.DataSource = Database.db_Items.currentItems.Items.Where(x => x.Type == selectedType).ToList();
             }else
             {

@@ -119,7 +119,7 @@ namespace TecoRP.Managers
                     names.Add(item.Name);
                     descs.Add("Suç ağırlığı: " + item.WantedLevel);
                 }
-                Clients.ClientManager.SendCrimeList(sender, names, descs, player.socialClubName);
+                Clients.ClientManager.SendCrimeList(sender, names, descs, player.SocialClubName);
             }
             else
             {

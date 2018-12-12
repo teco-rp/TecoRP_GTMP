@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using TecoRP.Models;
 
 namespace TecoRP_ItemEditor.Model
 {
@@ -58,30 +59,7 @@ namespace TecoRP_ItemEditor.Model
     /// <value_1> TYPE (Örn.: 0-Tyre 1-Engine) </value_1>
     /// <value_2> NONE</value_2>
     /// </RepairPart>
-
-    public enum ItemType
-    {
-        None,
-        Drinkable,
-        Eatable,
-        FirstAid,
-        Weapon,
-        Armor,
-        Drug,
-        Ammo,
-        WeaponPaint,
-        WeaponUpgrade,
-        License,
-        Skin,
-        Bag,
-        RepairPart,
-        Furniture,
-        Phone,
-        CraftingPart,
-        CraftingTable,
-        Wearable
-    }
-
+    
     public class Item
     {
         [XmlAttribute("ID")]
@@ -110,13 +88,7 @@ namespace TecoRP_ItemEditor.Model
             return Name;
         }
     }
-    [XmlRoot("AllItems")]
-    public class ItemList
-    {
-        [XmlElement("Item")]
-        public List<Item> Items { get; set; }
-        public ItemList() { Items = new List<Model.Item>(); }
-    }
+
     public class Inventory
     {
         [XmlIgnore]

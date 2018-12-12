@@ -12,6 +12,7 @@ using TecoRP.Models;
 using GrandTheftMultiplayer.Server.Constant;
 using System.Web;
 using Newtonsoft.Json;
+using TecoRP.Helpers;
 
 namespace TecoRP.Database
 {
@@ -52,27 +53,7 @@ namespace TecoRP.Database
             var pathInv = Path.Combine(INVENTORY_FOLDER, player.socialClubName);
             //if (!path.StartsWith(Directory.GetCurrentDirectory())) return;
 
-            var data = new Models.User()
-            {
-                socialClubName = player.socialClubName,
-                Password = API.shared.getHashSHA256(password),
-                Money = 750,
-                LastPosition = new GrandTheftMultiplayer.Shared.Math.Vector3 { X = -801, Y = -102, Z = 37 },
-                ArmorLevel = 0,
-                HealthLevel = 100,
-                BankMoney = 0,
-                Jailed = false,
-                JailedTime = 0,
-                Level = 1,
-                WantedLevel = 0,
-                CharacterName = API.shared.getEntityData(player, "CharacterName"),
-                Skin = PedHash.Abigail,
-                Hunger = 100,
-                Thirsty = 100,
-                AdminLevel = 0,
-                playingMinutes = 0,
-                Mission = 0,
-            };
+            var data = new Models.User(player.socialClubName);
 
             var dataInv = new Inventory
             {
@@ -123,7 +104,8 @@ namespace TecoRP.Database
                 API.shared.consoleOutput(LogCat.Fatal, $"LoadPlayerInventory | {player.socialClubName} | {API.shared.getEntityData(player,"ID")} | {ex.ToString()}");
 
             }
-            API.shared.setEntityData(player, "LOGGED_IN", true);
+            player.SetLoggedIn(true);
+            //API.shared.setEntityData(player, "LOGGED_IN", true);
         }
         private static void LoadPlayerData(Client player)
         {
@@ -266,8 +248,8 @@ namespace TecoRP.Database
 
         public static void SavePlayerAccount(Client player)
         {
-            if (!API.shared.hasEntityData(player, "FINISHED_DOWNLOAD"))
-                return;
+            //if (!API.shared.hasEntityData(player, "FINISHED_DOWNLOAD"))
+            //    return;
             if (!IsPlayerLoggedIn(player))
             {
                 API.shared.consoleOutput(LogCat.Warn,$"SavePlayerAccount | Player not logged in : {player.socialClubName} | {API.shared.getEntityData(player,"ID")}");
@@ -280,8 +262,8 @@ namespace TecoRP.Database
                 try
                 {
                     //  var old = API.shared.fromJson(File.ReadAllText(path));
-                    var data = GetOfflineUserDatas(player.socialClubName);
-
+                    var data = GetOfflineUserDatas(player.socialClubName) ?? new User(player.socialClubName);
+                    
                     foreach (var property in typeof(Models.User).GetProperties())
                     {
                         if (property.GetCustomAttributes(typeof(XmlIgnoreAttribute), false).Length > 0) continue;

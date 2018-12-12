@@ -1,4 +1,5 @@
-﻿//-----------------------PHONE-----------------------------
+﻿/// <reference path="types-gt-mp/index.d.ts" />
+//-----------------------PHONE-----------------------------
 var phone_menu = API.createMenu("Hat Yok", "Telefon", 0, 0, 6);
 var phonebook_menu = API.createMenu("Telefon Defteri", "Telefon", 0, 0, 6);
 var phone_gps_menu = API.createMenu("GPS", "Haritalar", 0, 0, 6);
@@ -69,8 +70,8 @@ API.onServerEventTrigger.connect(function (name, args) {
         for (var i = 0; i < args[0]; i++) {
             phonebook_menu.AddItem(API.createMenuItem(args[1][i], args[2][i]));
         }
-        //API.showCursor(true);
         phonebook_menu.Visible = true;
+        API.showCursor(false);
     }
 
     if (name == "phone_gps_open") {
@@ -83,8 +84,8 @@ API.onServerEventTrigger.connect(function (name, args) {
         for (var i = 0; i < args[0]; i++) {
             phone_gps_menu.AddItem(API.createMenuItem(args[1][i], " "));
         }
-        //API.showCursor(true);
         phone_gps_menu.Visible = true;
+        API.showCursor(false);
     }
 
     if (name == "phone_downloadscreen") {
@@ -93,6 +94,7 @@ API.onServerEventTrigger.connect(function (name, args) {
         }
         //API.showCursor(true);
         phone_downloadapp_menu.Visible = true;
+        API.showCursor(false);
     }
 
     if (name == "phone_emlakci_open") {
@@ -103,8 +105,9 @@ API.onServerEventTrigger.connect(function (name, args) {
         for (var i = 0; i < args[0]; i++) {
             phone_emlakci_menu.AddItem(API.createMenuItem(args[1][i], args[2][i]));
         }
-        //API.showCursor(true);
+        
         phone_emlakci_menu.Visible = true;
+        API.showCursor(false);
     }
 
 });

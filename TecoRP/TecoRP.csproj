@@ -24,12 +24,15 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
+    <Optimize>false</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <LangVersion>7.2</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="BCrypt.Net, Version=0.1.5073.29922, Culture=neutral, PublicKeyToken=6bcd409ee6bc9292, processorArchitecture=MSIL">
@@ -83,10 +86,15 @@
     <Compile Include="Database\db_GasStations.cs" />
     <Compile Include="Database\db_LicensePoints.cs" />
     <Compile Include="Database\db_PhoneOperatorShop.cs" />
+    <Compile Include="Helpers\ClothingExtensions.cs" />
+    <Compile Include="Helpers\PlayerExtensions.cs" />
+    <Compile Include="Helpers\SoftException.cs" />
     <Compile Include="Jobs\db_KamyonJob.cs" />
     <Compile Include="Jobs\db_TirJob.cs" />
+    <Compile Include="Managers\AccountManager.cs" />
     <Compile Include="Managers\AdvertisementManager.cs" />
     <Compile Include="Managers\BankManager.cs" />
+    <Compile Include="Managers\Base\EventMethodTriggerBase.cs" />
     <Compile Include="Managers\BlipManager.cs" />
     <Compile Include="Database\db_Accounts.cs" />
     <Compile Include="Database\db_Blips.cs" />
@@ -99,6 +107,7 @@
     <Compile Include="Database\db_Vehicles.cs" />
     <Compile Include="Managers\BuildingManager.cs" />
     <Compile Include="Managers\BusinessManager.cs" />
+    <Compile Include="Managers\ClothesManager.cs" />
     <Compile Include="Managers\CraftingManager.cs" />
     <Compile Include="Managers\CrimeManager.cs" />
     <Compile Include="Managers\EntranceManager.cs" />
@@ -116,6 +125,7 @@
     <Compile Include="Managers\LicenseManager.cs" />
     <Compile Include="Managers\PhoneManager.cs" />
     <Compile Include="Managers\TradeManager.cs" />
+    <Compile Include="Managers\UserManager.cs" />
     <Compile Include="Managers\VehicleManager.cs" />
     <Compile Include="Managers\Job_BusManager.cs" />
     <Compile Include="Managers\ConnectionManager.cs" />
@@ -165,43 +175,137 @@
     <Compile Include="Users\WzNewsCommands.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Client\Bank.js" />
-    <Content Include="Client\Building.js" />
-    <Content Include="Client\CraftingMenu.js" />
-    <Content Include="Client\CustomMenu.js" />
-    <Content Include="Client\Fuel.js" />
-    <Content Include="Client\HelpBrowser.js" />
-    <Content Include="Client\InputCharacter.js" />
-    <Content Include="Client\Inventory.js" />
-    <Content Include="Client\JobMenus.js" />
-    <Content Include="Client\LSPDComputer.js" />
-    <Content Include="Client\Menu.js" />
-    <Content Include="Client\OnSearchPlayer.js" />
-    <Content Include="Client\Phone.js" />
-    <Content Include="Client\PhoneOperatorMenu.js" />
-    <Content Include="Client\Shop.js" />
-    <Content Include="Client\Shortcuts.js" />
-    <Content Include="Client\Skills.js" />
-    <Content Include="Client\Sounds.js" />
-    <Content Include="Client\Storage.js" />
-    <Content Include="Client\TradeSelector.js" />
-    <Content Include="Client\Vault.js" />
+    <Content Include="Client\Bank.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Client\BaseUserUI.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Client\Building.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Client\CharacterCreator.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Client\CraftingMenu.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Client\CustomMenu.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Client\Fuel.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Client\HelpBrowser.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Client\InputCharacter.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Client\Inventory.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Client\JobMenus.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Client\LSPDComputer.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Client\Menu.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Client\OnSearchPlayer.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Client\Phone.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Client\PhoneOperatorMenu.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Client\Shop.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Client\Shortcuts.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Client\Skills.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Client\Sounds.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Client\Storage.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Client\TradeSelector.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Client\Vault.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Client\Vehicles.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="LICENSE.txt" />
     <Content Include="meta.xml">
       <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Client\MoneyDisplay.js" />
-    <Content Include="Client\WayPoint.js" />
+    <Content Include="Client\MoneyDisplay.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Client\WayPoint.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="CarLock.ogg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Client.ts" />
+    <TypeScriptCompile Include="types-gt-mp\Declarations.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Client.Contracts.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Client.GUI.CEF.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Client.Javascript.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Client.Javascript.ScriptContext.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Client.Models.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Client.Models.Game.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Client.Sound.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Client.Sync.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Shared.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\GrandTheftMultiplayer.Shared.Math.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\GTA.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\GTA.Math.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\GTA.Native.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\GTA.NaturalMotion.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\GTA.UI.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\index.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\Microsoft.ClearScript.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\NativeUI.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\NativeUI.UIMenu.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\NativeUI.UIMenuDynamicListItem.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\NativeUI.UIMenuItem.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\NativeUI.UIResText.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\System.Collections.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\System.Collections.Generic.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\System.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\System.Drawing.d.ts" />
+    <TypeScriptCompile Include="types-gt-mp\System.Windows.Forms.d.ts" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy $(TargetDir)Client\*.* D:\Server-Stable\resources\TecoRP\Client\ /r /Y
+xcopy $(TargetDir)*.dll D:\Server-Stable\resources\TecoRP\ /r /Y
+xcopy $(TargetDir)meta.xml D:\Server-Stable\resources\TecoRP\ /r /Y
+xcopy $(TargetDir)*.ogg D:\Server-Stable\resources\TecoRP\ /r /Y
+</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

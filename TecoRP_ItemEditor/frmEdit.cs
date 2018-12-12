@@ -7,13 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using TecoRP.Models;
 using TecoRP_ItemEditor.Model;
 
 namespace TecoRP_ItemEditor
 {
     public partial class frmEdit : Form
     {
-        public frmEdit(Model.Item _willBeEditedItem)
+        public frmEdit(Item _willBeEditedItem)
         {
             InitializeComponent();
             txtName.Text = _willBeEditedItem.Name;

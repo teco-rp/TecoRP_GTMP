@@ -1,7 +1,7 @@
 ﻿API.onServerEventTrigger.connect(function (name, args) {
 
     if (name == "set_character_name") {
-        API.triggerServerEvent("return_character_name", API.getUserInput("isim soyisim", 40), args[0]);
+        API.triggerServerEvent("ReturnCharacterName", API.getUserInput("isim soyisim", 40), args[0]);
     }
 
     if (name == "set_character_sex") {
@@ -11,7 +11,7 @@
         selectionMenu.Visible = true;
 
         selectionMenu.OnItemSelect.connect(function (sender, item, index) {
-            API.triggerServerEvent("return_character_sex", index == 0 ? "Kadın" : "Erkek", args[0]);
+            API.triggerServerEvent("ReturnCharacterGender", index == 0 ? "Kadın" : "Erkek", args[0]);
             selectionMenu.Visible = false;
         });
     }

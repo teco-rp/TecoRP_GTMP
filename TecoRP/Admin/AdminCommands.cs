@@ -492,7 +492,6 @@ namespace TecoRP.Admin
             }
             else
                 API.sendChatMessageToPlayer(sender, "Zaten kimseyi izlemiyorsunuz.");
-
         }
 
         [Command("goto", "/goto [Player/Vehicle/salevehicle/Pos/Entrance/House] [Name/ID/X_Y_Z]", GreedyArg = true)]

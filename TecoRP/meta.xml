@@ -1,37 +1,41 @@
 ﻿<meta>
   <info name="TecoRP v0.8.5" author="enisn" type="gamemode"/>
   <!--Server-Side-GameMode -->
-  <script src="bin/Debug/TecoRP.dll" type="server" lang="compiled"/>
+  <script src="TecoRP.dll" type="server" lang="compiled"/>
   <!--Server-Side-GameMode-Release-->
   <!--<script src="bin/Release/TecoRP.dll" type="server" lang="compiled"  />-->
 
-
   <!--Client-Side-Uncomplied-Scripts-->
-  <script src="Client/MoneyDisplay.js" type="client" lang="javascript"/>
-  <script src="Client/WayPoint.js" type="client" lang="javascript"/>
-  <script src="Client/Shortcuts.js" type="client" lang="javascript"/>
-  <script src="Client/Menu.js" type="client" lang="javascript"/>
+  <script src="Client/Bank.js" type="client" lang="javascript"/>
+  <script src="Client/BaseUserUI.js" type="client" lang="javascript"/>
+  <script src="Client/Building.js" type="client" lang="javascript"/>
+  <script src="Client/CharacterCreator.js" type="client" lang="javascript"/>
+  <script src="Client/CraftingMenu.js" type="client" lang="javascript"/>
+  <script src="Client/CustomMenu.js" type="client" lang="javascript"/>
+  <script src="Client/Fuel.js" type="client" lang="javascript"/>
+  <script src="Client/HelpBrowser.js" type="client" lang="javascript"/>
   <script src="Client/InputCharacter.js" type="client" lang="javascript"/>
   <script src="Client/Inventory.js" type="client" lang="javascript"/>
-  <script src="Client/Shop.js" type="client" lang="javascript"/>
+  <script src="Client/JobMenus.js" type="client" lang="javascript"/>
+  <script src="Client/LSPDComputer.js" type="client" lang="javascript"/>
+  <script src="Client/Menu.js" type="client" lang="javascript"/>
+  <script src="Client/MoneyDisplay.js" type="client" lang="javascript"/>
   <script src="Client/OnSearchPlayer.js" type="client" lang="javascript"/>
   <script src="Client/Phone.js" type="client" lang="javascript"/>
-  <script src="Client/Bank.js" type="client" lang="javascript"/>
-  <script src="Client/JobMenus.js" type="client" lang="javascript"/>
-  <script src="Client/Fuel.js" type="client" lang="javascript"/>
-  <script src="Client/Storage.js" type="client" lang="javascript"/>
-  <script src="Client/LSPDComputer.js" type="client" lang="javascript"/>
-  <script src="Client/Vault.js" type="client" lang="javascript"/>
-  <script src="Client/Building.js" type="client" lang="javascript"/>
-  <script src="Client/HelpBrowser.js" type="client" lang="javascript"/>
-  <script src="Client/CraftingMenu.js" type="client" lang="javascript"/>
-  <script src="Client/Sounds.js" type="client" lang="javascript"/>
-  <script src="Client/TradeSelector.js" type="client" lang="javascript"/>
+  <script src="Client/PhoneOperatorMenu.js" type="client" lang="javascript"/>
+  <script src="Client/Shop.js" type="client" lang="javascript"/>
+  <script src="Client/Shortcuts.js" type="client" lang="javascript"/>
   <script src="Client/Skills.js" type="client" lang="javascript"/>
-  <script src="Client/CustomMenu.js" type="client" lang="javascript"/>
+  <script src="Client/Sounds.js" type="client" lang="javascript"/>
+  <script src="Client/Storage.js" type="client" lang="javascript"/>
+  <script src="Client/TradeSelector.js" type="client" lang="javascript"/>
+  <script src="Client/Vault.js" type="client" lang="javascript"/>
+  <script src="Client/Vehicles.js" type="client" lang="javascript"/>
+  <script src="Client/WayPoint.js" type="client" lang="javascript"/>
+
   <!--<script src="Client/Interface.js" type="client" lang="javascript"/>-->
 
 
-  <file src="Client/content/logo.png" /> 
+  <!--<file src="Client/content/logo.png" />--> 
   <file src="CarLock.ogg" />
 </meta>

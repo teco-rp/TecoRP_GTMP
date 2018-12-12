@@ -18,7 +18,6 @@ namespace TecoRP.Users
         public Animation()
         {
             API.onPlayerDisconnected += API_onPlayerDisconnected;
-            API.onPlayerFinishedDownload += API_onPlayerFinishedDownload;
             API.onClientEventTrigger += API_onClientEventTrigger;
         }
 
@@ -45,20 +44,11 @@ namespace TecoRP.Users
                     break;
             }
         }
-
-        private void API_onPlayerFinishedDownload(Client player)
-        {
-            Task.Run(async () =>
-            {
-                await Task.Delay(1500);
-                LoadPlayerWeapons(player);
-            });
-        }
+        
 
         private void API_onPlayerDisconnected(Client player, string reason)
         {
             CloseMobilePhone(player);
-            DestroyPlayerWeapons(player);
         }
 
         [Flags]

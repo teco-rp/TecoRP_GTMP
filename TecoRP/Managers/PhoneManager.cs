@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TecoRP.Clients;
 using TecoRP.Database;
+using TecoRP.Helpers;
 using TecoRP.Models;
 using TecoRP.Users;
 
@@ -531,7 +532,7 @@ namespace TecoRP.Managers
                     {
                         Clients.ClientManager.RemoveMissionMarker(sender);
                         API.setEntityData(sender, "Mission", 4);
-                        UserCommands.TriggerUserMission(sender);
+                        UserManager.TriggerUserMission(sender);
                     }
                     #endregion
 
@@ -786,6 +787,17 @@ namespace TecoRP.Managers
             }
         }
 
+        public static void UpdatePhoneNumbers(Client player)
+        {
+            List<string> numbers = new List<string>();
+            foreach (var item in player.GetInventory().ItemList.Where(x => PhoneManager.PhoneIdList.Contains(x.ItemId)))
+            {
+                SpecifiedValuePhone _phone = API.shared.fromJson(item.SpecifiedValue).ToObject<SpecifiedValuePhone>();
+                if (_phone.FlightMode == false)
+                    numbers.Add(_phone.PhoneNumber);
+            }
+            API.shared.setEntityData(player, "PhoneNumbers", numbers);
+        }
         public void OnGpsPointRequested(Client sender, string localeText, int model_phone_id)
         {
             var _inventory = (Inventory)API.getEntityData(sender, "inventory");

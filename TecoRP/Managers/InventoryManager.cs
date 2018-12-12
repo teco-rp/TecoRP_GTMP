@@ -11,10 +11,11 @@ using TecoRP.Models;
 using TecoRP.Users;
 using System.Threading.Tasks;
 using GrandTheftMultiplayer.Shared;
+using TecoRP.Helpers;
 
 namespace TecoRP.Managers
 {
-    public class InventoryManager : Script
+    public class InventoryManager : Base.EventMethodTriggerBase
     {
 
         [Flags]
@@ -144,15 +145,272 @@ namespace TecoRP.Managers
             }
             if (eventName == "iventory_item_selected")
             {
-                #region Inventoy Item Selected
-                RPGManager rpgMgr = new RPGManager();
+                
+                return;
+            }
 
-                Inventory _inventory = API.getEntityData(sender, "inventory");
-                float _thirsty = (float)API.getEntityData(sender, "Thirsty");
-                float _hunger = (float)API.getEntityData(sender, "Hunger");
-                var itemTuple = GetItemFromPlayerInventory(sender, Convert.ToInt32(arguments[0]));
-                var usedItemInInventory = itemTuple.Item2;
-                var usedItem = itemTuple.Item1;
+            if (eventName == "shop_item_selected")
+            {
+                //args = [shopid] [index]
+                var _Shop = db_Shops.GetShop(Convert.ToInt32(arguments[0]));
+                int index = Convert.ToInt32(arguments[1]);
+                if (_Shop == null) { API.sendChatMessageToPlayer(sender, "~r~HATA: ~s~Shop bulunamadı."); return; }
+                int _PlayerMoney = API.getEntityData(sender, "Money");
+
+                if (_PlayerMoney >= _Shop.SaleItemList[index].Price)
+                {
+                    var buyedItem = db_Items.GetItemById(_Shop.SaleItemList[index].GameItemId);
+                    int missionNumber = (API.hasEntityData(sender, "Mission") ? API.getEntityData(sender, "Mission") : 0);
+
+                    switch (buyedItem.Type)
+                    {
+                        case ItemType.Phone:
+                            if (AddItemToPlayerInventory(sender, new Models.ClientItem
+                            {
+                                ItemId = buyedItem.ID,
+                                Count = 1,
+                                Equipped = false,
+                                SpecifiedValue = API.toJson(new SpecifiedValuePhone { Applications = new List<Application> { Application.GPS }, AutoInternetPay = false, Balance = 0, FlightMode = false, PhoneOperator = null, Contacts = new Dictionary<string, string>(), Frequence = -1, InternetBalance = 0, PhoneNumber = null, })
+                            }))
+                            {
+                                AddMoneyToPlayer(sender, -1 * _Shop.SaleItemList[index].Price);
+                                #region AboutMission
+
+                                if (missionNumber == 2)
+                                {
+                                    Clients.ClientManager.RemoveMissionMarker(sender);
+                                    API.setEntityData(sender, "Mission", 3);
+                                    UserManager.TriggerUserMission(sender);
+                                }
+
+                                #endregion
+                                return;
+                            }
+                            break;
+                        case ItemType.Skin:
+                            if (AddItemToPlayerInventory(sender, new ClientItem { ItemId = buyedItem.ID, Count = 1, Equipped = false }))
+                            {
+                                AddMoneyToPlayer(sender, -1 * _Shop.SaleItemList[index].Price);
+                                #region AboutMission
+                                if (missionNumber == 1)
+                                {
+                                    Clients.ClientManager.RemoveMissionMarker(sender);
+                                    API.setEntityData(sender, "Mission", 2);
+                                    UserManager.TriggerUserMission(sender);
+                                }
+                                #endregion 
+                                return;
+                            }
+                            break;
+                        case ItemType.Weapon:
+                            var _inventory = (Inventory)API.getEntityData(sender, "inventory");
+
+
+                            if (Convert.ToInt32(buyedItem.Value_2) < 1 || _inventory.ItemList.Any(x => x.ItemId == 302 && x.SpecifiedValue == sender.socialClubName || Convert.ToInt32(buyedItem.Value_2) == 4))
+                            {
+                                if (AddItemToPlayerInventory(sender, new ClientItem { ItemId = buyedItem.ID, Count = 1, Equipped = false }))
+                                {
+                                    AddMoneyToPlayer(sender, -1 * _Shop.SaleItemList[index].Price);
+                                    return;
+                                }
+                            }
+                            else
+                            {
+                                API.sendChatMessageToPlayer(sender, "~r~UYARI: ~s~Buradan alışveriş yapmak için kendinize ait bir silah ruhsatına ihtiyacınız var.");
+                                return;
+                            }
+
+                            break;
+                        default:
+                            if (AddItemToPlayerInventory(sender, new ClientItem { ItemId = buyedItem.ID, Count = 1, Equipped = false }))
+                            {
+                                AddMoneyToPlayer(sender, -1 * _Shop.SaleItemList[index].Price);
+                                return;
+                            }
+                            break;
+                    }
+                    API.sendChatMessageToPlayer(sender, "~r~HATA: ~s~Bu eşya için envanterinizde daha fazla yer bulunmuyor.");
+
+                }
+                else
+                {
+                    API.shared.sendChatMessageToPlayer(sender, $"~r~UYARI: ~s~Bunu alabilmek için en az ~r~{_Shop.SaleItemList[index].Price}$ ~s~paranız olmalı. ");
+                }
+
+
+
+                ////coming args from client = [name = Format ("[itemname] | $[price]")]
+
+
+                //#region shop item selected
+                //int _money = API.getEntityData(sender, "Money");
+                //int price = Convert.ToInt32(arguments[0].ToString().Split('$').LastOrDefault());
+
+                //if (_money >= price)
+                //{
+                //    var _inventory = (Inventory)API.getEntityData(sender, "inventory");
+                //    if (_inventory.ItemList.Count < _inventory.InventoryMaxCapacity)
+                //    {
+                //        var buyedItem = db_Items.GameItems.Items.FirstOrDefault(x => x.Name == arguments[0].ToString().Split('$').FirstOrDefault().Replace("|", String.Empty).Trim());
+
+                //        if (_inventory.ItemList.Select(s => s.ItemId).Contains(buyedItem.ID))
+                //        {
+                //            if (_inventory.ItemList.FirstOrDefault(x => x.ItemId == buyedItem.ID).Count < db_Items.GameItems.Items.FirstOrDefault(x => x.ID == buyedItem.ID).MaxCount)
+                //            {
+                //                _inventory.ItemList.FirstOrDefault(x => x.ItemId == buyedItem.ID).Count++;
+                //            }
+                //            else
+                //            {
+                //                API.sendChatMessageToPlayer(sender, "~y~Bu eşyadan daha fazla taşıyamazsınız.");
+                //                return;
+                //            }
+                //        }
+                //        else
+                //        {
+
+
+                //            if (buyedItem.Type == ItemType.Phone)
+                //            {
+                //                _inventory.ItemList.Add(new ClientItem
+                //                {
+                //                    Count = 1,
+                //                    ItemId = buyedItem.ID,
+                //                    SpecifiedValue = API.toJson(new SpecifiedValuePhone { Applications = new List<Application> { Application.GPS }, AutoInternetPay = false, Balance = 0, FlightMode = false, PhoneOperator = null, Contacts = new Dictionary<string, string>(), Frequence = -1, InternetBalance = 0, PhoneNumber = null, })
+                //                });
+
+                //            }
+                //            else
+                //                if (buyedItem.Type == ItemType.Skin)
+                //            {
+                //                _inventory.ItemList.Add(new ClientItem
+                //                {
+                //                    Count = 1,
+                //                    ItemId = buyedItem.ID,
+                //                });
+                //            }
+                //            else
+                //            {
+                //                _inventory.ItemList.Add(new ClientItem
+                //                {
+                //                    Count = 1,
+                //                    ItemId = buyedItem.ID,
+                //                });
+                //            }
+                //        }
+
+                //        API.setEntityData(sender, "inventory", _inventory);
+                //        _money -= price;
+                //        API.setEntityData(sender, "Money", _money);
+                //        API.triggerClientEvent(sender, "update_money_display", _money);
+                //        API.sendNotificationToPlayer(sender, "Satın alındı.", true);
+                //    }
+                //    else
+                //    {
+                //        API.sendChatMessageToPlayer(sender, "~y~Bu eşyayı almak için envanterinizde yeterli alan bulunmuyor.");
+                //    }
+
+                //}
+                //else
+                //{
+                //    API.sendChatMessageToPlayer(sender, "~y~Bu eşyayı almak için paranız yetersiz.");
+                //}
+                //#endregion
+                return;
+            }
+
+            if (eventName == "select_players_list")
+            {
+                #region select_player
+                var playerId = Convert.ToInt32(arguments[0].ToString().Split(')')[0].Replace("(", String.Empty).Trim());
+                foreach (var item in API.getAllPlayers())
+                {
+                    if (API.getEntityData(item, "ID") == playerId && Vector3.Distance(item.position, sender.position))
+                    {
+                        var giverInventory = (Inventory)API.getEntityData(sender, "inventory");
+                        var takerInventory = (Inventory)API.getEntityData(item, "inventory");
+                        var givingItem = giverInventory.ItemList.FirstOrDefault(x => x.ItemId == Convert.ToInt32(arguments[1].ToString()));
+                        if (givingItem != null)
+                        {
+                            if (!givingItem.Equipped)
+                            {
+                                if (takerInventory.ItemList.Count < takerInventory.InventoryMaxCapacity)
+                                {
+                                    giverInventory.ItemList.Remove(givingItem);
+                                    givingItem.Equipped = false;
+                                    takerInventory.ItemList.Add(givingItem);
+                                    API.setEntityData(sender, "inventory", giverInventory);
+                                    API.setEntityData(item, "inventory", takerInventory);
+                                    RPGManager rpgMgr = new RPGManager();
+                                    rpgMgr.Me(sender, " adlı kişi " + item.nametag + " adlı kişiye bir eşya verir.");
+                                }
+                                else
+                                {
+                                    API.sendChatMessageToPlayer(sender, "Karşı tarafın envanterinde yeterli yer ~r~bulunmuyor.");
+                                }
+                            }
+                            else
+                            {
+                                API.sendChatMessageToPlayer(sender, "~r~Lütfen önce eşyayı üzerinizden çıkarın!");
+                            }
+                        }
+                        else
+                            API.sendChatMessageToPlayer(sender, "Bir hata oluştu.");
+                    }
+                }
+                #endregion
+            }
+            else
+            if (eventName == "retun_players_list")
+            {
+                //RETURN - itemText - itemDescription
+                int _Id = Convert.ToInt32(arguments[0].ToString().Split('(').LastOrDefault().Split(')').FirstOrDefault());
+
+                foreach (var item in API.getAllPlayers())
+                {
+                    if (API.getEntityData(item, "ID") == _Id && Vector3.Distance(sender.position, item.position) < 3)
+                    {
+                        var _giverInventory = (Inventory)API.getEntityData(sender, "inventory");
+                        var _takerInventory = (Inventory)API.getEntityData(sender, "inventory");
+                        if (_takerInventory.ItemList.Count < _takerInventory.InventoryMaxCapacity)
+                        {
+                            try
+                            {
+                                var _givingItem = _giverInventory.ItemList.FirstOrDefault(x => x.ItemId == Convert.ToInt32(arguments[1]));
+                                _giverInventory.ItemList.Remove(_givingItem);
+                                _takerInventory.ItemList.Add(_givingItem);
+                                RPGManager rpgMgr = new RPGManager();
+                                rpgMgr.Me(sender, ", " + API.getEntityData(item, "CharacterName") + " adlı kişiye bir şeyler verir.");
+                            }
+                            catch (Exception ex)
+                            {
+                                API.consoleOutput(LogCat.Error, ex.ToString());
+                                API.sendChatMessageToPlayer(sender, "~r~HATA: ~w~Bir hata oluştu.");
+                            }
+                        }
+                        else
+                        {
+                            API.sendChatMessageToPlayer(sender, "~r~HATA: ~w~Karşı tarafın envanterinde bu eşyayı depolayacak yer yok.");
+                        }
+                        return;
+                    }
+                }
+            }
+        }
+
+        public void iventory_item_selected(Client sender, params object[] arguments)
+        {
+            #region Inventoy Item Selected
+            RPGManager rpgMgr = new RPGManager();
+
+            Inventory _inventory = API.getEntityData(sender, "inventory");
+            float _thirsty = (float)API.getEntityData(sender, "Thirsty");
+            float _hunger = (float)API.getEntityData(sender, "Hunger");
+            var itemTuple = GetItemFromPlayerInventory(sender, Convert.ToInt32(arguments[0]));
+            var usedItemInInventory = itemTuple.Item2;
+            var usedItem = itemTuple.Item1;
+
+            try
+            {
                 switch (usedItem.Type)
                 {
                     case ItemType.None:
@@ -635,273 +893,147 @@ namespace TecoRP.Managers
                             }
                         }
                         usedItemInInventory.Equipped = !usedItemInInventory.Equipped;
+                        if (API.getEntityData(sender, "Dead") == true) return;
+                        if (API.getEntityData(sender, "Dead") == true) return;
                         #endregion
                         return;
-                    default:
-
-                        break;
-                }
-
-
-
-                if (usedItemInInventory.Count > 1)
-                {
-                    usedItemInInventory.Count--;
-                }
-                else
-                    _inventory.ItemList.Remove(usedItemInInventory);
-
-                API.setEntityData(sender, "inventory", _inventory);
-                #endregion
-                return;
-            }
-
-            if (eventName == "shop_item_selected")
-            {
-                //args = [shopid] [index]
-                var _Shop = db_Shops.GetShop(Convert.ToInt32(arguments[0]));
-                int index = Convert.ToInt32(arguments[1]);
-                if (_Shop == null) { API.sendChatMessageToPlayer(sender, "~r~HATA: ~s~Shop bulunamadı."); return; }
-                int _PlayerMoney = API.getEntityData(sender, "Money");
-
-                if (_PlayerMoney >= _Shop.SaleItemList[index].Price)
-                {
-                    var buyedItem = db_Items.GetItemById(_Shop.SaleItemList[index].GameItemId);
-                    int missionNumber = (API.hasEntityData(sender, "Mission") ? API.getEntityData(sender, "Mission") : 0);
-
-                    switch (buyedItem.Type)
-                    {
-                        case ItemType.Phone:
-                            if (AddItemToPlayerInventory(sender, new Models.ClientItem
-                            {
-                                ItemId = buyedItem.ID,
-                                Count = 1,
-                                Equipped = false,
-                                SpecifiedValue = API.toJson(new SpecifiedValuePhone { Applications = new List<Application> { Application.GPS }, AutoInternetPay = false, Balance = 0, FlightMode = false, PhoneOperator = null, Contacts = new Dictionary<string, string>(), Frequence = -1, InternetBalance = 0, PhoneNumber = null, })
-                            }))
-                            {
-                                AddMoneyToPlayer(sender, -1 * _Shop.SaleItemList[index].Price);
-                                #region AboutMission
-
-                                if (missionNumber == 2)
-                                {
-                                    Clients.ClientManager.RemoveMissionMarker(sender);
-                                    API.setEntityData(sender, "Mission", 3);
-                                    UserCommands.TriggerUserMission(sender);
-                                }
-
-                                #endregion
-                                return;
-                            }
-                            break;
-                        case ItemType.Skin:
-                            if (AddItemToPlayerInventory(sender, new ClientItem { ItemId = buyedItem.ID, Count = 1, Equipped = false }))
-                            {
-                                AddMoneyToPlayer(sender, -1 * _Shop.SaleItemList[index].Price);
-                                #region AboutMission
-                                if (missionNumber == 1)
-                                {
-                                    Clients.ClientManager.RemoveMissionMarker(sender);
-                                    API.setEntityData(sender, "Mission", 2);
-                                    UserCommands.TriggerUserMission(sender);
-                                }
-                                #endregion 
-                                return;
-                            }
-                            break;
-                        case ItemType.Weapon:
-                            var _inventory = (Inventory)API.getEntityData(sender, "inventory");
-
-
-                            if (Convert.ToInt32(buyedItem.Value_2) < 1 || _inventory.ItemList.Any(x => x.ItemId == 302 && x.SpecifiedValue == sender.socialClubName || Convert.ToInt32(buyedItem.Value_2) == 4))
-                            {
-                                if (AddItemToPlayerInventory(sender, new ClientItem { ItemId = buyedItem.ID, Count = 1, Equipped = false }))
-                                {
-                                    AddMoneyToPlayer(sender, -1 * _Shop.SaleItemList[index].Price);
-                                    return;
-                                }
-                            }
-                            else
-                            {
-                                API.sendChatMessageToPlayer(sender, "~r~UYARI: ~s~Buradan alışveriş yapmak için kendinize ait bir silah ruhsatına ihtiyacınız var.");
-                                return;
-                            }
-
-                            break;
-                        default:
-                            if (AddItemToPlayerInventory(sender, new ClientItem { ItemId = buyedItem.ID, Count = 1, Equipped = false }))
-                            {
-                                AddMoneyToPlayer(sender, -1 * _Shop.SaleItemList[index].Price);
-                                return;
-                            }
-                            break;
-                    }
-                    API.sendChatMessageToPlayer(sender, "~r~HATA: ~s~Bu eşya için envanterinizde daha fazla yer bulunmuyor.");
-
-                }
-                else
-                {
-                    API.shared.sendChatMessageToPlayer(sender, $"~r~UYARI: ~s~Bunu alabilmek için en az ~r~{_Shop.SaleItemList[index].Price}$ ~s~paranız olmalı. ");
-                }
-
-
-
-                ////coming args from client = [name = Format ("[itemname] | $[price]")]
-
-
-                //#region shop item selected
-                //int _money = API.getEntityData(sender, "Money");
-                //int price = Convert.ToInt32(arguments[0].ToString().Split('$').LastOrDefault());
-
-                //if (_money >= price)
-                //{
-                //    var _inventory = (Inventory)API.getEntityData(sender, "inventory");
-                //    if (_inventory.ItemList.Count < _inventory.InventoryMaxCapacity)
-                //    {
-                //        var buyedItem = db_Items.GameItems.Items.FirstOrDefault(x => x.Name == arguments[0].ToString().Split('$').FirstOrDefault().Replace("|", String.Empty).Trim());
-
-                //        if (_inventory.ItemList.Select(s => s.ItemId).Contains(buyedItem.ID))
-                //        {
-                //            if (_inventory.ItemList.FirstOrDefault(x => x.ItemId == buyedItem.ID).Count < db_Items.GameItems.Items.FirstOrDefault(x => x.ID == buyedItem.ID).MaxCount)
-                //            {
-                //                _inventory.ItemList.FirstOrDefault(x => x.ItemId == buyedItem.ID).Count++;
-                //            }
-                //            else
-                //            {
-                //                API.sendChatMessageToPlayer(sender, "~y~Bu eşyadan daha fazla taşıyamazsınız.");
-                //                return;
-                //            }
-                //        }
-                //        else
-                //        {
-
-
-                //            if (buyedItem.Type == ItemType.Phone)
-                //            {
-                //                _inventory.ItemList.Add(new ClientItem
-                //                {
-                //                    Count = 1,
-                //                    ItemId = buyedItem.ID,
-                //                    SpecifiedValue = API.toJson(new SpecifiedValuePhone { Applications = new List<Application> { Application.GPS }, AutoInternetPay = false, Balance = 0, FlightMode = false, PhoneOperator = null, Contacts = new Dictionary<string, string>(), Frequence = -1, InternetBalance = 0, PhoneNumber = null, })
-                //                });
-
-                //            }
-                //            else
-                //                if (buyedItem.Type == ItemType.Skin)
-                //            {
-                //                _inventory.ItemList.Add(new ClientItem
-                //                {
-                //                    Count = 1,
-                //                    ItemId = buyedItem.ID,
-                //                });
-                //            }
-                //            else
-                //            {
-                //                _inventory.ItemList.Add(new ClientItem
-                //                {
-                //                    Count = 1,
-                //                    ItemId = buyedItem.ID,
-                //                });
-                //            }
-                //        }
-
-                //        API.setEntityData(sender, "inventory", _inventory);
-                //        _money -= price;
-                //        API.setEntityData(sender, "Money", _money);
-                //        API.triggerClientEvent(sender, "update_money_display", _money);
-                //        API.sendNotificationToPlayer(sender, "Satın alındı.", true);
-                //    }
-                //    else
-                //    {
-                //        API.sendChatMessageToPlayer(sender, "~y~Bu eşyayı almak için envanterinizde yeterli alan bulunmuyor.");
-                //    }
-
-                //}
-                //else
-                //{
-                //    API.sendChatMessageToPlayer(sender, "~y~Bu eşyayı almak için paranız yetersiz.");
-                //}
-                //#endregion
-                return;
-            }
-
-            if (eventName == "select_players_list")
-            {
-                #region select_player
-                var playerId = Convert.ToInt32(arguments[0].ToString().Split(')')[0].Replace("(", String.Empty).Trim());
-                foreach (var item in API.getAllPlayers())
-                {
-                    if (API.getEntityData(item, "ID") == playerId && Vector3.Distance(item.position, sender.position))
-                    {
-                        var giverInventory = (Inventory)API.getEntityData(sender, "inventory");
-                        var takerInventory = (Inventory)API.getEntityData(item, "inventory");
-                        var givingItem = giverInventory.ItemList.FirstOrDefault(x => x.ItemId == Convert.ToInt32(arguments[1].ToString()));
-                        if (givingItem != null)
+                    case ItemType.Mask:
+                        if (API.getEntityData(sender, "Dead") == true) return;
+                        #region Mask
+                        if (sender.CanWear(usedItem))
                         {
-                            if (!givingItem.Equipped)
+                            if (usedItemInInventory.Equipped)
                             {
-                                if (takerInventory.ItemList.Count < takerInventory.InventoryMaxCapacity)
-                                {
-                                    giverInventory.ItemList.Remove(givingItem);
-                                    givingItem.Equipped = false;
-                                    takerInventory.ItemList.Add(givingItem);
-                                    API.setEntityData(sender, "inventory", giverInventory);
-                                    API.setEntityData(item, "inventory", takerInventory);
-                                    RPGManager rpgMgr = new RPGManager();
-                                    rpgMgr.Me(sender, " adlı kişi " + item.nametag + " adlı kişiye bir eşya verir.");
-                                }
-                                else
-                                {
-                                    API.sendChatMessageToPlayer(sender, "Karşı tarafın envanterinde yeterli yer ~r~bulunmuyor.");
-                                }
+                                usedItemInInventory.Equipped = false;
+                                sender.UnwearMask(usedItem);
+                                return;
                             }
-                            else
+                            var masks = db_Items.GameItems.Values.Where(x => x.Type == ItemType.Mask);
+                            foreach (var item in _inventory.ItemList.Where(x => masks.Any(a => a.ID == x.ItemId)))
                             {
-                                API.sendChatMessageToPlayer(sender, "~r~Lütfen önce eşyayı üzerinizden çıkarın!");
+                                item.Equipped = usedItemInInventory == item;
                             }
+                            sender.WearMask(usedItem);
                         }
                         else
-                            API.sendChatMessageToPlayer(sender, "Bir hata oluştu.");
-                    }
+                            API.sendChatMessageToPlayer(sender, "~r~UYARI: ~w~Bu eşya karakterinizin cinsiyeti için değil.");
+                        if (API.getEntityData(sender, "Dead") == true) return;
+                        #endregion
+                        API.setEntityData(sender, "inventory", _inventory);
+                        return;
+                    case ItemType.Legs:
+                        if (API.getEntityData(sender, "Dead") == true) return;
+                        #region Pants
+                        if (sender.CanWear(usedItem))
+                        {
+                            if (usedItemInInventory.Equipped)
+                            {
+                                usedItemInInventory.Equipped = false;
+                                sender.UnwearPants();
+                                return;
+                            }
+                            var legs = db_Items.GameItems.Values.Where(x => x.Type == ItemType.Legs);
+                            foreach (var item in _inventory.ItemList.Where(x => legs.Any(a => a.ID == x.ItemId)))
+                            {
+                                item.Equipped = usedItemInInventory == item;
+                            }
+                            sender.WearPants(usedItem);
+                        }
+                        else
+                            API.sendChatMessageToPlayer(sender, "~r~UYARI: ~w~Bu eşya karakterinizin cinsiyeti için değil.");
+
+                        #endregion
+                        API.setEntityData(sender, "inventory", _inventory);
+                        return;
+                    case ItemType.Bags:
+                        if (API.getEntityData(sender, "Dead") == true) return;
+                        #region Bags
+                        if (sender.CanWear(usedItem))
+                        {
+                            if (usedItemInInventory.Equipped)
+                            {
+                                usedItemInInventory.Equipped = false;
+                                sender.UnwearBags();
+                                return;
+                            }
+                            var items = db_Items.GameItems.Values.Where(x => x.Type == ItemType.Bags);
+                            foreach (var item in _inventory.ItemList.Where(x => items.Any(a => a.ID == x.ItemId)))
+                                item.Equipped = usedItemInInventory == item;
+                            sender.WearBags(usedItem);
+                        }
+                        else
+                            API.sendChatMessageToPlayer(sender, "~r~UYARI: ~w~Bu eşya karakterinizin cinsiyeti için değil.");
+
+                        #endregion
+                        API.setEntityData(sender, "inventory", _inventory);
+                        return;
+                    case ItemType.Accessories:
+                        API.shared.sendChatMessageToPlayer(sender, "Bu eşya henüz kullanılabilir değil.");
+                        return;
+                    case ItemType.Undershirt:
+                        if (API.getEntityData(sender, "Dead") == true) return;
+                        #region Undershirt
+                        if (sender.CanWear(usedItem))
+                        {
+                            if (usedItemInInventory.Equipped)
+                            {
+                                usedItemInInventory.Equipped = false;
+                                sender.UnwearUndershirt();
+                                return;
+                            }
+                            var items = db_Items.GameItems.Values.Where(x => x.Type == ItemType.Undershirt);
+                            foreach (var item in _inventory.ItemList.Where(x => items.Any(a => a.ID == x.ItemId)))
+                                item.Equipped = usedItemInInventory == item;
+                            sender.WearUndershirt(usedItem);
+                        }
+                        else
+                            API.sendChatMessageToPlayer(sender, "~r~UYARI: ~w~Bu eşya karakterinizin cinsiyeti için değil.");
+                        #endregion
+                        API.setEntityData(sender, "inventory", _inventory);
+                        return;
+                    case ItemType.Tops:
+                        if (API.getEntityData(sender, "Dead") == true) return;
+                        #region Tops
+                        if (sender.CanWear(usedItem))
+                        {
+                            if (usedItemInInventory.Equipped)
+                            {
+                                usedItemInInventory.Equipped = false;
+                                sender.UnwearTops();
+                                var uShirt = _inventory.ItemList.FirstOrDefault(x=>x.Equipped && db_Items.GameItems.Values.Where(w=>w.Type == ItemType.Undershirt).Any(a=>a.ID == x.ItemId));
+                                if (uShirt != null)
+                                    uShirt.Equipped = false;
+                                sender.UnwearUndershirt();
+                                return;
+                            }
+                            var items = db_Items.GameItems.Values.Where(x => x.Type == ItemType.Tops);
+                            foreach (var item in _inventory.ItemList.Where(x => items.Any(a => a.ID == x.ItemId)))
+                                item.Equipped = usedItemInInventory == item;
+                            sender.WearTops(usedItem);
+                        }
+                        else
+                            API.sendChatMessageToPlayer(sender, "~r~UYARI: ~w~Bu eşya karakterinizin cinsiyeti için değil.");
+                        API.setEntityData(sender, "inventory", _inventory);
+                        #endregion
+                        return;
+
                 }
-                #endregion
+            }
+            catch (SoftException ex)
+            {
+                API.shared.sendChatMessageToPlayer(sender, ex.Message);
+            }
+
+
+            if (usedItemInInventory.Count > 1)
+            {
+                usedItemInInventory.Count--;
             }
             else
-            if (eventName == "retun_players_list")
-            {
-                //RETURN - itemText - itemDescription
-                int _Id = Convert.ToInt32(arguments[0].ToString().Split('(').LastOrDefault().Split(')').FirstOrDefault());
+                _inventory.ItemList.Remove(usedItemInInventory);
 
-                foreach (var item in API.getAllPlayers())
-                {
-                    if (API.getEntityData(item, "ID") == _Id && Vector3.Distance(sender.position, item.position) < 3)
-                    {
-                        var _giverInventory = (Inventory)API.getEntityData(sender, "inventory");
-                        var _takerInventory = (Inventory)API.getEntityData(sender, "inventory");
-                        if (_takerInventory.ItemList.Count < _takerInventory.InventoryMaxCapacity)
-                        {
-                            try
-                            {
-                                var _givingItem = _giverInventory.ItemList.FirstOrDefault(x => x.ItemId == Convert.ToInt32(arguments[1]));
-                                _giverInventory.ItemList.Remove(_givingItem);
-                                _takerInventory.ItemList.Add(_givingItem);
-                                RPGManager rpgMgr = new RPGManager();
-                                rpgMgr.Me(sender, ", " + API.getEntityData(item, "CharacterName") + " adlı kişiye bir şeyler verir.");
-                            }
-                            catch (Exception ex)
-                            {
-                                API.consoleOutput(LogCat.Error, ex.ToString());
-                                API.sendChatMessageToPlayer(sender, "~r~HATA: ~w~Bir hata oluştu.");
-                            }
-                        }
-                        else
-                        {
-                            API.sendChatMessageToPlayer(sender, "~r~HATA: ~w~Karşı tarafın envanterinde bu eşyayı depolayacak yer yok.");
-                        }
-                        return;
-                    }
-                }
-            }
+            API.setEntityData(sender, "inventory", _inventory);
+            #endregion
         }
 
         [Command("envanter", "/i", Alias = "i")]
@@ -1397,11 +1529,41 @@ namespace TecoRP.Managers
                                     API.shared.setEntityData(sender, "E", true);
                                 }
                                 break;
-                            default:
+                            case ItemType.Mask:
+                                break;
+                            case ItemType.Legs:
+                                if (sender.CanWear(gameItem))
+                                    sender.WearPants(gameItem);
+                                break;
+                            case ItemType.Bags:
+                                break;
+                            case ItemType.Feet:
+                                if (sender.CanWear(gameItem))
+                                    sender.WearShoes(gameItem);
+                                break;
+                            case ItemType.Accessories:
+                                break;
+                            case ItemType.Undershirt:
+                                if (sender.CanWear(gameItem))
+                                    sender.WearUndershirt(gameItem);
+                                break;
+                            case ItemType.Tops:
+                                if (sender.CanWear(gameItem))
+                                    sender.WearTops(gameItem);
                                 break;
                         }
                     }
 
+                }
+                else
+                {
+                    var gameItem = db_Items.GetItemById(item.ItemId);
+                    switch (gameItem.Type)
+                    {
+                        case ItemType.Weapon:
+                            Animation.WearWeapon(sender, gameItem.ObjectId, Convert.ToInt32(gameItem.Value_2));
+                            break;
+                    }
                 }
             }
         }

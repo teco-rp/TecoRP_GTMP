@@ -51,7 +51,15 @@ namespace TecoRP.Models
     /// </License>
     public enum ItemType
     {
-        None,
+        None = 0,
+        Mask = 1,
+        Torso = 3,
+        Legs = 4,
+        Bags = 5,
+        Feet = 6,
+        Accessories = 7,
+        Undershirt = 8,
+        Tops = 11,
         Drinkable,
         Eatable,
         FirstAid,
@@ -98,6 +106,8 @@ namespace TecoRP.Models
         public string Value_1 { get; set; }
         [XmlAttribute("Value_2")]
         public string Value_2 { get; set; }
+        [XmlAttribute("Value_3")]
+        public string Value_3 { get; set; }
     }
 
     [XmlRoot("AllItems")]

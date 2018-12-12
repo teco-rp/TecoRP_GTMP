@@ -152,7 +152,7 @@ namespace TecoRP.Managers
                 var targetPlayer = db_Accounts.GetPlayerById(Convert.ToInt32(splitted[1]));
                 if (targetPlayer == null){ API.shared.sendChatMessageToPlayer(sender, "~r~HATA: ~s~Oyuncu bulunamadı."); return; }
 
-                User userInformation = new User();
+                User userInformation = new User(sender.socialClubName);
                 if (licenses.Count > 1)
                 {
                     try

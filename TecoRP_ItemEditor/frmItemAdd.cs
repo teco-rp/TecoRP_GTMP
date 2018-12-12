@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using TecoRP_ItemEditor.Model;
+using TecoRP.Models;
 
 namespace TecoRP_ItemEditor
 {
@@ -24,13 +24,13 @@ namespace TecoRP_ItemEditor
 
         private void btnCreate_Click_1(object sender, EventArgs e)
         {
-            Model.ItemType _Type;
+            ItemType _Type;
             try{ _Type = (ItemType)Enum.Parse(typeof(ItemType), cmbType.SelectedItem.ToString());  }
             catch (Exception)
             {
                 _Type = ItemType.None;
             }
-            Database.db_Items.CreateItem(new Model.Item
+            Database.db_Items.CreateItem(new Item
             {
                 Name = txtName.Text,
                 Description = txtDescription.Text,
