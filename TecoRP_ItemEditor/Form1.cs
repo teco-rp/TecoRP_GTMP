@@ -22,7 +22,7 @@ namespace TecoRP_ItemEditor
             dgvWhiteList.CellEndEdit += DgvWhiteList_CellEndEdit;
 
             dtpWhitelistLastValidateTime.Value = DateTime.Now.AddYears(2);
-            foreach (var item in typeof(ItemType).GetEnumNames())
+            foreach (var item in typeof(TecoRP.Models.ItemType).GetEnumNames())
             {
                 cmbType.Items.Add(item);
             }
@@ -91,7 +91,7 @@ namespace TecoRP_ItemEditor
             btnAddRequiredItems.Enabled = false;
         }
 
-        public void FillData(List<Model.Item> _list)
+        public void FillData(List<Item> _list)
         {
             lstItems.Items.Clear();
             foreach (var item in _list)
@@ -123,7 +123,7 @@ namespace TecoRP_ItemEditor
                 txtName.Text = model.Name;
                 txtDescription.Text = model.Description;
                 txtObjectId.Text = model.ObjectId.ToString();
-                cmbType.SelectedItem = typeof(ItemType).GetEnumName(model.Type);
+                cmbType.SelectedItem = typeof(TecoRP.Models.ItemType).GetEnumName(model.Type);
                 chkDroppable.Checked = model.Droppable;
                 txtValue0.Text = model.Value_0;
                 nmrValue1.Text = model.Value_1;
@@ -164,7 +164,7 @@ namespace TecoRP_ItemEditor
             db_Items.currentItems.Items[_Index].Value_2 = nmrValue2.Value.ToString();
             db_Items.currentItems.Items[_Index].Droppable = chkDroppable.Checked;
             db_Items.currentItems.Items[_Index].MaxCount = Convert.ToInt32(nmrMaxCount.Value);
-            db_Items.currentItems.Items[_Index].Type = (ItemType)Enum.Parse(typeof(ItemType), cmbType.SelectedItem.ToString());
+            db_Items.currentItems.Items[_Index].Type = (TecoRP.Models.ItemType)Enum.Parse(typeof(TecoRP.Models.ItemType), cmbType.SelectedItem.ToString());
             db_Items.currentItems.Items[_Index].ID = Convert.ToInt32(nmrID.Value);
             db_Items.SaveChanges();
             FillData();
@@ -257,7 +257,7 @@ namespace TecoRP_ItemEditor
         private void cmbFilterItems_SelectedIndexChanged(object sender, EventArgs e)
         {
             lstItemListInCrafting.Items.Clear();
-            var _type = (ItemType)Enum.Parse(typeof(ItemType), cmbFilterItems.SelectedItem.ToString());
+            var _type = (TecoRP.Models.ItemType)Enum.Parse(typeof(TecoRP.Models.ItemType), cmbFilterItems.SelectedItem.ToString());
             foreach (var item in db_Items.GetAll().Items)
             {
                 if (item.Type == _type)

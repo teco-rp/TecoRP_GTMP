@@ -2,10 +2,6 @@
 using GrandTheftMultiplayer.Server.Constant;
 using GrandTheftMultiplayer.Server.Elements;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TecoRP.Models;
 
 namespace TecoRP.Helpers
@@ -24,8 +20,12 @@ namespace TecoRP.Helpers
                 API.shared.setEntityData(player, "Skin", PedHash.FreemodeFemale01);
                 player.setSkin(PedHash.FreemodeFemale01);
             }
-
             return player;
+        }
+
+        public static bool CanWear(this Client player, Item item)
+        {
+            return Convert.ToInt32(item.Value_0) == Convert.ToInt32(player.getData("Gender"));
         }
 
         public static Client ApplyApperance(this Client player, ClothingData data)
@@ -35,9 +35,22 @@ namespace TecoRP.Helpers
             return player;
         }
 
+        public static Client WearMask(this Client player, Item item)
+        {
+            player.setClothes(1, Convert.ToInt32(item.Value_1), Convert.ToInt32(item.Value_2));
+            return player;
+        }
+        public static Client UnwearMask(this Client player, Item item)
+        {
+            player.setClothes(1, -1,0);
+            return player;
+        }
+
         public static Client WearTops(this Client player, Item item)
         {
-            player.setClothes(11, Convert.ToInt32(item.Value_0), Convert.ToInt32(item.Value_1));
+            player.setClothes(8, -1, 0);
+            player.setClothes(3, Convert.ToInt32(item.Value_3), 0);
+            player.setClothes(11, Convert.ToInt32(item.Value_1), Convert.ToInt32(item.Value_2));
             return player;
         }
 
@@ -60,11 +73,15 @@ namespace TecoRP.Helpers
 
         public static Client WearUndershirt(this Client player, Item item)
         {
-            player.setClothes(8, Convert.ToInt32(item.Value_0), Convert.ToInt32(item.Value_1));
+            if(player.getClothesDrawable(11) < 0)
+            {
+                throw new SoftException("Bunu yalnızca başka bir kıyafetin altına giyebilirsiniz.");
+            }
+            player.setClothes(8, Convert.ToInt32(item.Value_1), Convert.ToInt32(item.Value_0));
             return player;
         }
 
-        public static Client UnearUndershirt(this Client player)
+        public static Client UnwearUndershirt(this Client player)
         {
             if (API.shared.getEntityData(player, "Gender") == true)
             {
@@ -78,7 +95,7 @@ namespace TecoRP.Helpers
         }
         public static Client WearPants(this Client player, Item item)
         {
-            player.setClothes(8, Convert.ToInt32(item.Value_0), Convert.ToInt32(item.Value_1));
+            player.setClothes(4, Convert.ToInt32(item.Value_1), Convert.ToInt32(item.Value_2));
             return player;
         }
         public static Client UnwearPants(this Client player)
@@ -95,7 +112,19 @@ namespace TecoRP.Helpers
         }
         public static Client WearShoes(this Client player, Item item)
         {
-            player.setClothes(6, Convert.ToInt32(item.Value_0), Convert.ToInt32(item.Value_1));
+            player.setClothes(6, Convert.ToInt32(item.Value_1), Convert.ToInt32(item.Value_2));
+            return player;
+        }
+
+        public static Client WearBags(this Client player, Item item)
+        {
+            player.setClothes(5, Convert.ToInt32(item.Value_1), Convert.ToInt32(item.Value_2));
+            return player;
+        }
+
+        public static Client UnwearBags(this Client player)
+        {
+            player.setClothes(5, -1, 0);
             return player;
         }
         public static Client UnwearShoes(this Client player)

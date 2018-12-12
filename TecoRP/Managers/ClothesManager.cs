@@ -43,6 +43,7 @@ namespace TecoRP.Managers
                 .UnwearShoes()
                 .ApplyApperance(cData);
             InventoryManager.LoadPlayerEquippedItems(sender);
+            UserManager.LoadPlayerStats(sender);
         }
 
         [Command("gorunum")]

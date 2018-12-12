@@ -102,6 +102,8 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.lstCraftingMachines = new System.Windows.Forms.ListBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.nmrValue3 = new System.Windows.Forms.NumericUpDown();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nmrValue1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nmrValue2)).BeginInit();
@@ -120,6 +122,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.nmrRequiredJob)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nmrRequiredMetalPart)).BeginInit();
             this.gbAddNew.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nmrValue3)).BeginInit();
             this.SuspendLayout();
             // 
             // lstItems
@@ -464,6 +467,7 @@
             this.tpItems.Controls.Add(this.lblMaxCount);
             this.tpItems.Controls.Add(this.nmrMaxCount);
             this.tpItems.Controls.Add(this.lblDescription);
+            this.tpItems.Controls.Add(this.nmrValue3);
             this.tpItems.Controls.Add(this.nmrValue2);
             this.tpItems.Controls.Add(this.lblType);
             this.tpItems.Controls.Add(this.nmrValue1);
@@ -473,6 +477,7 @@
             this.tpItems.Controls.Add(this.txtObjectId);
             this.tpItems.Controls.Add(this.lblValue1);
             this.tpItems.Controls.Add(this.txtDescription);
+            this.tpItems.Controls.Add(this.label10);
             this.tpItems.Controls.Add(this.lblValue2);
             this.tpItems.Controls.Add(this.txtValue0);
             this.tpItems.Controls.Add(this.btnRemove);
@@ -890,6 +895,32 @@
             this.lstCraftingMachines.TabIndex = 0;
             this.lstCraftingMachines.DoubleClick += new System.EventHandler(this.lstCraftingMachines_DoubleClick);
             // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(483, 239);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(46, 13);
+            this.label10.TabIndex = 3;
+            this.label10.Text = "Value_3";
+            // 
+            // nmrValue3
+            // 
+            this.nmrValue3.Location = new System.Drawing.Point(475, 256);
+            this.nmrValue3.Maximum = new decimal(new int[] {
+            5600,
+            0,
+            0,
+            0});
+            this.nmrValue3.Minimum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            -2147483648});
+            this.nmrValue3.Name = "nmrValue3";
+            this.nmrValue3.Size = new System.Drawing.Size(64, 20);
+            this.nmrValue3.TabIndex = 7;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -929,6 +960,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.nmrRequiredMetalPart)).EndInit();
             this.gbAddNew.ResumeLayout(false);
             this.gbAddNew.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nmrValue3)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1009,6 +1041,8 @@
         private System.Windows.Forms.Button btnAddToCraftedItem;
         private System.Windows.Forms.Button btnCreateCraftingMachine;
         private System.Windows.Forms.CheckBox chkWhiteListActive;
+        private System.Windows.Forms.NumericUpDown nmrValue3;
+        private System.Windows.Forms.Label label10;
     }
 }
 

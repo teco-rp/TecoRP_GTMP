@@ -15,7 +15,7 @@ using TecoRP.Models;
 //5 bagaj - 4 hood
 namespace TecoRP.Managers
 {
-    public class VehicleManager : Script
+    public class VehicleManager : Base.EventMethodTriggerBase
     {
         RPGManager rpgMgr = new RPGManager();
 
@@ -182,7 +182,7 @@ namespace TecoRP.Managers
                 if (veh.Interaction.Rent)
                     API.sendChatMessageToPlayer(player, $"~b~Bu araç ${veh.Price.Rent} ödeyerek kiralanabilir. ~h~/arac kirala");
 
-                if(veh.Interaction.Buy && veh.Price.Buy > 0 )
+                if (veh.Interaction.Buy && veh.Price.Buy > 0)
                     API.sendChatMessageToPlayer(player, $"~b~Bu araç ${veh.Price.Buy} ödeyerek satın alınabilir. ~h~/arac satinal");
             }
             //foreach (var item in db_SaleVehicles.currentSaleVehicleList.Items)
@@ -889,8 +889,7 @@ namespace TecoRP.Managers
         {
             if (sender.isInVehicle)
             {
-                //TODO: GT:MP 'G' ile araca binme bug'ı giderilinceye kadar
-                if (sender.vehicleSeat == -1 /*|| sender.vehicleSeat == 0*/)
+                if (sender.vehicleSeat == -1 || sender.vehicleSeat == 0)
                 {
                     var _vehicle = db_Vehicles.FindNearestVehicle(sender.position);
 

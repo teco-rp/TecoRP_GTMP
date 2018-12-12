@@ -106,6 +106,8 @@ namespace TecoRP.Models
         public string Value_1 { get; set; }
         [XmlAttribute("Value_2")]
         public string Value_2 { get; set; }
+        [XmlAttribute("Value_3")]
+        public string Value_3 { get; set; }
     }
 
     [XmlRoot("AllItems")]

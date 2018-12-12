@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 using GrandTheftMultiplayer.Server.API;
-using TecoRP_ItemEditor.Model;
+using TecoRP.Models;
 
 namespace TecoRP_ItemEditor.Database
 {
     public static class db_Items
     {
-        static XmlSerializer xSer = new XmlSerializer(typeof(Model.ItemList));
+        static XmlSerializer xSer = new XmlSerializer(typeof(ItemList));
         public static string dataPath = "Data/Items.xml";
         public static string dataPathSkins = "Data/Items(Skins).xml";
         public static ItemList currentItems = new ItemList();
