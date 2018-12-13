@@ -123,11 +123,12 @@ namespace TecoRP_ItemEditor
                 txtName.Text = model.Name;
                 txtDescription.Text = model.Description;
                 txtObjectId.Text = model.ObjectId.ToString();
-                cmbType.SelectedItem = typeof(TecoRP.Models.ItemType).GetEnumName(model.Type);
+                cmbType.SelectedItem = typeof(ItemType).GetEnumName(model.Type);
                 chkDroppable.Checked = model.Droppable;
                 txtValue0.Text = model.Value_0;
                 nmrValue1.Text = model.Value_1;
                 nmrValue2.Text = model.Value_2;
+                nmrValue3.Text = model.Value_3;
                 nmrMaxCount.Value = model.MaxCount;
                 nmrID.Value = model.ID;
             }
@@ -162,6 +163,7 @@ namespace TecoRP_ItemEditor
             db_Items.currentItems.Items[_Index].Value_0 = txtValue0.Text;
             db_Items.currentItems.Items[_Index].Value_1 = nmrValue1.Value.ToString();
             db_Items.currentItems.Items[_Index].Value_2 = nmrValue2.Value.ToString();
+            db_Items.currentItems.Items[_Index].Value_3 = nmrValue3.Value.ToString();
             db_Items.currentItems.Items[_Index].Droppable = chkDroppable.Checked;
             db_Items.currentItems.Items[_Index].MaxCount = Convert.ToInt32(nmrMaxCount.Value);
             db_Items.currentItems.Items[_Index].Type = (TecoRP.Models.ItemType)Enum.Parse(typeof(TecoRP.Models.ItemType), cmbType.SelectedItem.ToString());

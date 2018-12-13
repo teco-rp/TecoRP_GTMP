@@ -47,9 +47,12 @@
             this.label8 = new System.Windows.Forms.Label();
             this.btnCreate = new System.Windows.Forms.Button();
             this.txtValue0 = new System.Windows.Forms.TextBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.nmrValue_3 = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.nmrMaxStack)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nmrValue1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nmrValue2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nmrValue_3)).BeginInit();
             this.SuspendLayout();
             // 
             // txtName
@@ -151,14 +154,14 @@
             // 
             // nmrValue1
             // 
-            this.nmrValue1.Location = new System.Drawing.Point(118, 320);
+            this.nmrValue1.Location = new System.Drawing.Point(91, 321);
             this.nmrValue1.Name = "nmrValue1";
             this.nmrValue1.Size = new System.Drawing.Size(56, 20);
             this.nmrValue1.TabIndex = 3;
             // 
             // nmrValue2
             // 
-            this.nmrValue2.Location = new System.Drawing.Point(201, 320);
+            this.nmrValue2.Location = new System.Drawing.Point(165, 320);
             this.nmrValue2.Name = "nmrValue2";
             this.nmrValue2.Size = new System.Drawing.Size(56, 20);
             this.nmrValue2.TabIndex = 3;
@@ -176,7 +179,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(43, 294);
+            this.label6.Location = new System.Drawing.Point(21, 294);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(46, 13);
             this.label6.TabIndex = 2;
@@ -186,7 +189,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(128, 294);
+            this.label7.Location = new System.Drawing.Point(101, 295);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(46, 13);
             this.label7.TabIndex = 2;
@@ -196,7 +199,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(198, 294);
+            this.label8.Location = new System.Drawing.Point(162, 294);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(46, 13);
             this.label8.TabIndex = 2;
@@ -215,11 +218,28 @@
             // 
             // txtValue0
             // 
-            this.txtValue0.Location = new System.Drawing.Point(34, 320);
+            this.txtValue0.Location = new System.Drawing.Point(12, 320);
             this.txtValue0.Name = "txtValue0";
             this.txtValue0.Size = new System.Drawing.Size(69, 20);
             this.txtValue0.TabIndex = 6;
             this.txtValue0.Text = "0";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(224, 295);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(46, 13);
+            this.label9.TabIndex = 2;
+            this.label9.Text = "Value_3";
+            this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // nmrValue_3
+            // 
+            this.nmrValue_3.Location = new System.Drawing.Point(227, 321);
+            this.nmrValue_3.Name = "nmrValue_3";
+            this.nmrValue_3.Size = new System.Drawing.Size(56, 20);
+            this.nmrValue_3.TabIndex = 3;
             // 
             // frmItemAdd
             // 
@@ -229,11 +249,13 @@
             this.Controls.Add(this.txtValue0);
             this.Controls.Add(this.btnCreate);
             this.Controls.Add(this.cmbType);
+            this.Controls.Add(this.nmrValue_3);
             this.Controls.Add(this.nmrValue2);
             this.Controls.Add(this.nmrValue1);
             this.Controls.Add(this.nmrMaxStack);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
+            this.Controls.Add(this.label9);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label7);
@@ -249,6 +271,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.nmrMaxStack)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nmrValue1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nmrValue2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nmrValue_3)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -274,5 +297,7 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Button btnCreate;
         private System.Windows.Forms.TextBox txtValue0;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.NumericUpDown nmrValue_3;
     }
 }

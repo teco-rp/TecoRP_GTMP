@@ -40,6 +40,7 @@ namespace TecoRP_ItemEditor
                 Value_0 = txtValue0.Text,
                 Value_1 = Convert.ToInt32(nmrValue1.Value).ToString(),
                 Value_2 = Convert.ToInt32(nmrValue2.Value).ToString(),
+                Value_3 = Convert.ToInt32(nmrValue2.Value).ToString()
             });
 
             this.Hide();
