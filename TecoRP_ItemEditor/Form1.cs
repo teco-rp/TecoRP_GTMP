@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using TecoRP_ItemEditor.Database;
-using TecoRP_ItemEditor.Model;
+using TecoRP.Models;
 
 namespace TecoRP_ItemEditor
 {

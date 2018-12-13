@@ -8,7 +8,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using TecoRP.Models;
-using TecoRP_ItemEditor.Model;
 
 namespace TecoRP_ItemEditor
 {

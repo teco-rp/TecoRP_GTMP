@@ -86,7 +86,6 @@
     <Compile Include="frmItemAdd.Designer.cs">
       <DependentUpon>frmItemAdd.cs</DependentUpon>
     </Compile>
-    <Compile Include="Model\Items.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ValueTypes.cs">
