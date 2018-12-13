@@ -44,6 +44,7 @@ namespace TecoRP.Models
         public bool Jailed { get; set; } = false;
         public int? JailedTime { get; set; }
         public bool Dead { get; set; } = false;
+        public int? DrunkMinutes { get; set; }
         public int DeadSeconds { get; set; } = 0;
         public bool Cuffed { get; set; } = false;
         public List<Jobs> JobAbilities { get; set; }

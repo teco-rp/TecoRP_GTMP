@@ -12,6 +12,7 @@
   <script src="Client/CharacterCreator.js" type="client" lang="javascript"/>
   <script src="Client/CraftingMenu.js" type="client" lang="javascript"/>
   <script src="Client/CustomMenu.js" type="client" lang="javascript"/>
+  <script src="Client/Drunk.js" type="client" lang="javascript"/>
   <script src="Client/Fuel.js" type="client" lang="javascript"/>
   <script src="Client/HelpBrowser.js" type="client" lang="javascript"/>
   <script src="Client/InputCharacter.js" type="client" lang="javascript"/>

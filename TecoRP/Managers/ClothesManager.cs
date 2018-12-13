@@ -42,6 +42,7 @@ namespace TecoRP.Managers
                 .UnwearPants()
                 .UnwearShoes()
                 .ApplyApperance(cData);
+
             InventoryManager.LoadPlayerEquippedItems(sender);
             UserManager.LoadPlayerStats(sender);
         }

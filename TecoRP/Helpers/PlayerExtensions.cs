@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TecoRP.Database;
 using TecoRP.Models;
 
 namespace TecoRP.Helpers
@@ -32,7 +33,7 @@ namespace TecoRP.Helpers
 
         public static string GetCharacterName(this Client player)
         {
-            return API.shared.getEntityData(player, "CharacterName") as string;
+            return  (API.shared.getEntityData(player, "CharacterName") as string) ?? db_Accounts.GetPlayerCharacterName(player);
         }
 
         public static Inventory GetInventory(this Client player)

@@ -385,5 +385,10 @@ namespace TecoRP_ItemEditor
                 (sender as ListBox).Items.RemoveAt((sender as ListBox).SelectedIndex);
             }
         }
+
+        private void çokluEklemeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new BulkInsertForm().Show();
+        }
     }
 }

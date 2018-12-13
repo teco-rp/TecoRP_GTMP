@@ -5,6 +5,7 @@ using GrandTheftMultiplayer.Shared.Math;
 using System;
 using System.Threading.Tasks;
 using TecoRP.Database;
+using TecoRP.Users;
 
 namespace TecoRP.Managers
 {
@@ -154,6 +155,8 @@ namespace TecoRP.Managers
         {
             if ((player.isInVehicle && player.vehicle.isWindowBroken(0)) || !player.isInVehicle)
             {
+                API.shared.playPlayerAnimation(player, (int) Animation.AnimationFlags.Cancellable, "mp_facial", "mic_chatter");
+                
                 if (API.hasEntityData(player, "TalkLabel"))
                 {
 

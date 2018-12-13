@@ -1,7 +1,5 @@
 ﻿/// <reference path="types-gt-mp/index.d.ts" />
 
-/// <reference path="Vehicles.js"/>
-
 var help_main_menu = null;
 var menu_vehicle_actions = null;
 
@@ -19,6 +17,7 @@ function callHelpMenu() {
         help_main_menu = API.createMenu("YARDIM", 100, 0, 3);
         help_main_menu.AddItem(API.createMenuItem("Kısayollar", "Oyun içerisinde kullanabileceğiniz kısayol tuşlarıdır."));
         help_main_menu.AddItem(API.createMenuItem("Araçlar", "Araçlar hakkında bilmeniz gerekenler."));
+        help_main_menu.AddItem(API.createMenuItem("Animasyonlar", "Temel olarak 4 kısayol vardır. ~y~CTRL+1~w~ |  ~y~CTRL+2~w~  |   ~y~CTRL+3~w~    |   ~y~CTRL+4~w~"));
         help_main_menu.AddItem(API.createMenuItem("Evler", "Evler hakkında bilgiler."));
         help_main_menu.AddItem(API.createMenuItem("Envanter", "Evler hakkında bilgiler."));
         help_main_menu.OnItemSelect.connect(function (sender,selected,index) {
@@ -32,6 +31,8 @@ function callHelpMenu() {
                 case 2:
                     break;
                 case 3:
+                    break;
+                case 4:
                     help_main_menu.Visible = false;
                     API.triggerServerEvent("key_I");
                     break;
@@ -102,4 +103,3 @@ API.onKeyDown.connect(function (sender, args) {
         callHelpMenu();
     }
 });
-

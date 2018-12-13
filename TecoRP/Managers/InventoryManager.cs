@@ -598,8 +598,10 @@ namespace TecoRP.Managers
                     //-----------------------------
                     case ItemType.Drug:
                         if (API.getEntityData(sender, "Dead") == true) return;
-
-                        return;
+                        #region Drug
+                        sender.setData(nameof(User.DrunkMinutes), Convert.ToInt32(usedItem.Value_0));
+                        #endregion
+                        break;
                     //-----------------------------
                     case ItemType.Ammo:
                         if (API.getEntityData(sender, "Dead") == true) return;

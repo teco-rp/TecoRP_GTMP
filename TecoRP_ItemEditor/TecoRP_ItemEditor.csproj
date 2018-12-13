@@ -59,6 +59,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BulkInsertForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BulkInsertForm.Designer.cs">
+      <DependentUpon>BulkInsertForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Database\db_Items.cs" />
     <Compile Include="Database\db_Taxes.cs" />
     <Compile Include="Database\WhiteListDAL.cs" />
@@ -94,6 +100,9 @@
     <Compile Include="ValueTypes.Designer.cs">
       <DependentUpon>ValueTypes.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="BulkInsertForm.resx">
+      <DependentUpon>BulkInsertForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

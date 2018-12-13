@@ -109,9 +109,9 @@ namespace TecoRP.Users
             var bag = API.shared.getEntityData(player, "bag");
             if (bag == null)
                 bag = API.shared.createObject(bagObjId, player.position, player.rotation, player.dimension);
-            API.attachEntityToEntity(bag, player, "IK_Root", new Vector3(0, -0.15f, 0.35f), new Vector3(0, 0, 180));
+            API.shared.attachEntityToEntity(bag, player, "IK_Root", new Vector3(0, -0.15f, 0.35f), new Vector3(0, 0, 180));
         
-            API.setEntityData(player, "bag", bag);
+            API.shared.setEntityData(player, "bag", bag);
         }
 
         public static void WearWeapon(Client player, int weaponObjId, int weaponType)

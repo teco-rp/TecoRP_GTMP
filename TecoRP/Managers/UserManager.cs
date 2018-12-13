@@ -49,11 +49,11 @@ namespace TecoRP.Managers
             API.shared.sendChatMessageToPlayer(player, "~g~Başarıyla giriş yaptınız.");
 
             if (db_Accounts.DoesAccountExist(player.socialClubName))
+            {
                 db_Accounts.LoadPlayerAccount(player);
-
-            API.shared.sendChatMessageToPlayer(player, "Herhangi bir sorunuz olduğunda ~y~/?~w~ komutunu veya bir hata ile karşılaştığınızda ~y~/rapor~w~ komutunu kullanabilirsiniz.");
-            API.shared.sendChatMessageToPlayer(player, "Ayrıca ~y~F2~w~ tuşuna basarak da yardım menüsüne ulaşabilirsiniz." );
-        }
+                player.SetNameTagWithId();
+            }
+  }
 
         private void API_onPlayerFinishedDownload(Client player)
         {
@@ -63,6 +63,9 @@ namespace TecoRP.Managers
                 OnPlayerRegistering(player);
 
             RPGManager.CreatePlayerTalkLabel(player);
+
+            API.shared.sendChatMessageToPlayer(player, "Herhangi bir sorunuz olduğunda ~y~/?~w~ komutunu veya bir hata ile karşılaştığınızda ~y~/rapor~w~ komutunu kullanabilirsiniz.");
+            API.shared.sendChatMessageToPlayer(player, "Ayrıca ~y~F2~w~ tuşuna basarak da yardım menüsüne ulaşabilirsiniz.");
         }
         private void API_onPlayerDisconnected(Client player, string reason)
         {
@@ -73,6 +76,11 @@ namespace TecoRP.Managers
                     try
                     {
                         SavePlayer(player);
+                        InventoryManager.RemovePlayerEquippedItems(player);
+                        for (int i = 1; i < 5; i++)
+                        {
+                            Animation.RemovePlayerWeapon(player, i);
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -132,7 +140,7 @@ namespace TecoRP.Managers
             API.shared.consoleOutput("isMale is " + isMale);
             sender.SetSkinByGender();
             SetBeginnerInventory(sender);
-            //db_Accounts.SavePlayerAccount(sender);
+            db_Accounts.SavePlayerAccount(sender);
 
             GoToApperanceSelection(sender);
         }
@@ -160,12 +168,11 @@ namespace TecoRP.Managers
             API.shared.triggerClientEvent(player, "update_money_display", money);
             player.health = API.shared.getEntityData(player, "HealthLevel");
             player.armor = API.shared.getEntityData(player, "ArmorLevel");
-            player.SetNameTagWithId();
 
             float _Hunger = Convert.ToInt32(API.shared.getEntityData(player, "Hunger"));
             float _Thirsty = Convert.ToInt32(API.shared.getEntityData(player, "Thirsty"));
             API.shared.triggerClientEvent(player, "update_hungerthirsty", _Hunger, _Thirsty);
-            if (String.IsNullOrEmpty(player.nametag) || player.nametag == "")
+            if (String.IsNullOrEmpty(player.nametag) || player.nametag == " ")
             {
                 API.shared.triggerClientEvent(player, "set_character_name", false);
             }

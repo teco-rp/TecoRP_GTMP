@@ -48,7 +48,7 @@ namespace TecoRP.Helpers
 
         public static Client WearTops(this Client player, Item item)
         {
-            player.setClothes(8, -1, 0);
+            player.setClothes(8, 0, 17);
             player.setClothes(3, Convert.ToInt32(item.Value_3), 0);
             player.setClothes(11, Convert.ToInt32(item.Value_1), Convert.ToInt32(item.Value_2));
             return player;
@@ -59,13 +59,13 @@ namespace TecoRP.Helpers
             if (API.shared.getEntityData(player, "Gender") == true)
             {
                 player.setClothes(3, 15, 0);
-                player.setClothes(8, -1, 0);
+                player.setClothes(8, 0, 17);
                 player.setClothes(11, 252, 0);
             }
             else
             {
                 player.setClothes(3, 15, 0);
-                player.setClothes(8, -1, 0);
+                player.setClothes(8, 0 , 17);
                 player.setClothes(11, 15, 0);
             }
             return player;

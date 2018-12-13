@@ -110,6 +110,7 @@
     <Compile Include="Managers\ClothesManager.cs" />
     <Compile Include="Managers\CraftingManager.cs" />
     <Compile Include="Managers\CrimeManager.cs" />
+    <Compile Include="Managers\DrunkManager.cs" />
     <Compile Include="Managers\EntranceManager.cs" />
     <Compile Include="Managers\FactionManager.cs" />
     <Compile Include="Managers\GameObjectsManager.cs" />
@@ -191,6 +192,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Client\CustomMenu.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Client\Drunk.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Client\Fuel.js">

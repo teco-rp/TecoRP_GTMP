@@ -62,6 +62,8 @@
             this.button1 = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tpItems = new System.Windows.Forms.TabPage();
+            this.nmrValue3 = new System.Windows.Forms.NumericUpDown();
+            this.label10 = new System.Windows.Forms.Label();
             this.tpTaxes = new System.Windows.Forms.TabPage();
             this.button2 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -102,8 +104,7 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.lstCraftingMachines = new System.Windows.Forms.ListBox();
-            this.label10 = new System.Windows.Forms.Label();
-            this.nmrValue3 = new System.Windows.Forms.NumericUpDown();
+            this.çokluEklemeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nmrValue1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nmrValue2)).BeginInit();
@@ -111,6 +112,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.nmrID)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tpItems.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nmrValue3)).BeginInit();
             this.tpTaxes.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTaxes)).BeginInit();
             this.tpWhiteList.SuspendLayout();
@@ -122,7 +124,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.nmrRequiredJob)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nmrRequiredMetalPart)).BeginInit();
             this.gbAddNew.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nmrValue3)).BeginInit();
             this.SuspendLayout();
             // 
             // lstItems
@@ -165,7 +166,8 @@
             this.ıtemToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ekleToolStripMenuItem,
             this.valueTypesToolStripMenuItem,
-            this.tamListeToolStripMenuItem});
+            this.tamListeToolStripMenuItem,
+            this.çokluEklemeToolStripMenuItem});
             this.ıtemToolStripMenuItem.Name = "ıtemToolStripMenuItem";
             this.ıtemToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
             this.ıtemToolStripMenuItem.Text = "Item";
@@ -173,21 +175,21 @@
             // ekleToolStripMenuItem
             // 
             this.ekleToolStripMenuItem.Name = "ekleToolStripMenuItem";
-            this.ekleToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
+            this.ekleToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.ekleToolStripMenuItem.Text = "Ekle";
             this.ekleToolStripMenuItem.Click += new System.EventHandler(this.ekleToolStripMenuItem_Click);
             // 
             // valueTypesToolStripMenuItem
             // 
             this.valueTypesToolStripMenuItem.Name = "valueTypesToolStripMenuItem";
-            this.valueTypesToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
+            this.valueTypesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.valueTypesToolStripMenuItem.Text = "ValueTypes";
             this.valueTypesToolStripMenuItem.Click += new System.EventHandler(this.valueTypesToolStripMenuItem_Click);
             // 
             // tamListeToolStripMenuItem
             // 
             this.tamListeToolStripMenuItem.Name = "tamListeToolStripMenuItem";
-            this.tamListeToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
+            this.tamListeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.tamListeToolStripMenuItem.Text = "Tam Liste";
             this.tamListeToolStripMenuItem.Click += new System.EventHandler(this.tamListeToolStripMenuItem_Click);
             // 
@@ -489,6 +491,32 @@
             this.tpItems.TabIndex = 0;
             this.tpItems.Text = "Items";
             this.tpItems.UseVisualStyleBackColor = true;
+            // 
+            // nmrValue3
+            // 
+            this.nmrValue3.Location = new System.Drawing.Point(475, 256);
+            this.nmrValue3.Maximum = new decimal(new int[] {
+            5600,
+            0,
+            0,
+            0});
+            this.nmrValue3.Minimum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            -2147483648});
+            this.nmrValue3.Name = "nmrValue3";
+            this.nmrValue3.Size = new System.Drawing.Size(64, 20);
+            this.nmrValue3.TabIndex = 7;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(483, 239);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(46, 13);
+            this.label10.TabIndex = 3;
+            this.label10.Text = "Value_3";
             // 
             // tpTaxes
             // 
@@ -895,31 +923,12 @@
             this.lstCraftingMachines.TabIndex = 0;
             this.lstCraftingMachines.DoubleClick += new System.EventHandler(this.lstCraftingMachines_DoubleClick);
             // 
-            // label10
+            // çokluEklemeToolStripMenuItem
             // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(483, 239);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(46, 13);
-            this.label10.TabIndex = 3;
-            this.label10.Text = "Value_3";
-            // 
-            // nmrValue3
-            // 
-            this.nmrValue3.Location = new System.Drawing.Point(475, 256);
-            this.nmrValue3.Maximum = new decimal(new int[] {
-            5600,
-            0,
-            0,
-            0});
-            this.nmrValue3.Minimum = new decimal(new int[] {
-            200,
-            0,
-            0,
-            -2147483648});
-            this.nmrValue3.Name = "nmrValue3";
-            this.nmrValue3.Size = new System.Drawing.Size(64, 20);
-            this.nmrValue3.TabIndex = 7;
+            this.çokluEklemeToolStripMenuItem.Name = "çokluEklemeToolStripMenuItem";
+            this.çokluEklemeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.çokluEklemeToolStripMenuItem.Text = "Çoklu ekleme";
+            this.çokluEklemeToolStripMenuItem.Click += new System.EventHandler(this.çokluEklemeToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -943,6 +952,7 @@
             this.tabControl1.ResumeLayout(false);
             this.tpItems.ResumeLayout(false);
             this.tpItems.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nmrValue3)).EndInit();
             this.tpTaxes.ResumeLayout(false);
             this.tpTaxes.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTaxes)).EndInit();
@@ -960,7 +970,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.nmrRequiredMetalPart)).EndInit();
             this.gbAddNew.ResumeLayout(false);
             this.gbAddNew.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nmrValue3)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1043,6 +1052,7 @@
         private System.Windows.Forms.CheckBox chkWhiteListActive;
         private System.Windows.Forms.NumericUpDown nmrValue3;
         private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.ToolStripMenuItem çokluEklemeToolStripMenuItem;
     }
 }
 

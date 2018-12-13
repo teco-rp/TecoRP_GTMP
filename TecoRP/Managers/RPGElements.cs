@@ -46,6 +46,11 @@ namespace TecoRP.Managers
                             }
                             API.setEntityData(itemPlayer, "playingMinutes", _playingMinutes);
 
+                            #region DrunkData
+                            DrunkManager.CheckPlayer(itemPlayer);
+                            DrunkManager.DecreaseDrunkTime(itemPlayer, 1);
+
+                            #endregion
                             if (API.getEntityData(itemPlayer, "Jailed") == false)
                             {
                                 #region HungerThirsty

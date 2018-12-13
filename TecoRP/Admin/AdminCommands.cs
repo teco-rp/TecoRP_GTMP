@@ -51,7 +51,7 @@ namespace TecoRP.Admin
             " ~y~ ADMIN KOMUTLARI ~W~\n" +
             " /ranks /addrank /removerank /addcrime /removecrime \n" +
             "/sorular /reports /cevapla /accept /reject /find /clearplayerstar\n " +
-            "/createcraftingtable /ctableid /editctable /createfactioninteractive /editfi /fid"
+            "/createcraftingtable /ctableid /editctable /createfactioninteractive /editfi /fid /drunk"
             );
                     break;
                 default:
@@ -3627,6 +3627,24 @@ namespace TecoRP.Admin
                 db_FactionInteractives.Update(edited);
             }
         }
+
+        [Command("drunk")]
+        public void Drunk(Client sender, int playerId, int drunk)
+        {
+            if (!(API.getEntityData(sender, "AdminLevel") >= 1)) { API.sendChatMessageToPlayer(sender, "~r~HATA: ~w~Bunun için yetkiniz yok."); return; }
+
+            var player = db_Accounts.GetPlayerById(playerId);
+            if (player == null)
+            {
+                API.shared.sendChatMessageToPlayer(sender, "~r~HATA: ~w~Oyuncu bulunamadı.");
+                return;
+            }
+
+            if (drunk == 1)
+                Clients.ClientManager.SetPlayerDrunk(player);
+            if(drunk == 0)
+                Clients.ClientManager.SetPlayerUndrunk(player);
+        }
         public static void RemoveItemFromInventory(Client sender, string ownerSocialClubId, int index)
         {
             if (!(API.shared.getEntityData(sender, "AdminLevel") >= 2)) { API.shared.sendChatMessageToPlayer(sender, "~r~HATA: ~w~Bunun için yetkiniz yok."); return; }
@@ -3661,6 +3679,7 @@ namespace TecoRP.Admin
                 }
             }
         }
+
 
         // 678465 uğurun twitter kodu
         // ugursari.com.tr

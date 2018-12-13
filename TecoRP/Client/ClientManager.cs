@@ -378,5 +378,15 @@ namespace TecoRP.Clients
         {
             API.shared.triggerClientEvent(player, "open_operator_menu", operatorName, pricingSentence);
         }
+
+        public static void SetPlayerDrunk(Client player)
+        {
+            API.shared.triggerClientEvent(player, "set_drunk");
+        }
+        public static void SetPlayerUndrunk(Client player)
+        {
+            API.shared.triggerClientEvent(player, "set_undrunk");
+
+        }
     }
 }

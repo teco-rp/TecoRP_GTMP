@@ -7,7 +7,7 @@ API.onServerEventTrigger.connect(function (eventName, args) {
 
 
     if (eventName == "ChooseCharacterApperance") {
-
+        var hasSentToServer = false;
         var player = API.getLocalPlayer();
         menu = API.createMenu("Karakter", "Karakterinizi oluşturun.", 100, 100, 0, true);
 
@@ -65,12 +65,12 @@ API.onServerEventTrigger.connect(function (eventName, args) {
         if (args[0] === "male") {
             for (let i = 0; i < 7; i++) {
                 hairsColors.Add(i.toString());
-            }       
+            }
         }
         else {
             for (let i = 0; i < 6; i++) {
                 hairsColors.Add(i.toString());
-            }  
+            }
         }
 
         var hairColorsOptions = API.createListItem("Saç Rengi", "Karakterinizin saç rengini ayarlayabilirsiniz.", hairsColors, 0);
@@ -84,6 +84,7 @@ API.onServerEventTrigger.connect(function (eventName, args) {
             API.triggerServerEvent("SaveCharacterApperance", currentHead, currentEyes, currentHair, currentHairColor);
             menu.Visible = false;
             menu = null;
+            hasSentToServer = true;
         });
 
         menu.AddItem(headOptionsItem);
@@ -92,6 +93,11 @@ API.onServerEventTrigger.connect(function (eventName, args) {
         menu.AddItem(hairColorsOptions);
         menu.AddItem(completeAction);
         menu.Visible = true;
+
+        //menu.OnMenuVisibilityChanged.connect(function (sender, visible) {
+        //    if (sender.Visible === false && hasSentToServer === false) {
+        //        callCharacterApperance();
+        //    }
+        //});
     }
 });
-
