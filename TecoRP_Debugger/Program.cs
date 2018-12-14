@@ -5,7 +5,10 @@ using System.Linq;
 using System.Net.WebSockets;
 using System.Text;
 using System.Threading.Tasks;
+using TecoRP.Database;
 using TecoRP.Models;
+using TecoRP.Repository.Base;
+using TecoRP_Debugger.Helpers;
 using TecoRP_Debugger.Models;
 
 namespace TecoRP_Debugger
@@ -14,36 +17,13 @@ namespace TecoRP_Debugger
     {
         static void Main(string[] args)
         {
-        start:
-            Console.WriteLine("1- SycnAllowedPlayers");
-
-
-            if (Console.ReadLine() == "1")
-            {
-                Console.WriteLine("Senkronizasyon başladı.");
-                SycnAllowedPlayer();
-                Console.WriteLine("Tamamlandı!");
-            }
-
+            Console.WriteLine("Tap To Start...");
             Console.ReadLine();
-            goto start;
+
+
+            Console.WriteLine("Completed");
+            Console.ReadLine();
         }
-
-
-        static TecoRPEntities db = new TecoRPEntities();
-        public static void SycnAllowedPlayer()
-        {
-            var apps = db.Applications.Where(x => x.IsApproved == true);
-            var allowedList = TecoRP.Database.db_WhiteList.GetAllowedPlayers();
-            foreach (var item in apps)
-            {
-                if (!allowedList.Users.Any(a => a.SocialClubName == item.SocialClubName))
-                {
-                    allowedList.Users.Add(new TecoRP.Models.WhiteListUser { SocialClubName = item.SocialClubName, LastValidateTime = DateTime.Now.AddYears(2) });
-                }
-            }
-        }
-
 
         //public static async Task AddToWhiteList(WhiteListUser user)
         //{

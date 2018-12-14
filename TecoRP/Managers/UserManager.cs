@@ -226,14 +226,15 @@ namespace TecoRP.Managers
             //This will return to ClothingManager
             API.shared.triggerClientEvent(player, "ChooseCharacterApperance", player.getData("Gender") == true ? "male" : "female");
         }
+        static Random rnd = new Random();
         public void SetBeginnerInventory(Client player)
         {
             var inv = player.GetInventory();
 
             inv.ItemList.Add(new ClientItem { ItemId = 21, Count = 2 });
             inv.ItemList.Add(new ClientItem { ItemId = 2, Count = 2 });
-            inv.ItemList.Add(new ClientItem { ItemId = 5000, Count = 1, Equipped = true });
-            inv.ItemList.Add(new ClientItem { ItemId = 6000, Count = 1, Equipped = true });
+            inv.ItemList.Add(new ClientItem { ItemId = rnd.Next(5000,7000), Count = 1, Equipped = true });
+            inv.ItemList.Add(new ClientItem { ItemId = rnd.Next(5000, 7000), Count = 1, Equipped = false });
             //TODO: Add something else in starter inventory...
         }
 
@@ -302,11 +303,11 @@ namespace TecoRP.Managers
                             var skinItemList = db_Items.GameItems.Values.Where(w => w.Type == ItemType.Skin).Select(s => s.ID);
                             foreach (var itemShops in db_Shops.CurrentShopsList)
                             {
-                                foreach (var itemSaleList in itemShops.Key.SaleItemList)
+                                foreach (var itemSaleList in itemShops.SaleItemList)
                                 {
                                     if (skinItemList.Contains(itemSaleList.GameItemId))
                                     {
-                                        Clients.ClientManager.ShowMissionMarker(sender, itemShops.Key.Position.X, itemShops.Key.Position.Y, itemShops.Key.Position.Z, 1);
+                                        Clients.ClientManager.ShowMissionMarker(sender, itemShops.Position.X, itemShops.Position.Y, itemShops.Position.Z, 1);
                                         return;
                                     }
                                 }
@@ -320,11 +321,11 @@ namespace TecoRP.Managers
                             var phoneItemList = db_Items.GameItems.Values.Where(w => w.Type == ItemType.Phone).Select(s => s.ID);
                             foreach (var itemShops in db_Shops.CurrentShopsList)
                             {
-                                foreach (var itemSaleList in itemShops.Key.SaleItemList)
+                                foreach (var itemSaleList in itemShops.SaleItemList)
                                 {
                                     if (phoneItemList.Contains(itemSaleList.GameItemId))
                                     {
-                                        Clients.ClientManager.ShowMissionMarker(sender, itemShops.Key.Position.X, itemShops.Key.Position.Y, itemShops.Key.Position.Z, 2);
+                                        Clients.ClientManager.ShowMissionMarker(sender, itemShops.Position.X, itemShops.Position.Y, itemShops.Position.Z, 2);
                                         return;
                                     }
                                 }

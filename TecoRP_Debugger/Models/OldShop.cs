@@ -1,25 +1,19 @@
 ﻿using GrandTheftMultiplayer.Shared.Math;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using TecoRP.Models;
 
-namespace TecoRP.Models
+namespace TecoRP_Debugger.Models
 {
-    public class Shop
+    public class OldShop
     {
-        //-----------------------------------------------------
-        [XmlIgnore]
-        public GrandTheftMultiplayer.Server.Elements.Marker MarkerOnMap { get; set; }
         //-----------------------------------------------------
         [XmlAttribute("ID")]
         public int ShopId { get; set; }
-        //-----------------------------------------------------
-        [XmlAttribute(nameof(Type))]
-        public ShopType Type { get; set; }
         //-----------------------------------------------------
         [XmlElement("BusinessId")]
         public Nullable<int> BusinessId { get; set; }
@@ -43,39 +37,28 @@ namespace TecoRP.Models
         public int MarkerType { get; set; } = 1;
         //-----------------------------------------------------
         [XmlElement("Color")]
-        public MarkerColor MarkerColorRGB { get; set; }        
+        public MarkerColor MarkerColorRGB { get; set; }
         //-----------------------------------------------------
         [XmlElement("SaleItem")]
         public List<SaleItem> SaleItemList { get; set; }
 
     }
-    public class SaleItem
+    public class OldSaleItem
     {
-        //-------------------------------------------------
         [XmlAttribute("GameItemID")]
-        [JsonProperty("id")]
         public int GameItemId { get; set; }
-        //-------------------------------------------------
         [XmlAttribute("Price")]
-        [JsonProperty("p")]
         public int Price { get; set; } = 10;
-        //-------------------------------------------------
         [XmlAttribute("Count")]
-        [JsonProperty("c")]
         public int Count { get; set; } = 1;
     }
 
     [XmlRoot("Shop_List")]
-    public class ShopList
+    public class OldShopList
     {
         [XmlElement("Shop")]
         public List<Shop> Items { get; set; }
-        public ShopList(){ Items = new List<Shop>(); }
+        public OldShopList() { Items = new List<Shop>(); }
     }
 
-    public enum ShopType
-    {
-        Regular,
-        Clothes
-    }
 }

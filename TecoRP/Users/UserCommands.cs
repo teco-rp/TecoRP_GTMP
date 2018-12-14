@@ -12,6 +12,7 @@ using TecoRP.Managers;
 using TecoRP.Models;
 using System.Threading.Tasks;
 using TecoRP.Helpers;
+using Newtonsoft.Json;
 
 namespace TecoRP.Users
 {
@@ -333,49 +334,6 @@ namespace TecoRP.Users
         {
             API.setEntityData(sender, "Handsup", true);
             API.playPlayerAnimation(sender, (int)(AnimationFlags.Loop | AnimationFlags.OnlyAnimateUpperBody | AnimationFlags.AllowPlayerControl), "missminuteman_1ig_2", "handsup_base");
-        }
-
-        [Command("satinal", "/satinal")]
-        public void BuyFromShop(Client sender)
-        {
-            foreach (var item in db_Shops.CurrentShopsList.Keys)
-            {
-                if (Vector3.Distance(sender.position, item.Position) <= item.Range + 2)
-                {
-                    // var _list = db_Items.GameItems.Items.Where(x => item.SaleItemList.Select(s => s.GameItemId).Contains(x.ID));
-
-                    //Tuple<int[], string[], string[],int[]> shop = new Tuple<int[], string[], string[],int[]>(
-                    //    _list.Select(s=>s.ID).ToArray(),
-                    //    _list.Select(s=>s.Name).ToArray(),
-                    //    _list.Select(s=>s.Description).ToArray(),
-                    //    item.SaleItemList.Select(s=>s.Price).ToArray()
-                    //    );
-
-                    //API.triggerClientEvent(sender, "shop_open", _list.Count(),shop.Item2,shop.Item3,shop.Item1,shop.Item4);
-                    List<string> NameList = new List<string>();
-                    List<string> DescriptionList = new List<string>();
-                    foreach (var shopItem in item.SaleItemList)
-                    {
-                        var gameItem = db_Items.GetItemById(shopItem.GameItemId);
-                        if (gameItem != null)
-                        {
-                            NameList.Add(gameItem.Name + " | $" + shopItem.Price);
-                            DescriptionList.Add(gameItem.Description);
-                        }
-                    }
-                    API.triggerClientEvent(sender, "shop_open", NameList.Count, NameList.ToArray(), DescriptionList.ToArray(), item.ShopId);
-
-                    return;
-
-                    //foreach (var item2 in _list)
-                    //{
-                    //    NameList.Add(item2.Name + " | $" + item.SaleItemList.FirstOrDefault(x => x.GameItemId == item2.ID).Price);
-                    //    DescriptionList.Add(item2.Description);
-                    //}
-
-
-                }
-            }
         }
 
         [Command("paraver", "/paraver [OyuncuID] [Miktar]")]

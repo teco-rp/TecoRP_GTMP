@@ -87,6 +87,7 @@
     <Compile Include="Database\db_LicensePoints.cs" />
     <Compile Include="Database\db_PhoneOperatorShop.cs" />
     <Compile Include="Helpers\ClothingExtensions.cs" />
+    <Compile Include="Helpers\Converter.cs" />
     <Compile Include="Helpers\PlayerExtensions.cs" />
     <Compile Include="Helpers\SoftException.cs" />
     <Compile Include="Jobs\db_KamyonJob.cs" />
@@ -125,6 +126,7 @@
     <Compile Include="Managers\Job_TirManager.cs" />
     <Compile Include="Managers\LicenseManager.cs" />
     <Compile Include="Managers\PhoneManager.cs" />
+    <Compile Include="Managers\ShopManager.cs" />
     <Compile Include="Managers\TradeManager.cs" />
     <Compile Include="Managers\UserManager.cs" />
     <Compile Include="Managers\VehicleManager.cs" />

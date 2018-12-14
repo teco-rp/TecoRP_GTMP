@@ -13,7 +13,7 @@ using TecoRP.Jobs;
 
 namespace TecoRP.Admin
 {
-    public class AdminCommands : Script
+    public class AdminCommands : Managers.Base.EventMethodTriggerBase
     {
 
         [Command("ahelp", "/ahelp [page(1-2-3)] - Admin Help")]
@@ -1139,8 +1139,8 @@ namespace TecoRP.Admin
                 try
                 {
                     var _Index = db_Shops.FindShopIndexById(Convert.ToInt32(value));
-                    API.deleteEntity(db_Shops.CurrentShopsList.Values.ToList()[_Index]);
-                    if (db_Shops.CurrentShopsList.Remove(db_Shops.CurrentShopsList.Keys.FirstOrDefault(x => x.ShopId == Convert.ToInt32(value))))
+                    API.deleteEntity(db_Shops.CurrentShopsList[_Index].MarkerOnMap);
+                    if (db_Shops.CurrentShopsList.Remove(db_Shops.CurrentShopsList.FirstOrDefault(x => x.ShopId == Convert.ToInt32(value))))
                     {
                         API.sendChatMessageToPlayer(sender, "~~s~Başarıyla ~g~silindi.");
                     }
@@ -2087,7 +2087,7 @@ namespace TecoRP.Admin
             });
         }
         [Command("addshopitem", "/addshopitem ~y~[shopId] [ItemID] [StackCount] ~w~[Price]")]
-        public void AddItemToShop(Client sender, int shopId, int ItemId, int StackCount, int ItemPrice)
+        public void AddShopItem(Client sender, int shopId, int ItemId, int StackCount, int itemPrice)
         {
             if (!(API.getEntityData(sender, "AdminLevel") >= 3)) { API.sendChatMessageToPlayer(sender, "~r~HATA: ~w~Bunun için yetkiniz yok."); return; }
             var _Index = db_Shops.FindShopIndexById(shopId);
@@ -2098,11 +2098,11 @@ namespace TecoRP.Admin
                     var _GameItem = db_Items.GetItemById(ItemId);
                     if (_GameItem != null)
                     {
-                        db_Shops.CurrentShopsList.Keys.FirstOrDefault(x => x.ShopId == shopId).SaleItemList.Add(new SaleItem
+                        db_Shops.CurrentShopsList.FirstOrDefault(x => x.ShopId == shopId).SaleItemList.Add(new SaleItem
                         {
                             Count = StackCount,
                             GameItemId = ItemId,
-                            Price = ItemPrice
+                            Price = itemPrice
                         });
                         db_Shops.SaveChanges();
                     }
@@ -2125,6 +2125,21 @@ namespace TecoRP.Admin
             }
         }
 
+        public void AddItemToShop(Client sender, params object[] args /*int shopId, string itemRange, string price*/)
+        {
+            int shopId = Convert.ToInt32(args[0]);
+            string[] range = args[1].ToString().Split('-');
+            int minId = Convert.ToInt32(range[0]);
+            int maxId = Convert.ToInt32(range[1]);
+            int price = Convert.ToInt32(args[2].ToString().Replace("$",string.Empty));
+
+            for (int i = minId; i <= maxId; i++)
+            {
+                AddShopItem(sender, shopId, i, 1, price);
+            }
+
+        }
+
         [Command("removeshopitem", "/removeshopitem ~y~[ShopID] ~s~[ItemId]")]
         public void RemoveShopItem(Client sender, int _shopId, int _itemId)
         {
@@ -2134,11 +2149,11 @@ namespace TecoRP.Admin
             {
                 try
                 {
-                    foreach (var item in db_Shops.CurrentShopsList.Keys.ToList()[_Index].SaleItemList)
+                    foreach (var item in db_Shops.CurrentShopsList[_Index].SaleItemList)
                     {
                         if (item.GameItemId == _itemId)
                         {
-                            db_Shops.CurrentShopsList.Keys.FirstOrDefault(x => x.ShopId == _shopId).SaleItemList.Remove(item);
+                            db_Shops.CurrentShopsList.FirstOrDefault(x => x.ShopId == _shopId).SaleItemList.Remove(item);
                             API.sendNotificationToPlayer(sender, "~y~Başarıyla kaldırıldı.");
                             db_Shops.SaveChanges();
                             return;
@@ -2157,11 +2172,30 @@ namespace TecoRP.Admin
                 API.sendChatMessageToPlayer(sender, "~r~HATA: ~s~Shop bulunamadı.");
             }
         }
+
+        public void RemoveItemFromShop(Client sender, params object[] args)
+        {
+            RemoveShopItem(sender, Convert.ToInt32(args[0]), Convert.ToInt32(args[1]));
+        }
+
+        public void UpdatePriceShopItem(Client sender, params object[] args)
+        {
+            if (!(API.getEntityData(sender, "AdminLevel") >= 3)) { API.sendChatMessageToPlayer(sender, "~r~HATA: ~w~Bunun için yetkiniz yok."); return; }
+            var shopId = Convert.ToInt32(args[0]);
+            var gameItemId = Convert.ToInt32(args[1]);
+            var newPrice = Convert.ToInt32(args[2].ToString().Replace("$", string.Empty));
+
+            var _shop = db_Shops.GetShop(shopId);
+
+            var editedItem = _shop.SaleItemList.FirstOrDefault(x => x.GameItemId == gameItemId);
+            editedItem.Price = newPrice;
+            db_Shops.SaveChanges();
+        }
         [Command("shopid", "/shopid [range]")]
-        public void shopid(Client sender, int range)
+        public void Shopid(Client sender, int range)
         {
             if (!(API.getEntityData(sender, "AdminLevel") >= 1)) { API.sendChatMessageToPlayer(sender, "~r~HATA: ~w~Bunun için yetkiniz yok."); return; }
-            foreach (var item in db_Shops.CurrentShopsList.Keys)
+            foreach (var item in db_Shops.CurrentShopsList)
             {
                 if (Vector3.Distance(sender.position, item.Position) < range)
                 {
@@ -2181,10 +2215,10 @@ namespace TecoRP.Admin
                     var _Index = db_Shops.FindShopIndexById(shopId);
                     if (shopId >= 0)
                     {
-                        db_Shops.CurrentShopsList.Keys.ToList()[_Index].Position = sender.position + new Vector3(0, 0, -1);
-                        db_Shops.CurrentShopsList.Keys.ToList()[_Index].Dimension = sender.dimension;
-                        db_Shops.CurrentShopsList.Values.ToList()[_Index].position = sender.position + new Vector3(0, 0, -1);
-                        db_Shops.CurrentShopsList.Values.ToList()[_Index].dimension = sender.dimension;
+                        db_Shops.CurrentShopsList[_Index].Position = sender.position + new Vector3(0, 0, -1);
+                        db_Shops.CurrentShopsList[_Index].Dimension = sender.dimension;
+                        db_Shops.CurrentShopsList[_Index].MarkerOnMap.position = sender.position + new Vector3(0, 0, -1);
+                        db_Shops.CurrentShopsList[_Index].MarkerOnMap.dimension = sender.dimension;
                         db_Shops.SaveChanges();
                         API.sendNotificationToPlayer(sender, "~y~Shop, pozisyonunuz olarak güncellendi.");
                         return;
@@ -2208,8 +2242,8 @@ namespace TecoRP.Admin
                 {
                     try
                     {
-                        db_Shops.CurrentShopsList.Keys.ToList()[_Index].MarkerColorRGB = new MarkerColor { Red = Convert.ToInt32(value.Split(' ')[0]), Green = Convert.ToInt32(value.Split(' ')[1]), Blue = Convert.ToInt32(value.Split(' ')[2]) };
-                        db_Shops.CurrentShopsList.Values.ToList()[_Index].color = new Color(Convert.ToInt32(value.Split(' ')[0]), Convert.ToInt32(value.Split(' ')[1]), Convert.ToInt32(value.Split(' ')[2]));
+                        db_Shops.CurrentShopsList[_Index].MarkerColorRGB = new MarkerColor { Red = Convert.ToInt32(value.Split(' ')[0]), Green = Convert.ToInt32(value.Split(' ')[1]), Blue = Convert.ToInt32(value.Split(' ')[2]) };
+                        db_Shops.CurrentShopsList[_Index].MarkerOnMap.color = new Color(Convert.ToInt32(value.Split(' ')[0]), Convert.ToInt32(value.Split(' ')[1]), Convert.ToInt32(value.Split(' ')[2]));
                         db_Shops.SaveChanges();
                         return;
 
@@ -2228,8 +2262,8 @@ namespace TecoRP.Admin
                 {
                     try
                     {
-                        db_Shops.CurrentShopsList.Keys.ToList()[_Index].Range = Convert.ToInt32(value);
-                        db_Shops.CurrentShopsList.Values.ToList()[_Index].scale = new Vector3(Convert.ToInt32(value), Convert.ToInt32(value), 1);
+                        db_Shops.CurrentShopsList[_Index].Range = Convert.ToInt32(value);
+                        db_Shops.CurrentShopsList[_Index].MarkerOnMap.scale = new Vector3(Convert.ToInt32(value), Convert.ToInt32(value), 1);
                         db_Shops.SaveChanges();
                     }
                     catch (Exception)

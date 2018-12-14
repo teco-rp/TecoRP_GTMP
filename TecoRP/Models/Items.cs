@@ -8,6 +8,8 @@ using System.Xml.Serialization;
 using GrandTheftMultiplayer.Server.API;
 using GrandTheftMultiplayer.Server.Constant;
 using GrandTheftMultiplayer.Shared.Math;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using TecoRP.Database;
 
 namespace TecoRP.Models
@@ -86,28 +88,65 @@ namespace TecoRP.Models
     }
     public class Item
     {
+        //-------------------------------------------------
         [XmlAttribute("ID")]
+        [JsonProperty("id")]
         public int ID { get; set; }
+        //-------------------------------------------------
         [XmlAttribute("MaxStack")]
+        [JsonProperty("mc")]
         public int MaxCount { get; set; } = 1;
+        //-------------------------------------------------
         [XmlAttribute("Name")]
+        [JsonProperty("name")]
         public string Name { get; set; }
+        //-------------------------------------------------
         [XmlElement("Description")]
+        [JsonProperty("des")]
         public string Description { get; set; }
+        //-------------------------------------------------
         [XmlAttribute("Type")]
+        [JsonProperty("type")]
+        //[JsonConverter(typeof(StringEnumConverter))]
         public ItemType Type { get; set; }
+        //-------------------------------------------------
         [XmlAttribute("ObjectID")]
+        [JsonProperty("oi")]
         public int ObjectId { get; set; } = 0;
+        //-------------------------------------------------
         [XmlAttribute("Droppable")]
+        [JsonProperty("d")]
         public bool Droppable { get; set; } = true;
+        //-------------------------------------------------
         [XmlAttribute("Value_0")]
+        [JsonProperty("v0")]
         public string Value_0 { get; set; }
+        //-------------------------------------------------
         [XmlAttribute("Value_1")]
+        [JsonProperty("v1")]
         public string Value_1 { get; set; }
+        //-------------------------------------------------
         [XmlAttribute("Value_2")]
+        [JsonProperty("v2")]
         public string Value_2 { get; set; }
+        //-------------------------------------------------
         [XmlAttribute("Value_3")]
+        [JsonProperty("v3")]
         public string Value_3 { get; set; }
+
+        public SimplyGameItem AsSimply()
+        {
+            return new SimplyGameItem
+            {
+                ID = ID,
+                Description = Description,
+                Name = Name,
+                Type = Type,
+                Value_0 = Value_0,
+                Value_1 = Value_1,
+                Value_2 = Value_2
+            };
+        }
     }
 
     [XmlRoot("AllItems")]
@@ -116,6 +155,33 @@ namespace TecoRP.Models
         [XmlElement("Item")]
         public List<Item> Items { get; set; }
         public ItemList() { Items = new List<Item>(); }
+    }
+
+    public class SimplyGameItem
+    {
+        //-------------------------------------------------
+        [XmlAttribute("ID")]
+        [JsonProperty("id")]
+        public int ID { get; set; }
+        //-------------------------------------------------
+        [XmlAttribute("Name")]
+        [JsonProperty("name")]
+        public string Name { get; set; }
+        //-------------------------------------------------
+        [XmlElement("Description")]
+        [JsonProperty("des")]
+        public string Description { get; set; }
+        [JsonProperty("type")]
+        public ItemType Type { get; set; }
+        //-------------------------------------------------
+        [JsonProperty("v0")]
+        public string Value_0 { get; set; }
+        //-------------------------------------------------
+        [JsonProperty("v1")]
+        public string Value_1 { get; set; }
+        //-------------------------------------------------
+        [JsonProperty("v2")]
+        public string Value_2 { get; set; }
     }
     #endregion
 

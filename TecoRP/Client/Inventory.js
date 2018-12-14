@@ -82,13 +82,13 @@ API.onKeyDown.connect(function (Player, args) {
     //    inventory_menu.Clear();
     //}
     if (args.KeyCode == Keys.B && inventory_menu.Visible == true) {
-        API.triggerServerEvent("request_sell_item", inventory_menu.CurrentSelection)
+        API.triggerServerEvent("request_sell_item", inventory_menu.CurrentSelection);
         inventory_menu.Visible = false;
         API.showCursor(false);
         inventory_menu.Clear();
     }
     if (args.KeyCode == Keys.X && inventory_menu.Visible == true) {
-        API.triggerServerEvent("key_X", inventory_menu.CurrentSelection.toString())
+        API.triggerServerEvent("key_X", inventory_menu.CurrentSelection.toString());
         inventory_menu.Visible = false;
         API.showCursor(false);
         inventory_menu.Clear();

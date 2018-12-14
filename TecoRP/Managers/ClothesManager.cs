@@ -52,5 +52,10 @@ namespace TecoRP.Managers
         {
             API.triggerClientEvent(sender, "ChooseCharacterApperance", sender.getData("Gender") == true ? "male" : "female");
         }
+
+        public void LoadClothes(Client sender)
+        {
+            InventoryManager.LoadPlayerEquippedItems(sender);
+        }
     }
 }

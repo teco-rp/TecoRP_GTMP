@@ -27,17 +27,24 @@ namespace TecoRP.Database
 
         public static void InitGameItems()
         {
-                API.shared.consoleOutput("GameItems yüklenmeye başladı.");
-          
-                GameItems.Clear();
-                foreach (var item in GetAll().Items)
+            API.shared.consoleOutput("GameItems yüklenmeye başladı.");
+
+            GameItems.Clear();
+            foreach (var item in GetAll().Items)
+            {
+                try
                 {
                     GameItems.Add(item.ID, item);
                 }
-                API.shared.consoleOutput(GameItems.Count + " item başarıyla yüklendi.");
+                catch (ArgumentException ex)
+                {
+                    API.shared.consoleOutput(LogCat.Error,"ID already exist: "+item.ID);
+                }
+            }
+            API.shared.consoleOutput(GameItems.Count + " item başarıyla yüklendi.");
 
         }
-        
+
         public static ItemList GetAll()
         {
             var returnModel = new ItemList();
@@ -62,7 +69,7 @@ namespace TecoRP.Database
         private static void CreateItem(Item _item)
         {
             _item.ID = GameItems.Count > 0 ? GameItems.LastOrDefault().Key + 1 : 1;
-            GameItems.Add(_item.ID,_item);
+            GameItems.Add(_item.ID, _item);
             SaveChanges();
         }
 
@@ -106,9 +113,9 @@ namespace TecoRP.Database
                     //var gameItem = GameItems.FirstOrDefault(x => x.ID == itemDropped.Item.ItemId);
                     var gameItem = GameItems[itemDropped.Item.ItemId];
                     Vector3 rotationVector = new Vector3(gameItem.Type == ItemType.Weapon ? 90 : 0, 0, 0);
-                    itemDropped.LabelInGame = API.shared.createTextLabel(gameItem.Name, itemDropped.SavedPosition , 10, 0.5f,true, itemDropped.SavedDim);
+                    itemDropped.LabelInGame = API.shared.createTextLabel(gameItem.Name, itemDropped.SavedPosition, 10, 0.5f, true, itemDropped.SavedDim);
                     itemDropped.ObjectInGame = API.shared.createObject(gameItem.ObjectId, itemDropped.SavedPosition, rotationVector, itemDropped.SavedDim);
-                   // API.shared.attachEntityToEntity(currentDroppedItems.Items.LastOrDefault().LabelInGame, currentDroppedItems.Items.LastOrDefault().ObjectInGame, null, new Vector3(), new Vector3());
+                    // API.shared.attachEntityToEntity(currentDroppedItems.Items.LastOrDefault().LabelInGame, currentDroppedItems.Items.LastOrDefault().ObjectInGame, null, new Vector3(), new Vector3());
 
                 }
                 catch (Exception ex)
@@ -120,7 +127,7 @@ namespace TecoRP.Database
                     API.shared.consoleOutput(LogCat.Warn, ex.ToString());
                 }
             }
-            API.shared.consoleOutput(currentDroppedItems.Items.Count+" adet yerdeki eşya yüklendi.");
+            API.shared.consoleOutput(currentDroppedItems.Items.Count + " adet yerdeki eşya yüklendi.");
 
         }
         public static DroppedItemList GetAllDropped()
@@ -139,7 +146,7 @@ namespace TecoRP.Database
             }
             return currentDroppedItems;
         }
-        public static bool DropItem(ClientItem _ClientItem, Client droppedPlayer,bool saveFingerPrint = true)
+        public static bool DropItem(ClientItem _ClientItem, Client droppedPlayer, bool saveFingerPrint = true)
         {
             //var gameItem = db_Items.GameItems.Items.FirstOrDefault(x => x.ID == _ClientItem.ItemId);
             var gameItem = db_Items.GameItems[_ClientItem.ItemId];
@@ -151,7 +158,7 @@ namespace TecoRP.Database
                     {
                         try
                         {
-                            Vector3 rotationVector = new Vector3(gameItem.Type == ItemType.Weapon ? 90 : 0,0,0);
+                            Vector3 rotationVector = new Vector3(gameItem.Type == ItemType.Weapon ? 90 : 0, 0, 0);
                             currentDroppedItems.Items.Add(new DroppedItem
                             {
                                 DroppedItemId = currentDroppedItems.Items.Count > 0 ? currentDroppedItems.Items.LastOrDefault().DroppedItemId + 1 : 1,
@@ -162,12 +169,12 @@ namespace TecoRP.Database
                                 SavedPosition = droppedPlayer.position + new Vector3(0, 0, -0.75),
                                 SavedDim = droppedPlayer.dimension,
                                 DroppedPlayerSocialClubName = saveFingerPrint ? droppedPlayer.socialClubName : "",
-                                });
-                                //API.shared.attachEntityToEntity(currentDroppedItems.Items.LastOrDefault().LabelInGame, currentDroppedItems.Items.LastOrDefault().ObjectInGame, null, new Vector3(), new Vector3());
-                                SaveChanges(true);
+                            });
+                            //API.shared.attachEntityToEntity(currentDroppedItems.Items.LastOrDefault().LabelInGame, currentDroppedItems.Items.LastOrDefault().ObjectInGame, null, new Vector3(), new Vector3());
+                            SaveChanges(true);
 
-                                return true;
-                         
+                            return true;
+
                         }
                         catch (Exception ex)
                         {
@@ -187,8 +194,8 @@ namespace TecoRP.Database
             try
             {
                 API.shared.deleteEntity(_droppedItem.LabelInGame);
-                if(_droppedItem.ObjectInGame !=null)
-                API.shared.deleteEntity(_droppedItem.ObjectInGame);
+                if (_droppedItem.ObjectInGame != null)
+                    API.shared.deleteEntity(_droppedItem.ObjectInGame);
                 currentDroppedItems.Items.Remove(_droppedItem);
                 return true;
             }
@@ -211,7 +218,7 @@ namespace TecoRP.Database
                     xWriter.Dispose();
                 }
                 else
-                    Directory.CreateDirectory(dataPath.Split('/')[0]); 
+                    Directory.CreateDirectory(dataPath.Split('/')[0]);
             }
         }
 
@@ -229,7 +236,7 @@ namespace TecoRP.Database
                     xWriter.Dispose();
                 }
                 else
-                    Directory.CreateDirectory(dataPath.Split('/')[0]); 
+                    Directory.CreateDirectory(dataPath.Split('/')[0]);
             }
         }
 

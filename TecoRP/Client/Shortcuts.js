@@ -23,7 +23,7 @@ API.onKeyDown.connect(function (Player, args) {
         API.triggerServerEvent("key_I");
     }
     if (args.KeyCode == Keys.E && !API.isChatOpen() && !isInVehicle && !API.isCursorShown()) {
-        API.triggerServerEvent("key_E");
+        API.triggerServerEvent("Key_E");
     }
     //if (args.KeyCode == Keys.E && !API.isChatOpen() && !isInVehicle && !API.isCursorShown()) {
     //    API.triggerServerEvent("key_B");

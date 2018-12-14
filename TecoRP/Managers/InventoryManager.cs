@@ -59,13 +59,6 @@ namespace TecoRP.Managers
                 OnInventory(sender);
                 return;
             }
-            if (eventName == "key_E")
-            {
-                Users.UserCommands uCommands = new Users.UserCommands();
-                uCommands.BuyFromShop(sender);
-                uCommands = null;
-                return;
-            }
             if (eventName == "key_B")
             {
                 //INCOMING ARGUMENTS [ItemIndex]

@@ -6,73 +6,56 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using TecoRP.Models;
 
-namespace TecoRP.Models
+namespace TecoRP_Debugger.Models
 {
     public class Shop
     {
         //-----------------------------------------------------
-        [XmlIgnore]
-        public GrandTheftMultiplayer.Server.Elements.Marker MarkerOnMap { get; set; }
-        //-----------------------------------------------------
-        [XmlAttribute("ID")]
+        [JsonProperty(PropertyName = "ID")]
         public int ShopId { get; set; }
         //-----------------------------------------------------
-        [XmlAttribute(nameof(Type))]
+        [JsonProperty(PropertyName = "t")]
         public ShopType Type { get; set; }
         //-----------------------------------------------------
-        [XmlElement("BusinessId")]
-        public Nullable<int> BusinessId { get; set; }
+        [JsonProperty(PropertyName = "bid")]
+        public int? BusinessId { get; set; }
         //-----------------------------------------------------
-        [XmlElement("Position")]
+        [JsonProperty(PropertyName = "pos")]
         public Vector3 Position { get; set; }
         //-----------------------------------------------------
-        [XmlElement("Rotation")]
+        [JsonProperty(PropertyName = "rot")]
         public Vector3 Rotation { get; set; }
         //-----------------------------------------------------
-        [XmlAttribute("Dimension")]
+        [JsonProperty(PropertyName = "d")]
         public int Dimension { get; set; }
         //-----------------------------------------------------
-        [XmlElement("Scale")]
+        [JsonProperty(PropertyName = "s")]
         public Vector3 Scale { get; set; }
         //-----------------------------------------------------
-        [XmlAttribute("Range")]
+        [JsonProperty(PropertyName = "r")]
         public int Range { get; set; } = 5;
         //-----------------------------------------------------
-        [XmlElement("Type")]
+        [JsonProperty(PropertyName = "mt")]
         public int MarkerType { get; set; } = 1;
         //-----------------------------------------------------
-        [XmlElement("Color")]
-        public MarkerColor MarkerColorRGB { get; set; }        
+        [JsonProperty(PropertyName = "c")]
+        public MarkerColor MarkerColorRGB { get; set; }
         //-----------------------------------------------------
-        [XmlElement("SaleItem")]
+        [JsonProperty(PropertyName = "items")]
         public List<SaleItem> SaleItemList { get; set; }
 
     }
     public class SaleItem
     {
-        //-------------------------------------------------
-        [XmlAttribute("GameItemID")]
-        [JsonProperty("id")]
+        [JsonProperty(PropertyName = "gid")]
         public int GameItemId { get; set; }
-        //-------------------------------------------------
-        [XmlAttribute("Price")]
-        [JsonProperty("p")]
+        [JsonProperty(PropertyName = "p")]
         public int Price { get; set; } = 10;
-        //-------------------------------------------------
-        [XmlAttribute("Count")]
-        [JsonProperty("c")]
+        [JsonProperty(PropertyName = "c")]
         public int Count { get; set; } = 1;
     }
-
-    [XmlRoot("Shop_List")]
-    public class ShopList
-    {
-        [XmlElement("Shop")]
-        public List<Shop> Items { get; set; }
-        public ShopList(){ Items = new List<Shop>(); }
-    }
-
     public enum ShopType
     {
         Regular,

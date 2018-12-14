@@ -843,7 +843,7 @@ namespace TecoRP.Managers
 
                 case "En Yakın Alışveriş":
                     _Index = 0; _nearestIndex = 0; lastDistance = int.MaxValue;
-                    foreach (var item in db_Shops.CurrentShopsList.Keys)
+                    foreach (var item in db_Shops.CurrentShopsList)
                     {
                         if (lastDistance > Vector3.Distance(sender.position, item.Position))
                         {
@@ -852,7 +852,7 @@ namespace TecoRP.Managers
                         lastDistance = Convert.ToInt32(Vector3.Distance(sender.position, item.Position));
                         _Index++;
                     }
-                    API.triggerClientEvent(sender, "update_waypoint", db_Shops.CurrentShopsList.Keys.ToList()[_nearestIndex].Position.X, db_Shops.CurrentShopsList.Keys.ToList()[_nearestIndex].Position.Y);
+                    API.triggerClientEvent(sender, "update_waypoint", db_Shops.CurrentShopsList[_nearestIndex].Position.X, db_Shops.CurrentShopsList[_nearestIndex].Position.Y);
                     break;
 
                 case "En Yakın Araç Satıcısı":
