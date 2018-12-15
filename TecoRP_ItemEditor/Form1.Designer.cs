@@ -37,6 +37,7 @@
             this.ekleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.valueTypesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tamListeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.çokluEklemeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.btnRefresh = new System.Windows.Forms.Button();
             this.lblDescription = new System.Windows.Forms.Label();
             this.lblType = new System.Windows.Forms.Label();
@@ -104,7 +105,7 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.lstCraftingMachines = new System.Windows.Forms.ListBox();
-            this.çokluEklemeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnAdd = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nmrValue1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nmrValue2)).BeginInit();
@@ -175,23 +176,30 @@
             // ekleToolStripMenuItem
             // 
             this.ekleToolStripMenuItem.Name = "ekleToolStripMenuItem";
-            this.ekleToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.ekleToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.ekleToolStripMenuItem.Text = "Ekle";
             this.ekleToolStripMenuItem.Click += new System.EventHandler(this.ekleToolStripMenuItem_Click);
             // 
             // valueTypesToolStripMenuItem
             // 
             this.valueTypesToolStripMenuItem.Name = "valueTypesToolStripMenuItem";
-            this.valueTypesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.valueTypesToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.valueTypesToolStripMenuItem.Text = "ValueTypes";
             this.valueTypesToolStripMenuItem.Click += new System.EventHandler(this.valueTypesToolStripMenuItem_Click);
             // 
             // tamListeToolStripMenuItem
             // 
             this.tamListeToolStripMenuItem.Name = "tamListeToolStripMenuItem";
-            this.tamListeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.tamListeToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.tamListeToolStripMenuItem.Text = "Tam Liste";
             this.tamListeToolStripMenuItem.Click += new System.EventHandler(this.tamListeToolStripMenuItem_Click);
+            // 
+            // çokluEklemeToolStripMenuItem
+            // 
+            this.çokluEklemeToolStripMenuItem.Name = "çokluEklemeToolStripMenuItem";
+            this.çokluEklemeToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.çokluEklemeToolStripMenuItem.Text = "Çoklu ekleme";
+            this.çokluEklemeToolStripMenuItem.Click += new System.EventHandler(this.çokluEklemeToolStripMenuItem_Click);
             // 
             // btnRefresh
             // 
@@ -353,7 +361,7 @@
             // btnSave
             // 
             this.btnSave.Enabled = false;
-            this.btnSave.Location = new System.Drawing.Point(326, 317);
+            this.btnSave.Location = new System.Drawing.Point(279, 317);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 8;
@@ -435,7 +443,8 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(421, 317);
+            this.button1.Enabled = false;
+            this.button1.Location = new System.Drawing.Point(698, 307);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 10;
@@ -458,6 +467,7 @@
             // 
             // tpItems
             // 
+            this.tpItems.Controls.Add(this.btnAdd);
             this.tpItems.Controls.Add(this.chkDroppable);
             this.tpItems.Controls.Add(this.lstItems);
             this.tpItems.Controls.Add(this.button1);
@@ -923,12 +933,15 @@
             this.lstCraftingMachines.TabIndex = 0;
             this.lstCraftingMachines.DoubleClick += new System.EventHandler(this.lstCraftingMachines_DoubleClick);
             // 
-            // çokluEklemeToolStripMenuItem
+            // btnAdd
             // 
-            this.çokluEklemeToolStripMenuItem.Name = "çokluEklemeToolStripMenuItem";
-            this.çokluEklemeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.çokluEklemeToolStripMenuItem.Text = "Çoklu ekleme";
-            this.çokluEklemeToolStripMenuItem.Click += new System.EventHandler(this.çokluEklemeToolStripMenuItem_Click);
+            this.btnAdd.Location = new System.Drawing.Point(377, 317);
+            this.btnAdd.Name = "btnAdd";
+            this.btnAdd.Size = new System.Drawing.Size(75, 23);
+            this.btnAdd.TabIndex = 11;
+            this.btnAdd.Text = "YENİ EKLE";
+            this.btnAdd.UseVisualStyleBackColor = true;
+            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
             // Form1
             // 
@@ -1053,6 +1066,7 @@
         private System.Windows.Forms.NumericUpDown nmrValue3;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.ToolStripMenuItem çokluEklemeToolStripMenuItem;
+        private System.Windows.Forms.Button btnAdd;
     }
 }
 

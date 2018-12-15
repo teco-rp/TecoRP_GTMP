@@ -33,48 +33,7 @@ namespace TecoRP.Users
             AllowPlayerControl = 1 << 5,
             Cancellable = 1 << 7
         }
-        #region anims
-        public Dictionary<string, string> AnimationList = new Dictionary<string, string>
-    {
-        {"finger", "mp_player_intfinger mp_player_int_finger"},
-        {"guitar", "anim@mp_player_intcelebrationmale@air_guitar air_guitar"},
-        {"shagging", "anim@mp_player_intcelebrationmale@air_shagging air_shagging"},
-        {"synth", "anim@mp_player_intcelebrationmale@air_synth air_synth"},
-        {"kiss", "anim@mp_player_intcelebrationmale@blow_kiss blow_kiss"},
-        {"bro", "anim@mp_player_intcelebrationmale@bro_love bro_love"},
-        {"chicken", "anim@mp_player_intcelebrationmale@chicken_taunt chicken_taunt"},
-        {"chin", "anim@mp_player_intcelebrationmale@chin_brush chin_brush"},
-        {"dj", "anim@mp_player_intcelebrationmale@dj dj"},
-        {"dock", "anim@mp_player_intcelebrationmale@dock dock"},
-        {"facepalm", "anim@mp_player_intcelebrationmale@face_palm face_palm"},
-        {"fingerkiss", "anim@mp_player_intcelebrationmale@finger_kiss finger_kiss"},
-        {"freakout", "anim@mp_player_intcelebrationmale@freakout freakout"},
-        {"jazzhands", "anim@mp_player_intcelebrationmale@jazz_hands jazz_hands"},
-        {"knuckle", "anim@mp_player_intcelebrationmale@knuckle_crunch knuckle_crunch"},
-        {"nose", "anim@mp_player_intcelebrationmale@nose_pick nose_pick"},
-        {"no", "anim@mp_player_intcelebrationmale@no_way no_way"},
-        {"peace", "anim@mp_player_intcelebrationmale@peace peace"},
-        {"photo", "anim@mp_player_intcelebrationmale@photography photography"},
-        {"rock", "anim@mp_player_intcelebrationmale@rock rock"},
-        {"salute", "anim@mp_player_intcelebrationmale@salute salute"},
-        {"shush", "anim@mp_player_intcelebrationmale@shush shush"},
-        {"slowclap", "anim@mp_player_intcelebrationmale@slow_clap slow_clap"},
-        {"surrender", "anim@mp_player_intcelebrationmale@surrender surrender"},
-        {"thumbs", "anim@mp_player_intcelebrationmale@thumbs_up thumbs_up"},
-        {"taunt", "anim@mp_player_intcelebrationmale@thumb_on_ears thumb_on_ears"},
-        {"vsign", "anim@mp_player_intcelebrationmale@v_sign v_sign"},
-        {"wank", "anim@mp_player_intcelebrationmale@wank wank"},
-        {"wave", "anim@mp_player_intcelebrationmale@wave wave"},
-        {"loco", "anim@mp_player_intcelebrationmale@you_loco you_loco"},
-        {"handsup", "missminuteman_1ig_2 handsup_base"},
-        {"cuffed","get_up@cuffed back_to_default"},
-        {"cuffed2","mp_prison_break handcuffed" },
-        {"cuffed3","random@arrests@busted enter" },
-        {"carry","anim@heists@box_carry@ run" },
-        {"repair","mini@repair fixing_a_car" },
-    };
-
-        #endregion
+    
         public UserCommands()
         {
             API.onClientEventTrigger += API_onClientEventTrigger;
@@ -269,65 +228,6 @@ namespace TecoRP.Users
             API.triggerClientEvent(sender, "update_money_display", money);
         }
 
-        [Command("anim", "~y~USAGE: ~w~/anim [animasyon]\n" +
-                    "~y~USAGE: ~w~/anim list - Animasyonların listesi.\n" +
-                    "~y~USAGE: ~w~/anim stop - Animsyonu durdurmak için.")]
-        public void SetPlayerAnim(Client sender, string animation)
-        {
-            if (!Animation.IsPlayerAvailableForAnim(sender))
-                return;
-            if (animation == "list")
-            {
-                string helpText = AnimationList.Aggregate(new StringBuilder(),
-                                (sb, kvp) => sb.Append(kvp.Key + " "), sb => sb.ToString());
-                API.sendChatMessageToPlayer(sender, "~b~Available animations:");
-                var split = helpText.Split();
-                for (int i = 0; i < split.Length; i += 5)
-                {
-                    string output = "";
-                    if (split.Length > i)
-                        output += split[i] + " ";
-                    if (split.Length > i + 1)
-                        output += split[i + 1] + " ";
-                    if (split.Length > i + 2)
-                        output += split[i + 2] + " ";
-                    if (split.Length > i + 3)
-                        output += split[i + 3] + " ";
-                    if (split.Length > i + 4)
-                        output += split[i + 4] + " ";
-                    if (!string.IsNullOrWhiteSpace(output))
-                        API.sendChatMessageToPlayer(sender, "~b~>> ~w~" + output);
-
-
-                }
-            }
-            else if (animation == "stop")
-            {
-                if (API.hasEntityData(sender, "Cuffed") || API.hasEntityData(sender, "Cuffed") == true)
-                {
-                    API.sendChatMessageToPlayer(sender, "~r~HATA: ~s~Kelepçeliyken bunu yapamazsınız.");
-                    return;
-                }
-                if (API.getEntityData(sender, "DeadSeconds") > 0)
-                {
-                    API.sendChatMessageToPlayer(sender, "~r~HATA: ~s~Yaralıyken bunu yapamazsınız.");
-                    return;
-                }
-                API.stopPlayerAnimation(sender);
-                API.resetEntityData(sender, "Handsup");
-            }
-            else if (!AnimationList.ContainsKey(animation))
-            {
-                API.sendChatMessageToPlayer(sender, "~r~HATA: ~w~Animasyon bulunamadı!");
-            }
-            else
-            {
-                var flag = 0;
-                if (animation == "handsup") flag = 1;
-                API.setEntityData(sender, "Handsup", true);
-                API.playPlayerAnimation(sender, flag, AnimationList[animation].Split()[0], AnimationList[animation].Split()[1]);
-            }
-        }
 
         [Command("teslimol", Alias = "handsup")]
         public void Handsup(Client sender)

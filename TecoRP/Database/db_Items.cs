@@ -214,7 +214,7 @@ namespace TecoRP.Database
                 {
                     XmlTextWriter xWriter = new XmlTextWriter(dataPath, UTF8Encoding.UTF8);
                     xWriter.Formatting = Formatting.Indented;
-                    xSer.Serialize(xWriter, GameItems);
+                    xSer.Serialize(xWriter, new ItemList { Items = GameItems.Select(s=>s.Value).ToList() });
                     xWriter.Dispose();
                 }
                 else

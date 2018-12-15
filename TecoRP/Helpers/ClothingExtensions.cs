@@ -25,7 +25,9 @@ namespace TecoRP.Helpers
 
         public static bool CanWear(this Client player, Item item)
         {
-            return Convert.ToInt32(item.Value_0) == Convert.ToInt32(player.getData("Gender"));
+            if (item.Type == ItemType.Legs || item.Type == ItemType.Feet || item.Type == ItemType.Undershirt || item.Type == ItemType.Tops)
+                return Convert.ToInt32(item.Value_0) == Convert.ToInt32(player.getData("Gender"));
+            return true;
         }
 
         public static Client ApplyApperance(this Client player, ClothingData data)
@@ -42,7 +44,7 @@ namespace TecoRP.Helpers
         }
         public static Client UnwearMask(this Client player, Item item)
         {
-            player.setClothes(1, -1,0);
+            player.setClothes(1, -1, 0);
             return player;
         }
 
@@ -65,7 +67,7 @@ namespace TecoRP.Helpers
             else
             {
                 player.setClothes(3, 15, 0);
-                player.setClothes(8, 0 , 17);
+                player.setClothes(8, 0, 17);
                 player.setClothes(11, 15, 0);
             }
             return player;
@@ -73,7 +75,7 @@ namespace TecoRP.Helpers
 
         public static Client WearUndershirt(this Client player, Item item)
         {
-            if(player.getClothesDrawable(11) < 0)
+            if (player.getClothesDrawable(11) < 0)
             {
                 throw new SoftException("Bunu yalnızca başka bir kıyafetin altına giyebilirsiniz.");
             }

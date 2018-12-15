@@ -2172,12 +2172,10 @@ namespace TecoRP.Admin
                 API.sendChatMessageToPlayer(sender, "~r~HATA: ~s~Shop bulunamadı.");
             }
         }
-
         public void RemoveItemFromShop(Client sender, params object[] args)
         {
             RemoveShopItem(sender, Convert.ToInt32(args[0]), Convert.ToInt32(args[1]));
         }
-
         public void UpdatePriceShopItem(Client sender, params object[] args)
         {
             if (!(API.getEntityData(sender, "AdminLevel") >= 3)) { API.sendChatMessageToPlayer(sender, "~r~HATA: ~w~Bunun için yetkiniz yok."); return; }
@@ -2190,6 +2188,20 @@ namespace TecoRP.Admin
             var editedItem = _shop.SaleItemList.FirstOrDefault(x => x.GameItemId == gameItemId);
             editedItem.Price = newPrice;
             db_Shops.SaveChanges();
+        }
+
+        [Command("renameGameItem","/renameGameItem [GameItemID] [NewName]")]
+        public void RenameGameItem(Client sender, params object[] args)
+        {
+            if (!(API.getEntityData(sender, "AdminLevel") >= 3)) { API.sendChatMessageToPlayer(sender, "~r~HATA: ~w~Bunun için yetkiniz yok."); return; }
+
+            var editedItem = db_Items.GetItemById(Convert.ToInt32(args[0]));
+
+            editedItem.Name = args[1].ToString();
+
+            db_Items.SaveChanges();
+
+            API.shared.sendChatMessageToPlayer(sender, $"~o~[GameItems] ~w~ID: {args[0]}, eşyanın adı {args[1]} olarak güncellendi.");
         }
         [Command("shopid", "/shopid [range]")]
         public void Shopid(Client sender, int range)
@@ -3128,16 +3140,15 @@ namespace TecoRP.Admin
             Models.ItemType _type;
             if (Enum.TryParse<ItemType>(commandParam, out _type))
             {
-                foreach (var itemDropped in db_Items.currentDroppedItems.Items)
+                for (int i = db_Items.currentDroppedItems.Items.Count - 1; i >= 0; i--)
                 {
-                    if (db_Items.GetItemById(itemDropped.Item.ItemId).Type == _type)
+                    if (db_Items.GetItemById(db_Items.currentDroppedItems.Items[i].Item.ItemId).Type == _type)
                     {
                         try
                         {
-                            API.deleteEntity(itemDropped.ObjectInGame);
-                            API.deleteEntity(itemDropped.LabelInGame);
-                            db_Items.currentDroppedItems.Items.Remove(itemDropped);
-
+                            API.deleteEntity(db_Items.currentDroppedItems.Items[i].ObjectInGame);
+                            API.deleteEntity(db_Items.currentDroppedItems.Items[i].LabelInGame);
+                            db_Items.currentDroppedItems.Items.Remove(db_Items.currentDroppedItems.Items[i]);
                         }
                         catch (Exception ex)
                         {
@@ -3152,12 +3163,11 @@ namespace TecoRP.Admin
                 {
                     try
                     {
-                        foreach (var item in db_Items.currentDroppedItems.Items)
+                        for (int i = db_Items.currentDroppedItems.Items.Count - 1; i >= 0; i--)
                         {
-                            if (Vector3.Distance(sender.position, item.Position) <= Convert.ToInt32(commandParam.Split(' ')[1]))
+                            if (Vector3.Distance(sender.position, db_Items.currentDroppedItems.Items[i].Position) <= Convert.ToInt32(commandParam.Split(' ')[1]))
                             {
-                                db_Items.RemoveDroppedItem(item);
-
+                                db_Items.RemoveDroppedItem(db_Items.currentDroppedItems.Items[i]);
                             }
                         }
                     }
@@ -3173,13 +3183,13 @@ namespace TecoRP.Admin
                 }
                 else
                 {
-                    foreach (var item in db_Items.currentDroppedItems.Items)
+                    for (int i = db_Items.currentDroppedItems.Items.Count - 1; i >= 0; i--)
                     {
                         try
                         {
-                            API.deleteEntity(item.ObjectInGame);
-                            API.deleteEntity(item.LabelInGame);
-                            db_Items.currentDroppedItems.Items.Remove(item);
+                            API.deleteEntity(db_Items.currentDroppedItems.Items[i].ObjectInGame);
+                            API.deleteEntity(db_Items.currentDroppedItems.Items[i].LabelInGame);
+                            db_Items.currentDroppedItems.Items.Remove(db_Items.currentDroppedItems.Items[i]);
                         }
                         catch (Exception ex)
                         {
@@ -3191,8 +3201,6 @@ namespace TecoRP.Admin
                         }
                     }
                 }
-
-
             }
         }
 

@@ -174,6 +174,7 @@ namespace TecoRP_ItemEditor
 
         private void kaydetToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            db_Items.currentItems.Items = db_Items.currentItems.Items.OrderBy(o => o.ID).ToList();
             db_Items.SaveChanges();
         }
 
@@ -389,6 +390,32 @@ namespace TecoRP_ItemEditor
         private void çokluEklemeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             new BulkInsertForm().Show();
+        }
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var _Type = (ItemType) Enum.Parse(typeof(ItemType),cmbType.SelectedItem.ToString());
+                Database.db_Items.CreateItem(new Item
+                {
+                    ID = (int)nmrID.Value,
+                    Name = txtName.Text,
+                    Description = txtDescription.Text,
+                    MaxCount = Convert.ToInt32(nmrMaxCount.Value),
+                    ObjectId = String.IsNullOrEmpty(txtObjectId.Text) ? 0 : Convert.ToInt32(txtObjectId.Text),
+                    Type = _Type,
+                    Value_0 = txtValue0.Text,
+                    Value_1 = Convert.ToInt32(nmrValue1.Value).ToString(),
+                    Value_2 = Convert.ToInt32(nmrValue2.Value).ToString(),
+                    Value_3 = Convert.ToInt32(nmrValue2.Value).ToString(),
+                    Droppable = chkDroppable.Checked,
+                });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
         }
     }
 }

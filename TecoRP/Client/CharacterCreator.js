@@ -79,7 +79,7 @@ API.onServerEventTrigger.connect(function (eventName, args) {
             API.setPlayerClothes(player, 2, currentHair, currentHairColor);
         });
 
-        var completeAction = API.createMenuItem("KAYDET", "");
+        var completeAction = API.createColoredItem("KAYDET", "", "#4A148C","#ECEFF1");
         completeAction.Activated.connect(function (sender, item) {
             API.triggerServerEvent("SaveCharacterApperance", currentHead, currentEyes, currentHair, currentHairColor);
             menu.Visible = false;
@@ -87,6 +87,7 @@ API.onServerEventTrigger.connect(function (eventName, args) {
             hasSentToServer = true;
         });
 
+        API.setMenuBannerRectangle(menu, 255, 74, 20, 140);
         menu.AddItem(headOptionsItem);
         menu.AddItem(eyesOptionsItem);
         menu.AddItem(hairsOptions);

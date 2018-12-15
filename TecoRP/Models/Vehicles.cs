@@ -13,6 +13,7 @@ namespace TecoRP.Models
     public class Vehicle
     {
         private StorageList _baggageItems = new StorageList();
+        private StorageList _torpedoItems;
 
         [JsonIgnore]
         public GrandTheftMultiplayer.Server.Elements.Vehicle VehicleOnMap { get; set; }
@@ -89,7 +90,7 @@ namespace TecoRP.Models
         public int MaxBaggageCount { get; set; } = 10;
         //-------------------------------------------------------------------
         [JsonProperty(PropertyName = "t")]
-        public StorageList TorpedoItems { get; set; }
+        public StorageList TorpedoItems { get => _torpedoItems ?? new StorageList(); set => _torpedoItems = value; }
         //-------------------------------------------------------------------
         [JsonProperty(PropertyName = "mt")]
         public int MaxTorpedoCount { get; set; } = 5;
