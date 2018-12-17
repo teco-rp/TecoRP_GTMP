@@ -12,6 +12,7 @@ using TecoRP.Users;
 using System.Threading.Tasks;
 using GrandTheftMultiplayer.Shared;
 using TecoRP.Helpers;
+using Newtonsoft.Json;
 
 namespace TecoRP.Managers
 {
@@ -67,35 +68,6 @@ namespace TecoRP.Managers
                 GivePlayerList(sender, 5, choosenItem.ID, choosenItem.Name);
                 return;
             }
-            if (eventName == "key_X")
-            {
-                if (API.getEntityData(sender, "Dead") == true) return;
-                var _inventory = (API.getEntityData(sender, "inventory") as Inventory);
-                var _clientItem = _inventory.ItemList[Convert.ToInt32(arguments[0])];
-                var gameItem = db_Items.GetItemById(_clientItem.ItemId);
-                //var choosenItem = db_Items.GameItems.Items.FirstOrDefault(x => x.ID == _clientItem.ItemId);
-                if (gameItem.Droppable)
-                {
-                    if (db_Items.DropItem(_clientItem, sender))
-                    {
-                        //if (_inventory.ItemList.Remove(_clientItem))
-                        if (RemoveItemFromPlayerInventory(sender, gameItem.ID))
-                        {
-                            API.playPlayerAnimation(sender, 0, "mp_weapon_drop", "drop_lh");
-
-                        }
-                        return;
-                    }
-                    else
-                    {
-                        API.sendChatMessageToPlayer(sender, "~r~HATA: ~s~Eşya yere atılamıyor.");
-                        return;
-                    }
-                }
-                else
-                    API.sendChatMessageToPlayer(sender, "~r~HATA: ~s~Bu eşya yere atılamaz.");
-                return;
-            }
 
             if (eventName == "key_N")
             {
@@ -134,11 +106,6 @@ namespace TecoRP.Managers
                 }
                 #endregion
                 API.sendChatMessageToPlayer(sender, "~r~UYARI: ~s~Etrafınızda toplayabileceğiniz bir nesne yok.");
-                return;
-            }
-            if (eventName == "iventory_item_selected")
-            {
-
                 return;
             }
 
@@ -221,7 +188,7 @@ namespace TecoRP.Managers
             }
         }
 
-        public void iventory_item_selected(Client sender, params object[] arguments)
+        public void InventoryItemSelected(Client sender, params object[] arguments)
         {
             #region Inventoy Item Selected
             RPGManager rpgMgr = new RPGManager();
@@ -229,7 +196,7 @@ namespace TecoRP.Managers
             Inventory _inventory = API.getEntityData(sender, "inventory");
             float _thirsty = (float)API.getEntityData(sender, "Thirsty");
             float _hunger = (float)API.getEntityData(sender, "Hunger");
-            var itemTuple = GetItemFromPlayerInventory(sender, Convert.ToInt32(arguments[0]));
+            var itemTuple = GetItemFromPlayerInventoryById(sender, Convert.ToInt32(arguments[0]));
             var usedItemInInventory = itemTuple.Item2;
             var usedItem = itemTuple.Item1;
 
@@ -845,35 +812,81 @@ namespace TecoRP.Managers
         [Command("envanter", "/i", Alias = "i")]
         public void OnInventory(Client sender)
         {
-            Inventory _inventory = API.getEntityData(sender, "inventory");
-
-            List<string> descList = new List<string>();
-            List<string> nameList = new List<string>();
-            //Dead Item Registry
-            int _Index = 0; List<int> indexes = new List<int>();
-            foreach (var item in _inventory.ItemList)
+            Inventory inv = GetPlayerInventory(sender);
+            var jsonObj = new
             {
-                var _gameItem = db_Items.GetItemById(item.ItemId);
-                if (_gameItem == null) { indexes.Add(_Index); continue; }
-                nameList.Add((item.Equipped ? "*" : String.Empty) + _gameItem.Name + " (" + item.Count + ")");
-                if (_gameItem.Type == ItemType.License)
+                max = inv.InventoryMaxCapacity,
+                items = inv.ItemList.Select((s) =>
                 {
-                    descList.Add("" + (String.IsNullOrEmpty(item.SpecifiedValue) ? "Belirsiz" : db_Accounts.GetOfflineUserDatas(item.SpecifiedValue).CharacterName) + " adlı kişiye ait.");
-                    continue;
-                }
-                descList.Add(_gameItem.Description);
-                _Index++;
-            }
-            string desc = "Eşyalarım  |  " + _inventory.ItemList.Count + " / " + _inventory.InventoryMaxCapacity;
-            API.triggerClientEvent(sender, "inventory_open", nameList.Count(), nameList.ToArray(), descList.ToArray(), desc, sender.socialClubName);
+                    var gItem = db_Items.GetItemById(s.ItemId);
+                    return new
+                    {
+                        id = s.ItemId,
+                        count = s.Count,
+                        isEquipped = s.Equipped,
+                        type = gItem.Type,
+                        droppable = gItem.Droppable,
+                        name = gItem.Name,
+                        des = gItem.Description,
+                    };
+                })
+            };
 
-            #region ForDeadRegistry
-            foreach (var item in indexes)
+            var array = jsonObj.items.Select(s => (int)s.type).Distinct().ToArray();
+            API.triggerClientEvent(sender, "inventory_open", JsonConvert.SerializeObject(jsonObj), array);
+            //List<string> descList = new List<string>();
+            //List<string> nameList = new List<string>();
+            ////Dead Item Registry
+            //int _Index = 0; List<int> indexes = new List<int>();
+            //foreach (var item in _inventory.ItemList)
+            //{
+            //    var _gameItem = db_Items.GetItemById(item.ItemId);
+            //    if (_gameItem == null) { indexes.Add(_Index); continue; }
+            //    nameList.Add((item.Equipped ? "*" : String.Empty) + _gameItem.Name + " (" + item.Count + ")");
+            //    if (_gameItem.Type == ItemType.License)
+            //    {
+            //        descList.Add("" + (String.IsNullOrEmpty(item.SpecifiedValue) ? "Belirsiz" : db_Accounts.GetOfflineUserDatas(item.SpecifiedValue).CharacterName) + " adlı kişiye ait.");
+            //        continue;
+            //    }
+            //    descList.Add(_gameItem.Description);
+            //    _Index++;
+            //}
+            //string desc = "Eşyalarım  |  " + _inventory.ItemList.Count + " / " + _inventory.InventoryMaxCapacity;
+            //API.triggerClientEvent(sender, "inventory_open", nameList.Count(), nameList.ToArray(), descList.ToArray(), desc, sender.socialClubName);
+
+            //#region ForDeadRegistry
+            //foreach (var item in indexes)
+            //{
+            //    _inventory.ItemList.RemoveAt(item);
+            //}
+            //API.setEntityData(sender, "inventory", _inventory);
+            //#endregion
+        }
+
+        public void Key_X(Client sender, params object[] args)
+        {
+            if (API.getEntityData(sender, "Dead") == true) return;
+            
+            var _item = GetItemFromPlayerInventoryById(sender, Convert.ToInt32(args[0]));
+            
+            if (_item.Item1.Droppable)
             {
-                _inventory.ItemList.RemoveAt(item);
+                if (db_Items.DropItem(_item.Item2, sender))
+                {
+                    if (RemoveItemFromPlayerInventory(sender, _item.Item1.ID))
+                    {
+                        API.playPlayerAnimation(sender, 0, "mp_weapon_drop", "drop_lh");
+                    }
+                    return;
+                }
+                else
+                {
+                    API.sendChatMessageToPlayer(sender, "~r~HATA: ~s~Eşya yere atılamıyor.");
+                    return;
+                }
             }
-            API.setEntityData(sender, "inventory", _inventory);
-            #endregion
+            else
+                API.sendChatMessageToPlayer(sender, "~r~HATA: ~s~Bu eşya yere atılamaz.");
         }
         [Command("envanteregerikoy")]
         public static void PutItToInvenotry(Client sender)
@@ -1094,6 +1107,15 @@ namespace TecoRP.Managers
             else
                 return null;
         }
+
+        public static Tuple<Item, ClientItem> GetItemFromPlayerInventoryById(Client player, int itemId)
+        {
+            var gameItem = GetPlayerInventory(player).ItemList.FirstOrDefault(x => x.ItemId == itemId);
+            var item = db_Items.GetItemById(itemId);
+            if (item == null)
+                return null;
+            return new Tuple<Item, ClientItem>(item, gameItem);
+        }
         public static Tuple<Item, ClientItem> GetWeaponFromPlayerInventory(Client sender, WeaponHash _type)
         {
             var _inventory = GetPlayerInventory(sender);
@@ -1101,16 +1123,6 @@ namespace TecoRP.Managers
             if (_clientItem != null)
             {
                 return new Tuple<Item, ClientItem>(db_Items.GetItemById(_clientItem.ItemId), _clientItem);
-            }
-            return null;
-        }
-        public static Tuple<Item, ClientItem> GetItemFromPlayerInventoryById(Client sender, int gameItemId)
-        {
-            var _inventory = GetPlayerInventory(sender);
-            var _item = _inventory.ItemList.FirstOrDefault(x => x.ItemId == gameItemId);
-            if (_item != null)
-            {
-                return new Tuple<Item, ClientItem>(db_Items.GetItemById(gameItemId), _item);
             }
             return null;
         }

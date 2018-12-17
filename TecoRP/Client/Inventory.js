@@ -1,7 +1,7 @@
 ﻿//--------------INVENTORY------------
 var inventory_menu = API.createMenu("Envanter", "Eşyalarınız", 0, 0, 4);
 var player_selection_menu = API.createMenu("Eşya Sat", "Satmak istediğiniz oyuncuyu seçin", 0, 0, 4);
-API.setMenuBannerRectangle(inventory_menu, 200, 255, 10, 30);
+API.setMenuBannerRectangle(inventory_menu, 255, 74, 20, 140);
 player_selection_menu.Visible = false;
 inventory_menu.Visible = false;
 player_selection_menu.ResetKey(menuControl.Back);
@@ -9,19 +9,17 @@ inventory_menu.ResetKey(menuControl.Back);
 
 var selectionType = null;
 var objectId = null;
-var playerId = null;
 var idList = null;
 var itemIndex = null;
+var invData = null;
+var currentFilter = "Hepsi";
+
 API.onServerEventTrigger.connect(function (name, args) {
 
     if (name == "inventory_open" && inventory_menu.Visible == false) {
-        API.setMenuSubtitle(inventory_menu, args[3]);
-        playerId = args[4];
-        for (var i = 0; i < args[0]; i++) {
-            inventory_menu.AddItem(API.createMenuItem(args[1][i], args[2][i]));
-        }
-        API.showCursor(true);
-        inventory_menu.Visible = true;
+        invData = JSON.parse(args[0]);
+        API.sendChatMessage("args[1] is " + args[1].length);
+        callInventoryMenu(invData, args[1]);
     }
     if (name == "inventory_open_selection") {
         selectionType = args[4];
@@ -45,13 +43,100 @@ API.onServerEventTrigger.connect(function (name, args) {
     }
 });
 
+function callInventoryMenu(data) {
+    inventory_menu.Clear();
+    API.setMenuSubtitle(inventory_menu, "Eşyalarım:  " + invData.items.length + "/" + invData.max);
+    let filterList = new List(String);
+    filterList.Add("Hepsi");
+    filterList.Add("Normal");
+    filterList.Add("Kıyafetler");
+    filterList.Add("İçecekler");
+    filterList.Add("Yiyecekler");
+    filterList.Add("İlkyardım");
+    filterList.Add("Silahlar ve Cephane");
+    filterList.Add("Uyuşturucu ve Maddeler");
+    filterList.Add("Lisanslar");
+    filterList.Add("Tamir Parçaları");
+    filterList.Add("Telefonlar");
+    filterList.Add("Malzemeler");
+    filterList.Add("Kuşanılabilir");
+
+    var filterMenuItem = API.createListItem("Tür", "Eşyalarınızı türlerine göre filtreleyebilirsiniz.", filterList, 0);
+    inventory_menu.AddItem(filterMenuItem);
+    fillMenuWithType(filterMenuItem.List[0]);
+    inventory_menu.Visible = true;
+
+    filterMenuItem.OnListChanged.connect(function (sender, idx) {
+        inventory_menu.Clear();
+        inventory_menu.AddItem(filterMenuItem);
+        fillMenuWithType(sender.List[idx]);
+    });
+}
+
+function fillMenuWithType(type) {
+    currentFilter = type;
+    for (let i = 0; i < invData.items.length; i++) {
+        if (compare(invData.items[i].type, type)) {
+
+            if (invData.items[i].isEquipped) {
+                let menu = API.createColoredItem(invData.items[i].name, invData.items[i].des, "#4A148C", "#F1F1F2");
+                menu.SetRightLabel("*");
+                inventory_menu.AddItem(menu);
+            }
+            else {
+                inventory_menu.AddItem(API.createMenuItem(invData.items[i].name, invData.items[i].des));
+            }
+        }
+    }
+}
+
+function compare(type, menuName) {
+    switch (menuName) {
+        case "Hepsi": return true;
+        case "Normal": return type == 0;
+        case "Kıyafetler": return type > 0 && type < 12;
+        case "içecekler": return type == 12;
+        case "Yiyecekler": return type == 13;
+        case "İlkyardım": return type == 14;
+        case "Silahlar ve Cephane": return type == 15 || type == 18 || type == 19;
+        case "Uyuşturucu ve Maddeler": return type == 16;
+        case "Lisanslar": return type == 20;
+        case "Tamir Parçaları": return type == 22;
+        case "Telefonlar": return type == 24;
+        case "Malzemeler": return type == 25;
+        case "Kuşanılabilir": return type == 27;
+    }
+    return false;
+}
+
+function getItemAtIndex(index) {
+    let idx = 0;
+    for (let i = 0; i < invData.items.length; i++) {
+        if (compare(invData.items[i].type, currentFilter)) {
+            if ((index - 1) == idx) {
+                return invData.items[i];
+            }
+            idx++;
+        }
+    }
+    return null;
+}
+
 inventory_menu.OnItemSelect.connect(function (sender, item, index) {
 
     if (selectionType == null) {
-        API.triggerServerEvent("iventory_item_selected", index);
-        inventory_menu.Visible = false;
-        API.showCursor(false);
-        inventory_menu.Clear();
+  
+
+        try {
+            var selectedItem = getItemAtIndex(index);
+            API.triggerServerEvent("InventoryItemSelected", selectedItem.id);
+            inventory_menu.Visible = false;
+            API.showCursor(false);
+            inventory_menu.Clear();
+
+        } catch (e) {
+            API.sendChatMessage("Error: " + e)
+        }
     } else {
         API.triggerServerEvent("inventory_item_selection_selected", selectionType, objectId, index);
         inventory_menu.Visible = false;
@@ -68,7 +153,7 @@ player_selection_menu.OnItemSelect.connect(function (sender, item, index) {
     player_selection_menu.Clear();
 });
 API.onKeyDown.connect(function (Player, args) {
-    if (args.KeyCode == Keys.Escape && inventory_menu.Visible == true) {
+    if (inventory_menu.Visible == true && (args.KeyCode == Keys.Escape || args.KeyCode == Keys.Back)) {
         selectionType = null;
         objectId = null;
         inventory_menu.Visible = false;
@@ -88,16 +173,25 @@ API.onKeyDown.connect(function (Player, args) {
         inventory_menu.Clear();
     }
     if (args.KeyCode == Keys.X && inventory_menu.Visible == true) {
-        API.triggerServerEvent("key_X", inventory_menu.CurrentSelection.toString());
-        inventory_menu.Visible = false;
-        API.showCursor(false);
-        inventory_menu.Clear();
+
+        let selected = getItemAtIndex(inventory_menu.CurrentSelection);
+        API.triggerServerEvent("Key_X", selected.id);
+        if (selected.droppable) {
+            invData.items.splice(invData.items.indexOf(selected), 1);
+            inventory_menu.RemoveItemAt(inventory_menu.CurrentSelection);
+            inventory_menu.RefreshIndex();
+        }
+        //inventory_menu.Visible = false;
+        //API.showCursor(false);
+        //inventory_menu.Clear();
     }
     if (args.KeyCode == Keys.N) {
-        API.triggerServerEvent("key_N")
+        API.triggerServerEvent("key_N");
     }
 
 });
+
+
 
 
 //----------------GIVE---ITEM-------------------
