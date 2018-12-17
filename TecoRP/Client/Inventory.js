@@ -18,7 +18,6 @@ API.onServerEventTrigger.connect(function (name, args) {
 
     if (name == "inventory_open" && inventory_menu.Visible == false) {
         invData = JSON.parse(args[0]);
-        API.sendChatMessage("args[1] is " + args[1].length);
         callInventoryMenu(invData, args[1]);
     }
     if (name == "inventory_open_selection") {
@@ -48,18 +47,18 @@ function callInventoryMenu(data) {
     API.setMenuSubtitle(inventory_menu, "Eşyalarım:  " + invData.items.length + "/" + invData.max);
     let filterList = new List(String);
     filterList.Add("Hepsi");
-    filterList.Add("Normal");
+    filterList.Add("Telefonlar");
     filterList.Add("Kıyafetler");
     filterList.Add("İçecekler");
     filterList.Add("Yiyecekler");
-    filterList.Add("İlkyardım");
-    filterList.Add("Silahlar ve Cephane");
     filterList.Add("Uyuşturucu ve Maddeler");
     filterList.Add("Lisanslar");
     filterList.Add("Tamir Parçaları");
-    filterList.Add("Telefonlar");
-    filterList.Add("Malzemeler");
+    filterList.Add("Normal");
     filterList.Add("Kuşanılabilir");
+    filterList.Add("Malzemeler");
+    filterList.Add("Silahlar ve Cephane");
+    filterList.Add("İlkyardım");
 
     var filterMenuItem = API.createListItem("Tür", "Eşyalarınızı türlerine göre filtreleyebilirsiniz.", filterList, 0);
     inventory_menu.AddItem(filterMenuItem);

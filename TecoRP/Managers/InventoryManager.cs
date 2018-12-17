@@ -727,7 +727,7 @@ namespace TecoRP.Managers
                                 sender.UnwearShoes();
                                 return;
                             }
-                            var shoes = db_Items.GameItems.Values.Where(x => x.Type == ItemType.Legs);
+                            var shoes = db_Items.GameItems.Values.Where(x => x.Type == ItemType.Feet);
                             foreach (var item in _inventory.ItemList.Where(x => shoes.Any(a => a.ID == x.ItemId)))
                             {
                                 item.Equipped = usedItemInInventory == item;
