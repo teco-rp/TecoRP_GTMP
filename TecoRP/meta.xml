@@ -32,6 +32,7 @@
   <script src="Client/TradeSelector.js" type="client" lang="javascript"/>
   <script src="Client/Vault.js" type="client" lang="javascript"/>
   <script src="Client/Vehicles.js" type="client" lang="javascript"/>
+  <script src="Client/VehicleShop.js" type="client" lang="javascript"/>
   <script src="Client/WayPoint.js" type="client" lang="javascript"/>
 
   <!--<script src="Client/Interface.js" type="client" lang="javascript"/>-->

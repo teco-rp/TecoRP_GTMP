@@ -856,17 +856,19 @@ namespace TecoRP.Managers
                     break;
 
                 case "En Yakın Araç Satıcısı":
-                    _Index = 0; _nearestIndex = 0; lastDistance = int.MaxValue;
-                    foreach (var item in db_SaleVehicles.currentSaleVehicleList.Items)
-                    {
-                        if (lastDistance > Vector3.Distance(sender.position, new Vector3(item.Position.X, item.Position.Y, item.Position.Z)))
-                        {
-                            _nearestIndex = _Index;
-                        }
-                        _Index++;
-                        lastDistance = Convert.ToInt32(Vector3.Distance(sender.position, new Vector3(item.Position.X, item.Position.Y, item.Position.Z)));
-                    }
-                    API.triggerClientEvent(sender, "update_waypoint", db_SaleVehicles.currentSaleVehicleList.Items[_nearestIndex].Position.X, db_SaleVehicles.currentSaleVehicleList.Items[_nearestIndex].Position.Y);
+                    //_Index = 0; _nearestIndex = 0; lastDistance = int.MaxValue;
+                    //foreach (var item in db_SaleVehicles.currentSaleVehicleList.Items)
+                    //{
+                    //    if (lastDistance > Vector3.Distance(sender.position, new Vector3(item.Position.X, item.Position.Y, item.Position.Z)))
+                    //    {
+                    //        _nearestIndex = _Index;
+                    //    }
+                    //    _Index++;
+                    //    lastDistance = Convert.ToInt32(Vector3.Distance(sender.position, new Vector3(item.Position.X, item.Position.Y, item.Position.Z)));
+                    //}
+                    //API.triggerClientEvent(sender, "update_waypoint", db_SaleVehicles.currentSaleVehicleList.Items[_nearestIndex].Position.X, db_SaleVehicles.currentSaleVehicleList.Items[_nearestIndex].Position.Y);
+
+                    API.sendChatMessageToPlayer(sender, "~r~HATA: ~w~System.NotImplementedException");
                     break;
 
                 case "En Yakın Meslek":

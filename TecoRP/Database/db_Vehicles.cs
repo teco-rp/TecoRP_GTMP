@@ -381,7 +381,7 @@ namespace TecoRP.Database
                 return false;
             }
         }
-        public static bool CreateVehicle(VehicleHash vehModel, Vector3 pos, Vector3 rot, int dim = 0, string ownerSocialClubName = null)
+        public static Models.Vehicle CreateVehicle(VehicleHash vehModel, Vector3 pos, Vector3 rot, int dim = 0, string ownerSocialClubName = null)
         {
             try
             {
@@ -419,12 +419,12 @@ namespace TecoRP.Database
                     _veh.Mods[i] = -1;
                 }
                 SaveChanges();
-                return true;
+                return _veh;
             }
             catch (Exception ex)
             {
                 API.shared.consoleOutput(LogCat.Warn, "Vehicle Creation Error: " + ex.ToString());
-                return false;
+                return null;
             }
         }
         public static bool CreateRentedVehicle(VehicleHash vehModel, string rentedSocialClubName, Vector3 pos, Vector3 rot, int dim = 0)

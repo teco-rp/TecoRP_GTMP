@@ -10,6 +10,7 @@ using TecoRP.Database;
 using TecoRP.Managers;
 using TecoRP.Models;
 using TecoRP.Jobs;
+using GrandTheftMultiplayer.Shared;
 
 namespace TecoRP.Admin
 {
@@ -51,7 +52,8 @@ namespace TecoRP.Admin
             " ~y~ ADMIN KOMUTLARI ~W~\n" +
             " /ranks /addrank /removerank /addcrime /removecrime \n" +
             "/sorular /reports /cevapla /accept /reject /find /clearplayerstar\n " +
-            "/createcraftingtable /ctableid /editctable /createfactioninteractive /editfi /fid /drunk"
+            "/createcraftingtable /ctableid /editctable /createfactioninteractive /editfi /fid /drunk\n" +
+            "/createvehicleshop /editvehicleshop /vehicleshopid"
             );
                     break;
                 default:
@@ -384,7 +386,7 @@ namespace TecoRP.Admin
             }
         }
 
-        [Command("respawn", "/respawn [player/vehicle/salevehicle] [name/(vehid/all)]")]
+        [Command("respawn", "/respawn [player/vehicle] [name/(vehid/all)]")]
         public void Respawn(Client sender, string type, string value)
         {
             if (!(API.getEntityData(sender, "AdminLevel") > 0)) { API.sendChatMessageToPlayer(sender, "~r~HATA: ~w~Bunun için yetkiniz yok."); return; }
@@ -412,18 +414,6 @@ namespace TecoRP.Admin
                             API.shared.sendChatMessageToPlayer(sender, "~r~HATA: ~s~ID sayı olmalıydı. Sayı dışındaki parametreler: ~y~[all/*]");
                         }
                     }
-                }
-            }
-            if ("salevehicle".StartsWith(type.ToLower()) || "sv".StartsWith(type.ToLower()))
-            {
-                for (int i = 0; i < SaleVehicleManager.SaleVehiclesOnMap.Count; i++)
-                {
-                    API.deleteEntity(SaleVehicleManager.SaleVehiclesOnMap[i]);
-
-                    var _vehicleModel = db_SaleVehicles.currentSaleVehicleList.Items[i];
-                    SaleVehicleManager.SaleVehiclesOnMap.RemoveAt(i);
-                    SaleVehicleManager.SaleVehiclesOnMap.Insert(i, API.createVehicle(_vehicleModel.VehicleModel, new Vector3(_vehicleModel.Position.X, _vehicleModel.Position.Y, _vehicleModel.Position.Z), new Vector3(_vehicleModel.Rotation.X, _vehicleModel.Rotation.Y, _vehicleModel.Rotation.Z), _vehicleModel.VehicleColors.Color_1, _vehicleModel.VehicleColors.Color_2, _vehicleModel.Dimension));
-                    API.setVehicleEngineStatus(SaleVehicleManager.SaleVehiclesOnMap[i], false);
                 }
             }
         }
@@ -494,7 +484,7 @@ namespace TecoRP.Admin
                 API.sendChatMessageToPlayer(sender, "Zaten kimseyi izlemiyorsunuz.");
         }
 
-        [Command("goto", "/goto [Player/Vehicle/salevehicle/Pos/Entrance/House] [Name/ID/X_Y_Z]", GreedyArg = true)]
+        [Command("goto", "/goto [Player/Vehicle/GasStation/Pos/Entrance/House] [Name/ID/X_Y_Z]", GreedyArg = true)]
         public void GoTo(Client sender, string type, string identity)
         {
             if (!(API.getEntityData(sender, "AdminLevel") > 0)) { API.sendChatMessageToPlayer(sender, "~r~HATA: ~w~Bunun için yetkiniz yok."); return; }
@@ -589,10 +579,19 @@ namespace TecoRP.Admin
                 sender.position = db_Entrances.currentEntrances.Items[db_Entrances.FindBlipIndexById(Convert.ToInt32(identity))].EntrancePosition;
             }
             else
-                if ("salevehicle".StartsWith(type.ToLower()) || "sv".StartsWith(type.ToLower()))
+                if ("gasstation".StartsWith(type, StringComparison.InvariantCulture))
             {
-                sender.position = SaleVehicleManager.SaleVehiclesOnMap[db_SaleVehicles.FindSaleVehicleIndexById(Convert.ToInt32(identity))].position + new Vector3(0, 0, 1);
+                var _gasStation = db_GasStations.GetById(Convert.ToInt32(identity));
+                if (_gasStation == null)
+                    API.sendChatMessageToPlayer(sender, "~r~HATA: ~s~Gas Station bulunamadı.");
+                sender.position = _gasStation.Position;
+                sender.dimension = _gasStation.Dimension;
             }
+            //else
+            //    if ("salevehicle".StartsWith(type.ToLower()) || "sv".StartsWith(type.ToLower()))
+            //{
+            //    sender.position = SaleVehicleManager.SaleVehiclesOnMap[db_SaleVehicles.FindSaleVehicleIndexById(Convert.ToInt32(identity))].position + new Vector3(0, 0, 1);
+            //}
             else
                  if ("house".StartsWith(type.ToLower()))
             {
@@ -994,7 +993,7 @@ namespace TecoRP.Admin
                     {
                         //OLD
                         //API.givePlayerWeapon(item, API.weaponNameToModel(value), 99999, false, false);
-                        API.givePlayerWeapon(item, API.weaponNameToModel(value), 99999,true,true);
+                        API.givePlayerWeapon(item, API.weaponNameToModel(value), 99999, true, true);
                     }
                 }
             }
@@ -1058,14 +1057,14 @@ namespace TecoRP.Admin
             if ("gender".StartsWith(type.ToLower()))
             {
                 var player = db_Accounts.FindPlayerById(Convert.ToInt32(targetPlayer));
-                if (player!=null)
+                if (player != null)
                 {
                     API.shared.setEntityData(player, "Gender", Convert.ToBoolean(value));
                 }
             }
         }
 
-        [Command("remove", "/remove ~y~[TYPE] ~s~ [ID|weaponname/All] \n TYPES: ~y~(vehicle/blip/entrance/salevehicle/house/shop/bank/busstop/tirdeliverypoint/kamyondeliverypoint/gasstation\n vehlicpoint/ctable)")]
+        [Command("remove", "/remove ~y~[TYPE] ~s~ [ID|weaponname/All] \n TYPES: ~y~(vehicle/blip/entrance/house/shop/bank/busstop/tirdeliverypoint/kamyondeliverypoint/gasstation/vehicleshop\n vehlicpoint/ctable)")]
         public void Remove(Client sender, string type, string value)
         {
             if ("vehicle".StartsWith(type.ToLower()) || "car".StartsWith(type.ToLower()))
@@ -1113,23 +1112,7 @@ namespace TecoRP.Admin
                 API.sendChatMessageToPlayer(sender, "~y~ Entrance başarıyla kaldırıldı.");
                 #endregion
             }
-            else
-            if ("salevehicle".StartsWith(type.ToLower()) || "sv".StartsWith(type.ToLower()))
-            {
-                if (!(API.getEntityData(sender, "AdminLevel") >= 3)) { API.sendChatMessageToPlayer(sender, "~r~HATA: ~w~Bunun için yetkiniz yok."); return; }
-                #region SaleVehicle
-                try
-                {
-                    if (!(API.getEntityData(sender, "AdminLevel") >= 2)) { API.sendChatMessageToPlayer(sender, "~r~HATA: ~w~Bunun için yetkiniz yok."); return; }
-                    db_SaleVehicles.RemoveSaleVehicleFully(Convert.ToInt32(value));
-                    API.sendNotificationToPlayer(sender, "~y~Başarıyla kaldırıldı.");
-                }
-                catch (Exception)
-                {
-                    API.sendChatMessageToPlayer(sender, "~r~HATA: ~w~Bir hata oluştu. Parametreleri kontrol edin.");
-                }
-                #endregion
-            }
+
             else
             if ("shop".StartsWith(type.ToLower()))
             {
@@ -1317,7 +1300,11 @@ namespace TecoRP.Admin
                 }
             }
             else
-            if ("fi".StartsWith(type.ToLower()))
+            if ("vehicleshop".StartsWith(type.ToLower()))
+            {
+                db_VehicleShops.Remove(Convert.ToInt32(value));
+            }
+            else if ("fi".StartsWith(type.ToLower()))
             {
                 if (!(API.getEntityData(sender, "AdminLevel") >= 2)) { API.sendChatMessageToPlayer(sender, "~r~HATA: ~w~Bunun için yetkiniz yok."); return; }
                 if (db_FactionInteractives.Remove(Convert.ToInt32(value)))
@@ -1381,7 +1368,7 @@ namespace TecoRP.Admin
                         return;
                     }
                     Database.db_Vehicles dbVeh = new Database.db_Vehicles();
-                    if (db_Vehicles.CreateVehicle(_RequestedVehicle, sender.position, sender.rotation, sender.dimension))
+                    if (db_Vehicles.CreateVehicle(_RequestedVehicle, sender.position, sender.rotation, sender.dimension) != null)
                     {
                         API.setPlayerIntoVehicle(sender, db_Vehicles.GetAll().LastOrDefault().VehicleOnMap, -1);
                     }
@@ -1415,7 +1402,6 @@ namespace TecoRP.Admin
                 {
                     API.sendChatMessageToPlayer(sender, "~r~HATA: ~s~Araç bulunamadı.");
                 }
-
             }
 
 
@@ -1834,40 +1820,6 @@ namespace TecoRP.Admin
 
         }
 
-        [Command("createsalevehicle", "/csv [VehicleModel] [Price]", Alias = "csv")]
-        public void CreateSaleVehicle(Client sender, string vehicleName, int price)
-        {
-            if (!(API.getEntityData(sender, "AdminLevel") >= 2)) { API.sendChatMessageToPlayer(sender, "~r~HATA: ~w~Bunun için yetkiniz yok."); return; }
-            var _vehModel = API.vehicleNameToModel(vehicleName);
-            if (_vehModel.ToString() == "0") { API.sendNotificationToPlayer(sender, "Geçersiz Araç!"); return; }
-
-            SaleVehicleManager.SaleVehiclesOnMap.Add(API.createVehicle(_vehModel, sender.position, sender.rotation, 5, 10, 0));
-            db_SaleVehicles.AddSaleVehicle(new Models.SaleVehicle
-            {
-                Interaction = new Models.AttributeData2<bool> { Buy = true, Rent = false },
-                Position = new Models.AttributeData3<float> { X = sender.position.X, Y = sender.position.Y, Z = sender.position.Z + 2 },
-                DeliverPosition = new Models.AttributeData3<float> { X = sender.position.X + 2, Y = sender.position.Y + 1, Z = sender.position.Z + 2 },
-                DeliverRotation = new Models.AttributeData3<float> { X = sender.rotation.X, Y = sender.rotation.Y, Z = sender.rotation.Z },
-                Price = new Models.AttributeData2<int> { Buy = price, Rent = -1 },
-                Rotation = new Models.AttributeData3<float> { X = sender.rotation.X, Y = sender.rotation.Y, Z = sender.rotation.Z },
-                VehicleColors = new Models.Colors { Color_1 = 5, Color_2 = 10 },
-                VehicleModel = _vehModel,
-                Dimension = sender.dimension
-            });
-            API.setVehicleEngineStatus(SaleVehicleManager.SaleVehiclesOnMap.LastOrDefault(), false);
-        }
-        [Command("salevehicleid", "/salevehicleid [range]", Alias = "svid")]
-        public void SaleVehicleId(Client sender, int range)
-        {
-            if (!(API.getEntityData(sender, "AdminLevel") >= 2)) { API.sendChatMessageToPlayer(sender, "~r~HATA: ~w~Bunun için yetkiniz yok."); return; }
-            for (int i = 0; i < SaleVehicleManager.SaleVehiclesOnMap.Count; i++)
-            {
-                if (Vector3.Distance(sender.position, SaleVehicleManager.SaleVehiclesOnMap[i].position) < range)
-                {
-                    API.sendChatMessageToPlayer(sender, "~y~" + SaleVehicleManager.SaleVehiclesOnMap[i].model.ToString() + " ~s~(" + db_SaleVehicles.FindSaleVehicleIdByIndex(i) + ")");
-                }
-            }
-        }
         [Command("houseid", Alias = "hid")]
         public void HouseId(Client sender)
         {
@@ -1878,60 +1830,6 @@ namespace TecoRP.Admin
                     API.sendChatMessageToPlayer(sender, "~y~(" + item.HouseId + ") ~w~" + item.Name);
                 }
             }
-        }
-
-        [Command("editsalevehicle", "/esv [ID] [buy/rent/color/pos/deliverpos] [value]", Alias = "esv", GreedyArg = true)]
-        public void EditSaleVehicle(Client sender, int _Id, string type, string value)
-        {
-            if (!(API.getEntityData(sender, "AdminLevel") >= 2)) { API.sendChatMessageToPlayer(sender, "~r~HATA: ~w~Bunun için yetkiniz yok."); return; }
-            var _Index = db_SaleVehicles.FindSaleVehicleIndexById(_Id);
-            if ("buy".StartsWith(type.ToLower()))
-            {
-                try { Convert.ToInt32(value); } catch (Exception) { API.sendChatMessageToPlayer(sender, "~r~HATA: ~w~Fiyat sayı girilmeli."); }
-                db_SaleVehicles.currentSaleVehicleList.Items[_Index].Price.Buy = Convert.ToInt32(value);
-                if (Convert.ToInt32(value) < 0) db_SaleVehicles.currentSaleVehicleList.Items[_Index].Interaction.Buy = false;
-                else db_SaleVehicles.currentSaleVehicleList.Items[_Index].Interaction.Buy = true;
-                API.sendNotificationToPlayer(sender, "~y~Satış fiyatı " + value + " olarak güncellendi.");
-            }
-            if ("rent".StartsWith(type.ToLower()))
-            {
-                try
-                {
-                    db_SaleVehicles.currentSaleVehicleList.Items[_Index].Price.Rent = Convert.ToInt32(value);
-                    API.sendNotificationToPlayer(sender, "~y~Kiralama fiyatı " + value + " olarak güncellendi.");
-                    if (Convert.ToInt32(value) < 0) db_SaleVehicles.currentSaleVehicleList.Items[_Index].Interaction.Rent = false;
-                    else db_SaleVehicles.currentSaleVehicleList.Items[_Index].Interaction.Rent = true;
-
-                }
-                catch (Exception ex) { if (ex.GetType() == typeof(FormatException)) API.sendChatMessageToPlayer(sender, "~r~HATA: ~w~Fiyat sayı girilmeli."); }
-            }
-            if ("color".StartsWith(type.ToLower()))
-            {
-                SaleVehicleManager.SaleVehiclesOnMap[_Index].primaryColor = Convert.ToInt32(value.Split(' ')[0]);
-                SaleVehicleManager.SaleVehiclesOnMap[_Index].secondaryColor = Convert.ToInt32(value.Split(' ')[1]);
-                db_SaleVehicles.currentSaleVehicleList.Items[_Index].VehicleColors = new Models.Colors { Color_1 = Convert.ToInt32(value.Split(' ')[0]), Color_2 = Convert.ToInt32(value.Split(' ')[0]) };
-                API.sendNotificationToPlayer(sender, "~y~Aracın rengi " + value + " olarak güncellendi.");
-            }
-            if ("position".StartsWith(type.ToLower()))
-            {
-                SaleVehicleManager.SaleVehiclesOnMap[_Index].position = sender.position;
-                SaleVehicleManager.SaleVehiclesOnMap[_Index].rotation = sender.rotation;
-                SaleVehicleManager.SaleVehiclesOnMap[_Index].dimension = sender.dimension;
-                db_SaleVehicles.currentSaleVehicleList.Items[_Index].Position = new Models.AttributeData3<float> { X = sender.position.X, Y = sender.position.Y, Z = sender.position.Z };
-                db_SaleVehicles.currentSaleVehicleList.Items[_Index].Rotation = new Models.AttributeData3<float> { X = sender.rotation.X, Y = sender.rotation.Y, Z = sender.rotation.Z };
-                sender.position += new Vector3(0, 0, 1);
-
-                API.sendNotificationToPlayer(sender, "~y~Pozisyonu konumunuz olarak güncellendi.");
-            }
-            if ("deliverpos".StartsWith(type.ToLower()))
-            {
-                db_SaleVehicles.currentSaleVehicleList.Items[_Index].DeliverPosition = new Models.AttributeData3<float> { X = sender.position.X, Y = sender.position.Y, Z = sender.position.Z };
-                db_SaleVehicles.currentSaleVehicleList.Items[_Index].DeliverRotation = new Models.AttributeData3<float> { X = sender.rotation.X, Y = sender.rotation.Y, Z = sender.rotation.Z };
-                db_SaleVehicles.currentSaleVehicleList.Items[_Index].DeliverDimension = sender.dimension;
-
-                API.sendNotificationToPlayer(sender, "~y~Teslim Pozisyonu konumunuz olarak güncellendi.");
-            }
-            db_SaleVehicles.SaveChanges();
         }
 
         [Command("createhouse", "/cs [price]", Alias = "cs")]
@@ -2131,7 +2029,7 @@ namespace TecoRP.Admin
             string[] range = args[1].ToString().Split('-');
             int minId = Convert.ToInt32(range[0]);
             int maxId = Convert.ToInt32(range[1]);
-            int price = Convert.ToInt32(args[2].ToString().Replace("$",string.Empty));
+            int price = Convert.ToInt32(args[2].ToString().Replace("$", string.Empty));
 
             for (int i = minId; i <= maxId; i++)
             {
@@ -2190,7 +2088,7 @@ namespace TecoRP.Admin
             db_Shops.SaveChanges();
         }
 
-        [Command("renameGameItem","/renameGameItem [GameItemID] [NewName]")]
+        [Command("renameGameItem", "/renameGameItem [GameItemID] [NewName]")]
         public void RenameGameItem(Client sender, params object[] args)
         {
             if (!(API.getEntityData(sender, "AdminLevel") >= 3)) { API.sendChatMessageToPlayer(sender, "~r~HATA: ~w~Bunun için yetkiniz yok."); return; }
@@ -3684,8 +3582,76 @@ namespace TecoRP.Admin
 
             if (drunk == 1)
                 Clients.ClientManager.SetPlayerDrunk(player);
-            if(drunk == 0)
+            if (drunk == 0)
                 Clients.ClientManager.SetPlayerUndrunk(player);
+        }
+
+        [Command("createvehicleshop", "/cvs ~y~[vehicleClass] ~c~(1-Boats, 3-Compacts, 17-Sports etc...)", Alias = "cvs")]
+        public void CreateVehicleShop(Client sender, string vehicleClass)
+        {
+            if (!(API.getEntityData(sender, "AdminLevel") >= 3)) { API.sendChatMessageToPlayer(sender, "~r~HATA: ~w~Bunun için yetkiniz yok."); return; }
+
+            if (!int.TryParse(vehicleClass, out int vehClass))
+                API.sendChatMessageToPlayer(sender, "~r~HATA: ~w~Geçerli bir class sayısı girin.");
+
+            //if (!Enum.TryParse(vehicleClass, out VehicleHash vehicleHash))
+            //    API.sendChatMessageToPlayer(sender, "~r~HATA: ~s~Geçerli bir araç klasmanı giriniz.");
+
+            db_VehicleShops.Create(new VehicleShop
+            {
+                DeliveryDimension = sender.dimension,
+                DeliveryPosition = sender.position,
+                DeliveryRotation = sender.rotation,
+                Position = sender.position - new Vector3(0, 0, 1),
+                Rotation = sender.rotation,
+                Dimension = sender.dimension,
+                VehicleClass = vehClass
+            });
+
+        }
+
+        [Command("editvehicleshop", "/evs ~y~[id] [deliveryPoint/position/class]", Alias = "evs", GreedyArg = true)]
+        public void EditVehicleShop(Client sender, int id, string type)
+        {
+            if (!(API.getEntityData(sender, "AdminLevel") >= 3)) { API.sendChatMessageToPlayer(sender, "~r~HATA: ~w~Bunun için yetkiniz yok."); return; }
+
+            var shop = db_VehicleShops.Get(id);
+            if (shop == null) { API.shared.sendChatMessageToPlayer(sender, "~r~HATA: ~s~Geçersiz VehicleShop ID girildi."); return; }
+
+            if ("deliverypoint".StartsWith(type.ToLower()))
+            {
+                shop.DeliveryPosition = sender.position;
+                shop.DeliveryRotation = sender.rotation;
+                shop.DeliveryDimension = sender.dimension;
+                db_VehicleShops.Update(shop);
+                return;
+            }
+
+            if ("position".StartsWith(type.ToLower()))
+            {
+                shop.Position = sender.position - new Vector3(0, 0, 1);
+                shop.Rotation = sender.rotation;
+                shop.Dimension = sender.dimension;
+                db_VehicleShops.RemoveFromMap(shop);
+                db_VehicleShops.GenerateOnMap(shop);
+                db_VehicleShops.Update(shop);
+            }
+
+            if ("class".StartsWith(type.ToLowerInvariant().Split(' ')[0]))
+            {
+                shop.VehicleClass = Convert.ToInt32(type.Split(' ')[1]);
+                db_VehicleShops.Update(shop);
+            }
+        }
+
+        [Command("vehicleshopid")]
+        public void VehicleShopId(Client sender)
+        {
+            if (!(API.getEntityData(sender, "AdminLevel") >= 3)) { API.sendChatMessageToPlayer(sender, "~r~HATA: ~w~Bunun için yetkiniz yok."); return; }
+
+            var nearest = db_VehicleShops.FindNearest(sender.position);
+
+            API.sendChatMessageToPlayer(sender, "VehicleShopId is ~y~" + nearest.VehicleShopId);
         }
         public static void RemoveItemFromInventory(Client sender, string ownerSocialClubId, int index)
         {

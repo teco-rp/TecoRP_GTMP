@@ -65,10 +65,12 @@ namespace TecoRP.Repository.Base
                     Directory.GetParent(Path).Create();
                     return new List<TModel>();
                 }
-
-            var json = File.ReadAllText(Path);
-
-            return JsonConvert.DeserializeObject<List<TModel>>(json);
+            if (File.Exists(Path))
+            {
+                var json = File.ReadAllText(Path);
+                return JsonConvert.DeserializeObject<List<TModel>>(json);
+            }
+            return new List<TModel>();
         }
 
         public void Remove(TModel value)

@@ -749,7 +749,30 @@ namespace TecoRP.Managers
                         #endregion
                         API.setEntityData(sender, "inventory", _inventory);
                         return;
+                    case ItemType.Feet:
+                        if (API.getEntityData(sender, "Dead") == true) return;
+                        #region Shoes
+                        if (sender.CanWear(usedItem))
+                        {
+                            if (usedItemInInventory.Equipped)
+                            {
+                                usedItemInInventory.Equipped = false;
+                                sender.UnwearShoes();
+                                return;
+                            }
+                            var shoes = db_Items.GameItems.Values.Where(x => x.Type == ItemType.Legs);
+                            foreach (var item in _inventory.ItemList.Where(x => shoes.Any(a => a.ID == x.ItemId)))
+                            {
+                                item.Equipped = usedItemInInventory == item;
+                            }
+                            sender.WearShoes(usedItem);
+                        }
+                        else
+                            API.sendChatMessageToPlayer(sender, "~r~UYARI: ~w~Bu eşya karakterinizin cinsiyeti için değil.");
 
+                        #endregion
+                        API.setEntityData(sender, "inventory", _inventory);
+                        return;
                     case ItemType.Accessories:
                         API.shared.sendChatMessageToPlayer(sender, "Bu eşya henüz kullanılabilir değil.");
                         return;

@@ -85,12 +85,12 @@ namespace TecoRP.Models
         public int Dimension { get; set; } = 0;
         //-------------------------------------------------------------------
         [JsonProperty(PropertyName = "b")]
-        public StorageList BaggageItems { get => _baggageItems ?? new StorageList(); set => _baggageItems = value; }         //-------------------------------------------------------------------
+        public StorageList BaggageItems { get => _baggageItems == null ? _baggageItems = new StorageList() : _baggageItems; set => _baggageItems = value; }         //-------------------------------------------------------------------
         [JsonProperty(PropertyName = "mb")]
         public int MaxBaggageCount { get; set; } = 10;
         //-------------------------------------------------------------------
         [JsonProperty(PropertyName = "t")]
-        public StorageList TorpedoItems { get => _torpedoItems ?? new StorageList(); set => _torpedoItems = value; }
+        public StorageList TorpedoItems { get => _torpedoItems == null ? _torpedoItems = new StorageList() : _torpedoItems; set => _torpedoItems = value; }
         //-------------------------------------------------------------------
         [JsonProperty(PropertyName = "mt")]
         public int MaxTorpedoCount { get; set; } = 5;
@@ -109,7 +109,7 @@ namespace TecoRP.Models
         public VehicleList() { Items = new List<Vehicle>(); }
     }
 
-  
+
     public class SpecifiedValueForDamage
     {
         public List<int> BrokenDoors { get; set; }
@@ -124,41 +124,6 @@ namespace TecoRP.Models
         }
     }
 
-  
-
-    public class SaleVehicle
-    {
-        [XmlElement("ID")]
-        public int ID { get; set; }
-        [XmlElement("Model")]
-        public GrandTheftMultiplayer.Shared.VehicleHash VehicleModel { get; set; }
-        [XmlElement("Position")]
-        public AttributeData3<float> Position { get; set; }
-        [XmlElement("Rotation")]
-        public AttributeData3<float> Rotation { get; set; }
-        [XmlElement("DeliverPosition")]
-        public AttributeData3<float> DeliverPosition { get; set; }
-        [XmlElement("DeliverRotation")]
-        public AttributeData3<float> DeliverRotation { get; set; }
-        [XmlElement("Colors")]
-        public Colors VehicleColors { get; set; }
-        [XmlElement("Interaction")]
-        public AttributeData2<bool> Interaction { get; set; }
-        [XmlElement("Price")]
-        public AttributeData2<int> Price { get; set; }
-        [XmlElement("Dimension")]
-        public int Dimension { get; set; } = 0;
-        [XmlElement("DeliverDimension")]
-        public int DeliverDimension { get; set; } = 0;
-    }
-
-    [XmlRoot("SaleVehicle_List")]
-    public class SaleVehicleList
-    {
-        [XmlElement("SaleVehicle")]
-        public List<SaleVehicle> Items { get; set; }
-        public SaleVehicleList() { Items = new List<SaleVehicle>(); }
-    }
 
     #region AttrubteData
 
@@ -185,7 +150,7 @@ namespace TecoRP.Models
 
         public Vector3 ToVector3()
         {
-            return new Vector3(Convert.ToSingle(X),Convert.ToSingle(Y),Convert.ToSingle(Z));
+            return new Vector3(Convert.ToSingle(X), Convert.ToSingle(Y), Convert.ToSingle(Z));
         }
     }
     public class Colors
@@ -198,10 +163,10 @@ namespace TecoRP.Models
     #endregion
 
 
-    public class Tax 
+    public class Tax
     {
         [XmlAttribute("Vehicle")]
-        public VehicleHash  VehicleName { get; set; }
+        public VehicleHash VehicleName { get; set; }
         [XmlAttribute("TaxPerHour")]
         public float TaxPerHour { get; set; }
         [XmlAttribute("MaxTax")]

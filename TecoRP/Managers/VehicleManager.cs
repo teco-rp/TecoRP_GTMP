@@ -174,22 +174,16 @@ namespace TecoRP.Managers
         {
             API.shared.consoleOutput($"Player {player.socialClubName} has entered {vehicle} vehicle");
 
-            var vehIndex = SaleVehicleManager.FindIndex(vehicle);
-            if (vehIndex != -1)
-            {
-                var veh = db_SaleVehicles.currentSaleVehicleList.Items[vehIndex];
-
-                if (veh.Interaction.Rent)
-                    API.sendChatMessageToPlayer(player, $"~b~Bu araç ${veh.Price.Rent} ödeyerek kiralanabilir. ~h~/arac kirala");
-
-                if (veh.Interaction.Buy && veh.Price.Buy > 0)
-                    API.sendChatMessageToPlayer(player, $"~b~Bu araç ${veh.Price.Buy} ödeyerek satın alınabilir. ~h~/arac satinal");
-            }
-            //foreach (var item in db_SaleVehicles.currentSaleVehicleList.Items)
+            //var vehIndex = SaleVehicleManager.FindIndex(vehicle);
+            //if (vehIndex != -1)
             //{
-            //    if (Vector3.Distance(player.position, new Vector3(item.Position.X, item.Position.Y, item.Position.Z)) <= 1)
-            //    {
-            //    }
+            //    var veh = db_SaleVehicles.currentSaleVehicleList.Items[vehIndex];
+
+            //    if (veh.Interaction.Rent)
+            //        API.sendChatMessageToPlayer(player, $"~b~Bu araç ${veh.Price.Rent} ödeyerek kiralanabilir. ~h~/arac kirala");
+
+            //    if (veh.Interaction.Buy && veh.Price.Buy > 0)
+            //        API.sendChatMessageToPlayer(player, $"~b~Bu araç ${veh.Price.Buy} ödeyerek satın alınabilir. ~h~/arac satinal");
             //}
         }
         private void API_onPlayerExitVehicle(Client player, NetHandle vehicle, int seat)
@@ -466,103 +460,7 @@ namespace TecoRP.Managers
                 }
             }
         }
-        [Command("arac", "/arac [fiyat/satinal/kirala]")]
-        public void OnSaleVehicle(Client sender, string type)
-        {
-            if (sender.isInVehicle)
-            {
-                int _Index = 0;
-                foreach (var item in SaleVehicleManager.SaleVehiclesOnMap)
-                {
-                    if (Vector3.Distance(sender.position, item.position) < 2)
-                    {
-                        var vehicle = db_SaleVehicles.currentSaleVehicleList.Items[_Index];
-                        if ("fiyat".StartsWith(type.ToLower()))
-                        {
-                            API.sendNotificationToPlayer(sender, " Satış fiyatı: " + vehicle.Price.Buy + " | Kiralama Fiyatı: " + db_SaleVehicles.currentSaleVehicleList.Items[_Index].Price.Rent);
-                            return;
-                        }
-                        if ("satinal".StartsWith(type.ToLower()))
-                        {
-                            #region satinal
-                            if (db_Vehicles.GetPlayerVehicles(sender).Count >= 5)
-                            {
-                                API.sendChatMessageToPlayer(sender, "~y~Ulaşabileceğiniz azami araç sayısına ulaşmışsınız.");
-                                return;
-                            }
 
-                            if (vehicle.Interaction.Buy)
-                            {
-                                int _money = Convert.ToInt32(API.getEntityData(sender, "Money"));
-                                if (vehicle.Price.Buy <= _money)
-                                {
-                                    try
-                                    {
-                                        _money -= vehicle.Price.Buy;
-                                        API.triggerClientEvent(sender, "update_money_display", _money);
-                                        API.setEntityData(sender, "Money", _money);
-
-                                        if (db_Vehicles.CreateVehicle(vehicle.VehicleModel,
-                                                                      new Vector3(vehicle.DeliverPosition.X, vehicle.DeliverPosition.Y, vehicle.DeliverPosition.Z),
-                                                                      new Vector3(vehicle.DeliverRotation.X, vehicle.DeliverRotation.Y, vehicle.DeliverRotation.Z),
-                                                                      vehicle.DeliverDimension, sender.socialClubName))
-                                        {
-                                            API.triggerClientEvent(sender, "update_waypoint", vehicle.DeliverPosition.X, vehicle.DeliverPosition.Y, vehicle.DeliverPosition.Z);
-                                            API.warpPlayerOutOfVehicle(sender);
-                                        }
-                                        else
-                                        {
-                                            API.sendChatMessageToPlayer(sender, "~r~HATA: ~W~Bir hata oluştu. Daha sonra tekrar deneyin.");
-                                        }
-
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        API.consoleOutput(" ARAC SATINAL : HATA : " + ex.Message);
-                                        API.sendChatMessageToPlayer(sender, "~r~HATA: ~W~Bir hata oluştu. Daha sonra tekrar deneyin.");
-                                    }
-
-                                }
-                                else
-                                {
-                                    API.sendChatMessageToPlayer(sender, "~y~Bu aracı almak için en az " + db_SaleVehicles.currentSaleVehicleList.Items[_Index].Price.Buy + " paranız olmalı.");
-                                }
-                            }
-                            else
-                            {
-                                API.sendChatMessageToPlayer(sender, "~y~Maalesef bu araba şu anda satılmıyor.");
-                            }
-                            return;
-                            #endregion
-                        }
-                        if ("kirala".StartsWith(type.ToLower()))
-                        {
-                            if (vehicle.Interaction.Rent && vehicle.Price.Rent > 0)
-                            {
-                                if (!InventoryManager.IsEnoughMoney(sender, vehicle.Price.Rent))
-                                {
-                                    API.shared.sendChatMessageToPlayer(sender, $"~r~HATA: ~s~Bu aracı kiralamak için en az ~r~{vehicle.Price.Rent}$ ~s~paranız olmalıdır.");
-                                    return;
-                                }
-
-                                InventoryManager.AddMoneyToPlayer(sender, -1 * vehicle.Price.Rent);
-
-                                db_Vehicles.CreateRentedVehicle(vehicle.VehicleModel, sender.socialClubName, vehicle.DeliverPosition.ToVector3(), vehicle.DeliverRotation.ToVector3(), vehicle.DeliverDimension);
-                                return;
-                            }
-                            API.shared.sendChatMessageToPlayer(sender, "~r~HATA: ~s~Bu araç kiralanmak için değil.");
-                        }
-                    }
-                    _Index++;
-                }
-            }
-            else
-            {
-                API.sendNotificationToPlayer(sender, "Satılık veya kiralık bir aracın içinde olmalısınız.", true);
-            }
-
-
-        }
         [Command("kapikir", "/kapikir")]
         public void BreakDoor(Client sender)
         {
@@ -891,7 +789,8 @@ namespace TecoRP.Managers
             {
                 if (sender.vehicleSeat == -1 || sender.vehicleSeat == 0)
                 {
-                    var _vehicle = db_Vehicles.FindNearestVehicle(sender.position);
+                    
+                    var _vehicle = db_Vehicles.FindVehicle(sender.vehicle.handle);
 
                     #region Listeleme
                     List<string> names = new List<string>();
@@ -975,7 +874,7 @@ namespace TecoRP.Managers
                 if (_vehicle.TorpedoItems.Items.Count <= index)
                 {
                     //EŞYA KOYMA
-                    API.shared.consoleOutput("TRİGGERED EŞYA KOYMA");
+                    API.shared.consoleOutput("TRIGGERED EŞYA KOYMA");
                     Clients.ClientManager.ShowInventoryForSelection(sender, "vehicleT", Convert.ToInt32(_vehicle.VehicleId));
                     return;
                 }
@@ -1096,9 +995,9 @@ namespace TecoRP.Managers
             var _vehicle = db_Vehicles.GetVehicle(vehId);
             if (_vehicle != null)
             {
-                if (_vehicle.BaggageItems.Items.Count < _vehicle.MaxTorpedoCount)
+                if (_vehicle.TorpedoItems.Items.Count < _vehicle.MaxTorpedoCount)
                 {
-                    _vehicle.BaggageItems.Items.Add(_clientItem);
+                    _vehicle.TorpedoItems.Items.Add(_clientItem);
                     return true;
                 }
                 return false;

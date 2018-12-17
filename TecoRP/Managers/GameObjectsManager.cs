@@ -44,6 +44,7 @@ namespace TecoRP.Managers
             Task.Run(() => db_LicensePoints.SpawnAll());
             Task.Run(() => db_Hospital.ReadData());
             Task.Run(() => db_FactionInteractives.SpawnAll());
+            Task.Run(() => db_VehicleShops.Init());
             db_FactionRanks.InitRanks();
             // GetAllIPLSs();
         }

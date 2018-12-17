@@ -31,7 +31,7 @@ API.onServerEventTrigger.connect(function (name, args) {
         }
         shop_menu.Visible = true;
 
-
+        
         shop_menu.OnIndexChange.connect(function (sender, index) {
 
             if (parseInt(data[index].GameItem.type) < 12) {
@@ -85,8 +85,7 @@ API.onKeyDown.connect(function (Player, args) {
             var newMoney = API.getUserInput("$" + data[shop_menu.CurrentSelection].SaleItem.p, 12);
             API.triggerServerEvent("UpdatePriceShopItem", shopId, data[shop_menu.CurrentSelection].GameItem.id, newMoney);
             var idx = shop_menu.CurrentSelection;
-
-            shop_menu.Children[idx]
+            
             shop_menu.RemoveItemAt(idx);
             shop_menu.InsertItem(API.createMenuItem(data[idx].GameItem.name + "  $" + newMoney, data[idx].GameItem.des), idx);
             shop_menu.RefreshIndex();
