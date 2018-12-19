@@ -43,7 +43,7 @@ bank_menu.OnItemSelect.connect(function (sender, item, index) {
 
 
 API.onKeyDown.connect(function (Player, args) {
-    if (args.KeyCode == Keys.Escape && bank_menu.Visible == true) {
+    if ((args.KeyCode == Keys.Escape || args.KeyCode == Keys.Back) && bank_menu.Visible === true) {
         bank_menu.Visible = false;
         bank_menu.Clear();
         API.showCursor(false);

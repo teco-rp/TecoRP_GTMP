@@ -11,7 +11,7 @@ API.onKeyDown.connect(function (Player, args) {
         browser = API.createCefBrowser(1000, 1000, false);
         //browser = API.createCefBrowser(res_X * 0.80, res_Y * 0.80, false);
         API.setCefBrowserHeadless(browser, true);
-        API.setCefBrowserPosition(browser, res_X - 1000, res_Y - 1000);
+        API.setCefBrowserPosition(browser, 0, 0);
         //API.setCefBrowserPosition(browser, res_X * 0.1, res_Y * 0.1);
         API.waitUntilCefBrowserInit(browser);
         API.loadPageCefBrowser(browser, "Client/yardim/index.html", false);

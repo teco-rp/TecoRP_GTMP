@@ -16,10 +16,12 @@ phonebook_menu.ResetKey(menuControl.Back);
 phone_gps_menu.ResetKey(menuControl.Back);
 phone_downloadapp_menu.ResetKey(menuControl.Back);
 phone_emlakci_menu.ResetKey(menuControl.Back);
+var isPhoneOpen = false;
 
 API.onServerEventTrigger.connect(function (name, args) {
 
     if (name == "phone_open" && phone_menu.Visible == false) {
+        isPhoneOpen = true;
         API.setMenuTitle(phone_menu, args[3]);
         API.setMenuSubtitle(phone_menu, "Telefon | " + args[4]);
         model_phone = args[5];
@@ -146,6 +148,7 @@ phone_menu.OnItemSelect.connect(function (sender, item, index) {
         API.showCursor(false);
     }
     phone_menu.Clear();
+    isPhoneOpen = false;
 });
 
 phonebook_menu.OnItemSelect.connect(function (sender, item, index) {
@@ -181,7 +184,7 @@ phone_downloadapp_menu.OnItemSelect.connect(function (sender, item, index) {
 
 
 API.onKeyDown.connect(function (Player, args) {
-    if ((args.KeyCode == Keys.Escape || args.KeyCode == Keys.Back)) {
+    if ((args.KeyCode == Keys.Escape || args.KeyCode == Keys.Back) && isPhoneOpen) {
         API.triggerServerEvent("anim_stop");
         phone_menu.Visible = false;
         phonebook_menu.Visible = false;

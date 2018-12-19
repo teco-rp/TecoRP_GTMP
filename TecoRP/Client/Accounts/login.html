@@ -1,0 +1,80 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Teco Roleplay</title>
+    <meta charset="utf-8">
+    <link href="style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+    <div class="login-box">
+        <center>
+            <h1>Teco RP!</h1>
+        </center>
+
+        <div class="textbox">
+            <input id="Email" type="email" placeholder="E-Posta" value="" />
+            <span id="EmailVal"></span>
+        </div>
+
+        <div class="textbox">
+            <input id="Password" type="password" placeholder="Parola" value="" />
+            <span id="PasswordVal"></span>
+        </div>
+        <div class="textbox hidden" id="passwordConfirmBox">
+            <input id="PasswordConfirm" placeholder="Parola Tekrar" value="" />
+            <span id="PasswordConfirmVal"></span>
+        </div>
+        <input onclick="onLogin()" class="btn-primary" type="submit" name="" value="Giriş">
+        <input onclick="onRegister()" class="btn-secondary" type="button" name="" value="Kayıt Ol">
+    </div>
+    <script src="jquery.js"></script>
+
+    <script>
+        var isRegistering = false;
+        function onRegister()
+        {
+            if (isRegistering)
+            {
+                validate();
+                var pass = $("#Password").val();
+                var passConfirm = $("#PasswordConfirm").val();
+                if (pass !== passConfirm) {
+                    $("#PasswordConfirmVal").html("Parolalar eşleşmiyor.");
+                    return;
+                } else { $("#PasswordConfirmVal").html(""); }
+
+                resourceCall("register", $("#Email").val() , $("#Password").val());
+            }
+            else {
+                $("#passwordConfirmBox").removeClass("hidden");
+                isRegistering = true;
+            }
+        }
+
+        function onLogin() {
+            if (isRegistering) {
+                $("#passwordConfirmBox").addClass("hidden");
+                isRegistering = false;
+            }
+            validate();
+            resourceCall("login", $("#Email").val(), $("#Password").val());
+        }
+        function validate() {
+            var email = $("#Email").val();
+            var password = $("#Password").val();
+            if (email == "") {
+                $("#EmailVal").html("E-Posta boş olamaz.");
+            }
+            else { $("#EmailVal").html(""); }
+
+            if (password == "") {
+                $("#PasswordVal").html("Şifre boş olamaz.");
+            }
+            else { $("#PasswordVal").html(""); }
+        }
+
+    </script>
+</body>
+</html>

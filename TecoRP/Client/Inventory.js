@@ -218,7 +218,7 @@ players_menu.OnItemSelect.connect(function (sender, item, index) {
 });
 
 API.onKeyDown.connect(function (Player, args) {
-    if (args.KeyCode == Keys.Escape && players_menu.Visible == true) {
+    if ((args.KeyCode == Keys.Escape || args.KeyCode == Keys.Back) && players_menu.Visible === true) {
         players_menu.Visible = false;
         API.showCursor(false);
         players_menu.Clear();

@@ -7,6 +7,7 @@ API.onServerEventTrigger.connect(function (eventName, args) {
     else if (eventName == "set_undrunk") {
         setUndrunk();
     }
+    
 });
 
 function setDrunk() {

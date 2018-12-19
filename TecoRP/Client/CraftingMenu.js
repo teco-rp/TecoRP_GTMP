@@ -15,7 +15,7 @@ var craftingTableModel = null; API.onServerEventTrigger.connect(function (name, 
     API.triggerServerEvent("return_crafting", craftingTableModel, index)
 });
 API.onKeyDown.connect(function (Player, args) {
-    if (args.KeyCode == Keys.Escape && crafting_menu.Visible == true) {
+    if ((args.KeyCode == Keys.Escape || args.KeyCode == Keys.Back) && crafting_menu.Visible === true) {
         crafting_menu.Visible = false; API.showCursor(false); crafting_menu.Clear();
     }
     if (args.KeyCode == Keys.U && crafting_menu.Visible == false && !API.isPlayerInAnyVehicle(API.getLocalPlayer())) {

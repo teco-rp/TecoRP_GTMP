@@ -1,0 +1,76 @@
+﻿body {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    /*background: url(rende3.jpg) no-repeat;*/
+    background-size: cover;
+    background-color: #F1f1f2;
+}
+
+.login-box {
+    background-color: white;
+    width: 240px;
+    position: absolute;
+    padding:5%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -webkit-box-shadow: 1px 1px 10px 0px rgba(0,0,0,0.35);
+    -moz-box-shadow: 1px 1px 10px 0px rgba(0,0,0,0.35);
+    box-shadow: 1px 1px 10px 0px rgba(0,0,0,0.35);
+}
+
+.login-box h1 {
+    font-size: 25px;
+    color: #311B92;
+    font-family: Corbel;
+}
+
+.hidden{
+    visibility:hidden;
+}
+
+.btn-primary {
+    width: 45%;
+    height: 30px;
+    font-family: "Arial Bold";
+    background-color: #311B92;
+    -webkit-box-shadow: 1px 1px 10px 0px rgba(0,0,0,0.35);
+    -moz-box-shadow: 1px 1px 10px 0px rgba(0,0,0,0.35);
+    box-shadow: 1px 1px 10px 0px rgba(0,0,0,0.35);
+    border: none;
+    color: white;
+}
+
+.btn-primary:hover {
+    opacity: 0.8;
+}
+
+.btn-secondary {
+    width:45%;
+    height: 30px;
+    font-family:Arial Bold;
+    background-color: transparent;
+    box-shadow: none;
+    color: #311B92;
+    border: none;
+}
+
+.textbox {
+    width: 100%;
+    font-size: 20px;
+    margin-top: 24px;
+    margin-bottom: 8px;
+}
+
+.textbox input {
+    width:100%;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    border-bottom: 1px solid black;
+}
+.textbox span{
+    color:red;
+    font-size:14px;
+}

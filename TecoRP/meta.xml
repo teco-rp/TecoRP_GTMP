@@ -6,6 +6,10 @@
   <!--<script src="bin/Release/TecoRP.dll" type="server" lang="compiled"  />-->
 
   <!--Client-Side-Uncomplied-Scripts-->
+  <file src="Client/Accounts/jquery.js" type="client"/>
+  <script src="Client/Accounts/index.js" type="client" lang="javascript"/>
+  <script src="Client/Accounts/login.html" type="client" lang="javascript"/>
+  <script src="Client/Accounts/style.css" type="client" lang="javascript"/>
   <script src="Client/Bank.js" type="client" lang="javascript"/>
   <script src="Client/BaseUserUI.js" type="client" lang="javascript"/>
   <script src="Client/Building.js" type="client" lang="javascript"/>

@@ -34,7 +34,7 @@ custom_menu.OnItemSelect.connect(function (sender, item, index) {
 });
 
 API.onKeyDown.connect(function (Player, args) {
-    if (custom_menu.Visible == true && args.KeyCode == Keys.Escape) {
+    if (custom_menu.Visible == true && (args.KeyCode == Keys.Escape || args.KeyCode == Keys.Back)) {
         custom_menu.Visible = false;
         API.showCursor(false);
         custom_menu.Clear();

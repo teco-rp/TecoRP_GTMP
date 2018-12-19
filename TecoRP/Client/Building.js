@@ -29,7 +29,7 @@ building_menu.OnItemSelect.connect(function (sender, item, index) {
 });
 
 API.onKeyDown.connect(function (Player, args) {
-    if (args.KeyCode == Keys.Escape && building_menu.Visible == true) {
+    if ((args.KeyCode == Keys.Escape || args.KeyCode == Keys.Back) && building_menu.Visible === true) {
         building_menu.Visible = false;
         API.showCursor(false);
         building_menu.Clear();

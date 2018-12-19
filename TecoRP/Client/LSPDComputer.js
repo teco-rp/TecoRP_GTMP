@@ -61,7 +61,7 @@ lspd_menu.OnItemSelect.connect(function (sender, item, index) {
 });
 
 API.onKeyDown.connect(function (Player, args) {
-    if (args.KeyCode == Keys.Escape && lspd_menu.Visible == true) {
+    if ((args.KeyCode == Keys.Escape || args.KeyCode == Keys.Back) && lspd_menu.Visible === true) {
         lspd_menu.Visible = false;
         API.showCursor(false);
         lspd_menu.Clear();
