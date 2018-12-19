@@ -1,11 +1,10 @@
 ﻿using GrandTheftMultiplayer.Server.API;
+using GrandTheftMultiplayer.Server.Constant;
 using GrandTheftMultiplayer.Server.Elements;
-using GrandTheftMultiplayer.Server.Managers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
 
 namespace TecoRP.Managers.Base
 {
@@ -15,8 +14,8 @@ namespace TecoRP.Managers.Base
         {
             API.onClientEventTrigger += API_onClientEventTrigger;
         }
-        
-        private void API_onClientEventTrigger(GrandTheftMultiplayer.Server.Elements.Client sender, string eventName, params object[] arguments)
+
+        private void API_onClientEventTrigger(Client sender, string eventName, params object[] arguments)
         {
             var method = this.GetType().GetMethod(eventName);
             if (method == null)
@@ -28,8 +27,23 @@ namespace TecoRP.Managers.Base
                 method.Invoke(this, parameters: new object[] { sender });
                 return;
             }
+            try
+            {
+                method.Invoke(this, parameters: BindParameters(sender, parameters, arguments).ToArray());
+            }
+            catch (Exception ex)
+            {
+                API.consoleOutput(LogCat.Warn, ex.ToString());
+                method.Invoke(this, parameters: new object[] { sender, arguments });
+            }
+        }
 
-            method.Invoke(this, parameters: new object[] { sender, arguments });
+        public IEnumerable<object> BindParameters(Client sender, ParameterInfo[] parameters, object[] arguments)
+        {
+            yield return sender;
+            for (int i = 1; i < parameters.Length; i++)
+                yield return Convert.ChangeType(arguments[i], parameters[i].ParameterType);
+
         }
     }
 }
