@@ -79,11 +79,14 @@ function fillMenuWithType(type) {
 
             if (invData.items[i].isEquipped) {
                 let menu = API.createColoredItem(invData.items[i].name, invData.items[i].des, "#4A148C", "#F1F1F2");
-                menu.SetRightLabel("*");
+                menu.SetLeftBadge(BadgeStyle.Star);
+                menu.SetRightLabel(invData[i].count);
                 inventory_menu.AddItem(menu);
             }
             else {
-                inventory_menu.AddItem(API.createMenuItem(invData.items[i].name, invData.items[i].des));
+                let menu = API.createMenuItem(invData.items[i].name, invData.items[i].des)
+                menu.SetRightLabel(invData[i].count);
+                inventory_menu.AddItem();
             }
         }
     }
