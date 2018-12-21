@@ -34,7 +34,7 @@ namespace TecoRP.Managers
                 var _adv = db_Adversitements.GetById(id);
                 if (_adv != null)
                 {
-                    var player = db_Accounts.IsPlayerOnline(_adv.OwnerSocialClubId);
+                    var player = db_Players.IsPlayerOnline(_adv.OwnerSocialClubId);
                     if (player != null)
                     {
                         string number = PhoneManager.GetPhoneNumbers(player).FirstOrDefault();
@@ -42,7 +42,7 @@ namespace TecoRP.Managers
                     }
                     else
                     {
-                        var _player = db_Accounts.GetOfflineUserDatas(_adv.OwnerSocialClubId);
+                        var _player = db_Players.GetOfflineUserDatas(_adv.OwnerSocialClubId);
                         var _phone = InventoryManager.GetItemFromOfflineUser(_adv.OwnerSocialClubId, Models.ItemType.Phone).FirstOrDefault().Item2;
                         var specifiedValue = (SpecifiedValuePhone)API.fromJson(_phone.SpecifiedValue).ToObject<SpecifiedValuePhone>();
                         string number = specifiedValue.PhoneNumber;
@@ -64,7 +64,7 @@ namespace TecoRP.Managers
                 var _adv = db_Adversitements.GetById(id);
                 if (_adv != null)
                 {
-                    var player = db_Accounts.IsPlayerOnline(_adv.OwnerSocialClubId);
+                    var player = db_Players.IsPlayerOnline(_adv.OwnerSocialClubId);
                     if (player != null)
                     {
                         string number = PhoneManager.GetPhoneNumbers(player).FirstOrDefault();
@@ -93,14 +93,14 @@ namespace TecoRP.Managers
                 var _list = db_Adversitements.GetAll();
                 foreach (var item in _list)
                 {
-                    var player = db_Accounts.IsPlayerOnline(item.OwnerSocialClubId);
+                    var player = db_Players.IsPlayerOnline(item.OwnerSocialClubId);
                     if (player != null)
                     {
                         API.shared.sendChatMessageToPlayer(sender, $"~g~[WZNews] ((/ro {item.AddvertisementID} | /rr {item.AddvertisementID}))~s~ -[{player.nametag}] {item.Text}");
                     }
                     else
                     {
-                        var _player = db_Accounts.GetOfflineUserDatas(item.OwnerSocialClubId);
+                        var _player = db_Players.GetOfflineUserDatas(item.OwnerSocialClubId);
                         API.shared.sendChatMessageToPlayer(sender, $"~g~[WZNews] ((/ro {item.AddvertisementID} | /rr {item.AddvertisementID}))~s~-[{_player.CharacterName}] {item.Text}");
 
                     }
@@ -129,8 +129,8 @@ namespace TecoRP.Managers
 
                 var _Id = db_Adversitements.Add(new Models.Advertisement(sender.socialClubName, text));
                 API.shared.sendChatMessageToPlayer(sender, "~g~[WZNews] ~s~- Reklamınız alındı. Onaylandıktan sonra yayınlanacaktır.");
-                RPGManager.SendAllPlayersInFaction(5, $"~g~[WZNews] ((/ro {_Id} | /rr {_Id}))~s~ -[{db_Accounts.GetPlayerCharacterName(sender)}] {text}");
-                Admin.AdminCommands.SendMessage($"~g~[WZNews] ((/ro {_Id} | /rr {_Id}))~s~ -[{db_Accounts.GetPlayerCharacterName(sender)}] {text}", 5, 1);
+                RPGManager.SendAllPlayersInFaction(5, $"~g~[WZNews] ((/ro {_Id} | /rr {_Id}))~s~ -[{db_Players.GetPlayerCharacterName(sender)}] {text}");
+                Admin.AdminCommands.SendMessage($"~g~[WZNews] ((/ro {_Id} | /rr {_Id}))~s~ -[{db_Players.GetPlayerCharacterName(sender)}] {text}", 5, 1);
             }
             else
             {

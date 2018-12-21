@@ -42,7 +42,7 @@ namespace TecoRP.Managers
                             if (itemPlayer == sender) continue;
                             if (Vector3.Distance(itemPlayer.position, sender.position) < 4)
                             {
-                                names.Add(db_Accounts.GetPlayerCharacterName(itemPlayer));
+                                names.Add(db_Players.GetPlayerCharacterName(itemPlayer));
                                 IDs.Add(API.shared.getEntityData(itemPlayer, "ID"));
                                 //API.shared.consoleOutput(IDs.LastOrDefault().ToString());
                             }
@@ -83,7 +83,7 @@ namespace TecoRP.Managers
                             if (itemPlayer == sender) continue;
                             if (Vector3.Distance(itemPlayer.position, sender.position) < 4)
                             {
-                                names.Add(db_Accounts.GetPlayerCharacterName(itemPlayer));
+                                names.Add(db_Players.GetPlayerCharacterName(itemPlayer));
                                 IDs.Add(API.shared.getEntityData(itemPlayer, "ID"));
                             }
                         }
@@ -120,7 +120,7 @@ namespace TecoRP.Managers
                         if (itemPlayer == sender) continue;
                         if (Vector3.Distance(itemPlayer.position, sender.position) < 4)
                         {
-                            names.Add(db_Accounts.GetPlayerCharacterName(itemPlayer));
+                            names.Add(db_Players.GetPlayerCharacterName(itemPlayer));
                             IDs.Add(API.shared.getEntityData(itemPlayer, "ID"));
                         }
                     }
@@ -139,7 +139,7 @@ namespace TecoRP.Managers
         }
         public static void PlayerSelectedSell(Client sender, SellType _type, int sellingObjId, int targetplayerId, int price)
         {
-            var _player = db_Accounts.FindPlayerById(targetplayerId);
+            var _player = db_Players.FindPlayerById(targetplayerId);
             if (_player == null) { return; }
 
             switch (_type)
@@ -156,7 +156,7 @@ namespace TecoRP.Managers
 
                     API.shared.setEntityData(_player, SELL_KEY, _tradeModel);
                     API.shared.sendChatMessageToPlayer(sender, "~y~Teklifiniz iletildi.");
-                    API.shared.sendChatMessageToPlayer(_player, $"{db_Accounts.GetPlayerCharacterName(sender)}~y~ alı kişi size {db_Vehicles.GetVehicle(_tradeModel.SellingObjId).VehicleModelId} model aracı ~s~{_tradeModel.OfferedPrice}$ ~y~ ücret karşılığında satmayı öneriyor.\n ~y~((/onayla))~s~ yazarak teklifi kabul edebilirsiniz..");
+                    API.shared.sendChatMessageToPlayer(_player, $"{db_Players.GetPlayerCharacterName(sender)}~y~ alı kişi size {db_Vehicles.GetVehicle(_tradeModel.SellingObjId).VehicleModelId} model aracı ~s~{_tradeModel.OfferedPrice}$ ~y~ ücret karşılığında satmayı öneriyor.\n ~y~((/onayla))~s~ yazarak teklifi kabul edebilirsiniz..");
                     break;
                 case SellType.house:
                     TradeSellModel _tradeModelHouse = new Models.TradeSellModel
@@ -170,7 +170,7 @@ namespace TecoRP.Managers
 
                     API.shared.setEntityData(_player, SELL_KEY, _tradeModelHouse);
                     API.shared.sendChatMessageToPlayer(sender, "~y~Teklifiniz iletildi.");
-                    API.shared.sendChatMessageToPlayer(_player, $"{db_Accounts.GetPlayerCharacterName(sender)}~y~ alı kişi size {db_Houses.GetHouse(_tradeModelHouse.SellingObjId).Name} adlı evi ~s~{_tradeModelHouse.OfferedPrice}$ ~y~ ücret karşılığında satmayı öneriyor.\n ~y~((/onayla))~s~ yazarak teklifi kabul edebilirsiniz..");
+                    API.shared.sendChatMessageToPlayer(_player, $"{db_Players.GetPlayerCharacterName(sender)}~y~ alı kişi size {db_Houses.GetHouse(_tradeModelHouse.SellingObjId).Name} adlı evi ~s~{_tradeModelHouse.OfferedPrice}$ ~y~ ücret karşılığında satmayı öneriyor.\n ~y~((/onayla))~s~ yazarak teklifi kabul edebilirsiniz..");
 
                     break;
                 case SellType.metalparts:
@@ -184,7 +184,7 @@ namespace TecoRP.Managers
                     };
                     API.shared.setEntityData(_player, SELL_KEY, _tradeModelMetal);
                     API.shared.sendChatMessageToPlayer(sender, "~y~Teklifiniz iletildi.");
-                    API.shared.sendChatMessageToPlayer(_player, $"{db_Accounts.GetPlayerCharacterName(sender)}~y~ alı kişi size {_tradeModelMetal.SellingObjId} adet metal parçayı ~s~{_tradeModelMetal.OfferedPrice}$ ~y~ ücret karşılığında satmayı öneriyor.\n ~y~((/onayla))~s~ yazarak teklifi kabul edebilirsiniz..");
+                    API.shared.sendChatMessageToPlayer(_player, $"{db_Players.GetPlayerCharacterName(sender)}~y~ alı kişi size {_tradeModelMetal.SellingObjId} adet metal parçayı ~s~{_tradeModelMetal.OfferedPrice}$ ~y~ ücret karşılığında satmayı öneriyor.\n ~y~((/onayla))~s~ yazarak teklifi kabul edebilirsiniz..");
 
 
                     break;
@@ -204,7 +204,7 @@ namespace TecoRP.Managers
                 {
                     case SellType.vehicle:
                         #region vehicle
-                        var sellerPlayer = db_Accounts.IsPlayerOnline(_trade.SellerSocialClubID);
+                        var sellerPlayer = db_Players.IsPlayerOnline(_trade.SellerSocialClubID);
                         if (sellerPlayer != null)
                         {
                             if (VehicleManager.SetVehicleOwner(_trade.SellingObjId, sender.socialClubName))
@@ -229,7 +229,7 @@ namespace TecoRP.Managers
                         break;
                     case SellType.house:
                         #region house
-                        var hSellerPlayer = db_Accounts.IsPlayerOnline(_trade.SellerSocialClubID);
+                        var hSellerPlayer = db_Players.IsPlayerOnline(_trade.SellerSocialClubID);
                         if (hSellerPlayer != null)
                         {
                             if (HouseManager.SetHouseOwner(_trade.SellingObjId, _trade.BuyerSocialClubID))
@@ -254,7 +254,7 @@ namespace TecoRP.Managers
                         break;
                     case SellType.metalparts:
                         #region metalpart
-                        var mSellerPlayer = db_Accounts.IsPlayerOnline(_trade.SellerSocialClubID);
+                        var mSellerPlayer = db_Players.IsPlayerOnline(_trade.SellerSocialClubID);
                         if (mSellerPlayer != null)
                         {
                             InventoryManager.AddMetalPartsToPlayer(sender, _trade.SellingObjId);

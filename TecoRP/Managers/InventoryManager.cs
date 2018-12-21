@@ -968,7 +968,7 @@ namespace TecoRP.Managers
             if (!API.shared.hasEntityData(sender, "Offer")) { API.shared.sendChatMessageToPlayer(sender, "~r~HATA: ~s~Herhangi bir teklif yok."); return; }
             TradeModel _trade = (TradeModel)API.getEntityData(sender, "Offer");
 
-            var sellerPlayer = db_Accounts.IsPlayerOnline(_trade.SellerSocialClubID);
+            var sellerPlayer = db_Players.IsPlayerOnline(_trade.SellerSocialClubID);
             if (sellerPlayer != null)
             {
                 if (Vector3.Distance(sender.position, sellerPlayer.position) < 3)
@@ -1041,7 +1041,7 @@ namespace TecoRP.Managers
                     if (item == sender) continue;
                     if (Vector3.Distance(sender.position, item.position) < 5)
                     {
-                        names.Add(db_Accounts.GetPlayerCharacterName(item));
+                        names.Add(db_Players.GetPlayerCharacterName(item));
                         ids.Add(API.shared.getEntityData(item, "ID"));
                     }
                 }
@@ -1057,7 +1057,7 @@ namespace TecoRP.Managers
 
         public static void OnSellItemSelected(Client sender, int index, int targetPlayerId, int money)
         {
-            var player = db_Accounts.FindPlayerById(targetPlayerId);
+            var player = db_Players.FindPlayerById(targetPlayerId);
             if (player != null)
             {
 
@@ -1078,7 +1078,7 @@ namespace TecoRP.Managers
                         SellerSocialClubID = sender.socialClubName,
                         OfferedPrice = money
                     });
-                    API.shared.sendChatMessageToPlayer(player, $"~y~~h~{db_Accounts.GetPlayerCharacterName(sender)} adlı kişi size {_item.Item1.Name} adlı eşyayı {money}$ karşılığında satmayı öneriyor. \n (( /kabulet )) (( /reddet ))");
+                    API.shared.sendChatMessageToPlayer(player, $"~y~~h~{db_Players.GetPlayerCharacterName(sender)} adlı kişi size {_item.Item1.Name} adlı eşyayı {money}$ karşılığında satmayı öneriyor. \n (( /kabulet )) (( /reddet ))");
                     API.shared.sendChatMessageToPlayer(sender, "~y~Teklifiniz gönderildi.");
                 }
                 else
@@ -1474,17 +1474,17 @@ namespace TecoRP.Managers
         }
         public static void AddMoneyToOfflinePlayerBank(string socialClubId, int amount)
         {
-            var _player = db_Accounts.GetOfflineUserDatas(socialClubId);
+            var _player = db_Players.GetOfflineUserDatas(socialClubId);
             if (_player != null)
             {
                 _player.BankMoney += amount;
-                db_Accounts.SaveOfflineUserData(socialClubId, _player);
+                db_Players.SaveOfflineUserData(socialClubId, _player);
             }
         }
         public static List<Tuple<Item, ClientItem>> GetItemFromOfflineUser(string socialClubId, ItemType _type)
         {
             var model = new List<Tuple<Models.Item, Models.ClientItem>>();
-            var _inventory = db_Accounts.GetOfflineUserInventory(socialClubId);
+            var _inventory = db_Players.GetOfflineUserInventory(socialClubId);
             if (_inventory != null)
             {
                 foreach (var clientItem in _inventory.ItemList)

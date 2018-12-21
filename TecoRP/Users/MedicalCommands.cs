@@ -129,7 +129,7 @@ namespace TecoRP.Users
             int playerFactionId = API.getEntityData(sender, "FactionId");
             if (playerFactionId != 4) { API.sendChatMessageToPlayer(sender, "~r~HATA: ~s~Uygun oluşumda değilsiniz."); return; }
 
-            var player = db_Accounts.GetPlayerById(targetPlayerId);
+            var player = db_Players.GetPlayerById(targetPlayerId);
             if (player == null) { API.sendChatMessageToPlayer(sender, "~r~HATA: ~s~Oyuncu bulunamadı."); return; }
             if(API.hasEntityData(player, "firstAided")) { API.sendChatMessageToPlayer(sender,"~r~HATA: ~s~Bu kişiye zaten ilkyardım uygulanmış."); return; }
             if (Vector3.Distance(sender.position, player.position) < 3)
@@ -141,7 +141,7 @@ namespace TecoRP.Users
                     _deadSeconds += 180;
                     API.setEntityData(player, "DeadSeconds", _deadSeconds);
                     API.setEntityData(player, "firstAided", true);
-                    rpgMgr.Me(sender, " yerde baygın olarak yatan " + db_Accounts.GetPlayerCharacterName(player) + " adlı kişiye ilkyardım uygular.");
+                    rpgMgr.Me(sender, " yerde baygın olarak yatan " + db_Players.GetPlayerCharacterName(player) + " adlı kişiye ilkyardım uygular.");
                     API.sendChatMessageToPlayer(sender, "(( ~c~Kişiyi kurtarmak için" + _deadSeconds + " saniyen var. Bu süre içerisinde hastaneye yetişrimelisin. ~s~))");
                     API.sendChatMessageToPlayer(sender, "(( ~c~" + _deadSeconds + " saniye içerisinde hastaneye yetiştirilemezsen öleceksin. ))");
                     API.playPlayerAnimation(sender, 0, "amb@code_human_police_investigate@idle_b", "idle_f");
@@ -161,7 +161,7 @@ namespace TecoRP.Users
         {
             int playerFactionId = API.getEntityData(sender, "FactionId");
             if (playerFactionId != 4) { API.sendChatMessageToPlayer(sender, "~r~HATA: ~s~Uygun oluşumda değilsiniz."); return; }
-            var player = db_Accounts.GetPlayerById(targetPlayerId);
+            var player = db_Players.GetPlayerById(targetPlayerId);
             if (player == null) { API.sendChatMessageToPlayer(sender, "~r~HATA: ~s~Oyuncu bulunamadı."); return; }
             if (Vector3.Distance(sender.position, player.position) < 3)
             {
@@ -184,7 +184,7 @@ namespace TecoRP.Users
         {
             int playerFactionId = API.getEntityData(sender, "FactionId");
             if (playerFactionId != 4) { API.sendChatMessageToPlayer(sender, "~r~HATA: ~s~Uygun oluşumda değilsiniz."); return; }
-            var player = db_Accounts.GetPlayerById(targetPlayerId);
+            var player = db_Players.GetPlayerById(targetPlayerId);
             if (player == null) { API.sendChatMessageToPlayer(sender, "~r~HATA: ~s~Oyuncu bulunamadı."); return; }
             if (Vector3.Distance(sender.position, player.position) < 3)
             {
@@ -229,7 +229,7 @@ namespace TecoRP.Users
             Clients.ClientManager.RemoveBlip(sender);
             int playerFactionId = API.getEntityData(sender, "FactionId");
             if (playerFactionId != 4) { API.sendChatMessageToPlayer(sender, "~r~HATA: ~s~Uygun oluşumda değilsiniz."); return; }
-            var player = db_Accounts.GetPlayerById(targetPlayerId);
+            var player = db_Players.GetPlayerById(targetPlayerId);
             if (player == null) { API.sendChatMessageToPlayer(sender, "~r~HATA: ~s~Oyuncu bulunamadı."); return; }
             if (Vector3.Distance(sender.position, player.position) < 5)
             {
@@ -256,8 +256,8 @@ namespace TecoRP.Users
             if (ticket!=null)
             {
                 Clients.ClientManager.ShowBlip(sender, ticket.Position.X, ticket.Position.Y, ticket.Position.Z-1);
-                RPGManager.SendAllPlayersInFaction(4, "~r~[LSMD] ~s~" + db_Accounts.GetPlayerCharacterName(sender) + " bir çağrıyı kabul etti.");
-                var player = db_Accounts.IsPlayerOnline(ticket.OwnerSocialClubID);
+                RPGManager.SendAllPlayersInFaction(4, "~r~[LSMD] ~s~" + db_Players.GetPlayerCharacterName(sender) + " bir çağrıyı kabul etti.");
+                var player = db_Players.IsPlayerOnline(ticket.OwnerSocialClubID);
                 if (player!=null)
                 {
                     API.sendChatMessageToPlayer(player, "~r~[LSMD] : ~s~Çağrınız kabul edildi. Bulunduğunuz konumda bekleyin.");
@@ -299,9 +299,9 @@ namespace TecoRP.Users
             Rank factionRank = db_FactionRanks.GetRank(4, API.getEntityData(sender, "FactionRank"));
             if (factionRank!=null)
             {
-                RPGManager.SendAllPlayersInFaction(4, "~r~[LSMD]("+factionRank.RankName+") "+db_Accounts.GetPlayerCharacterName(sender)+": ~s~"+text); return;
+                RPGManager.SendAllPlayersInFaction(4, "~r~[LSMD]("+factionRank.RankName+") "+db_Players.GetPlayerCharacterName(sender)+": ~s~"+text); return;
             }
-            RPGManager.SendAllPlayersInFaction(4, "~r~[LSMD] " + db_Accounts.GetPlayerCharacterName(sender) + ": ~s~"+text);
+            RPGManager.SendAllPlayersInFaction(4, "~r~[LSMD] " + db_Players.GetPlayerCharacterName(sender) + ": ~s~"+text);
 
         }
         public static void AddPhoneTicket(string text,Vector3 position,string ownerSocialClubName)
@@ -322,7 +322,7 @@ namespace TecoRP.Users
             API.shared.stopPlayerAnimation(player);
             API.shared.setEntityInvincible(player, false);
             API.shared.freezePlayer(player, false);
-            db_Accounts.SavePlayerAccount(player);
+            db_Players.SavePlayerAccount(player);
         }
     }
 }

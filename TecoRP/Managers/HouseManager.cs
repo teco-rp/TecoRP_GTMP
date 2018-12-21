@@ -47,7 +47,7 @@ namespace TecoRP.Managers
 
                                 if (!String.IsNullOrEmpty(itemHouse.OwnerSocialClubName))
                                 {
-                                    var sellerPlayer = db_Accounts.IsPlayerOnline(itemHouse.OwnerSocialClubName);
+                                    var sellerPlayer = db_Players.IsPlayerOnline(itemHouse.OwnerSocialClubName);
                                     if (sellerPlayer!=null)
                                     {
                                         int sellerBankMoney = API.getEntityData(sender, "BankMoney");
@@ -66,9 +66,9 @@ namespace TecoRP.Managers
                                     }
                                     else
                                     {
-                                        var sellerOfflinePlayer = db_Accounts.GetOfflineUserDatas(itemHouse.OwnerSocialClubName);
+                                        var sellerOfflinePlayer = db_Players.GetOfflineUserDatas(itemHouse.OwnerSocialClubName);
                                         sellerOfflinePlayer.BankAccount += itemHouse.Price;
-                                        db_Accounts.SaveOfflineUserData(sellerOfflinePlayer.SocialClubName, sellerOfflinePlayer);
+                                        db_Players.SaveOfflineUserData(sellerOfflinePlayer.SocialClubName, sellerOfflinePlayer);
                                         HouseMarkerColor hmc = new Models.HouseMarkerColor();
                                         var _house = db_Houses.GetHouse(itemHouse.HouseId);
                                         _house.MarkerOnMap.color = new Color(hmc.NormalColor.Red, hmc.NormalColor.Green, hmc.NormalColor.Blue, 255);

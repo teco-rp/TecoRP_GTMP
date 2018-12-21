@@ -158,7 +158,7 @@ namespace TecoRP.Managers
 
                                 if (!String.IsNullOrEmpty(_house.OwnerSocialClubName))
                                 {
-                                    var sellerPlayer = db_Accounts.IsPlayerOnline(_house.OwnerSocialClubName);
+                                    var sellerPlayer = db_Players.IsPlayerOnline(_house.OwnerSocialClubName);
                                     if (sellerPlayer != null)
                                     {
                                         #region payment
@@ -187,7 +187,7 @@ namespace TecoRP.Managers
                                     }
                                     else
                                     {
-                                        var sellerOfflinePlayer = db_Accounts.GetOfflineUserDatas(_house.OwnerSocialClubName);
+                                        var sellerOfflinePlayer = db_Players.GetOfflineUserDatas(_house.OwnerSocialClubName);
 
                                         #region payment
                                         if (InventoryManager.IsEnoughMoney(sender, _house.Price))
@@ -210,7 +210,7 @@ namespace TecoRP.Managers
                                         #endregion
 
                                         _house.OwnerSocialClubName = sender.socialClubName;
-                                        db_Accounts.SaveOfflineUserData(sellerOfflinePlayer.SocialClubName, sellerOfflinePlayer);
+                                        db_Players.SaveOfflineUserData(sellerOfflinePlayer.SocialClubName, sellerOfflinePlayer);
                                         HouseMarkerColor hmc = new Models.HouseMarkerColor();
                                        // var _house = db_Houses.GetHouse(_house.HouseId);
                                        // _house.MarkerOnMap.color = new Color(hmc.NormalColor.Red, hmc.NormalColor.Green, hmc.NormalColor.Blue, 255);

@@ -33,7 +33,7 @@ namespace TecoRP.Helpers
 
         public static string GetCharacterName(this Client player)
         {
-            return  (API.shared.getEntityData(player, "CharacterName") as string) ?? db_Accounts.GetPlayerCharacterName(player);
+            return  (API.shared.getEntityData(player, "CharacterName") as string) ?? db_Players.GetPlayerCharacterName(player);
         }
 
         public static Inventory GetInventory(this Client player)

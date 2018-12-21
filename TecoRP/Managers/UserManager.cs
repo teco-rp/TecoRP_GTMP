@@ -17,12 +17,11 @@ namespace TecoRP.Managers
 {
     public class UserManager : EventMethodTriggerBase
     {
-        static Random random = new Random();
         public UserManager()
         {
-            API.onPlayerConnected += API_onPlayerConnected;
-            API.onPlayerFinishedDownload += API_onPlayerFinishedDownload;
-            API.onPlayerDisconnected += API_onPlayerDisconnected;
+            //API.onPlayerConnected += API_onPlayerConnected;
+            //API.onPlayerFinishedDownload += API_onPlayerFinishedDownload;
+            //API.onPlayerDisconnected += API_onPlayerDisconnected;
         }
         ~UserManager()
         {
@@ -39,21 +38,9 @@ namespace TecoRP.Managers
 
         private void API_onPlayerConnected(Client player)
         {
-            if (!CheckPlayerIfIsInWhiteList(player))
-                return;
-
-            player.dimension = random.Next(short.MinValue, int.MaxValue);
-
-            SetIdToPlayer(player);
-
-            API.shared.sendChatMessageToPlayer(player, "~g~Başarıyla giriş yaptınız.");
-
-            if (db_Accounts.DoesAccountExist(player.socialClubName))
-            {
-                db_Accounts.LoadPlayerAccount(player);
-                player.SetNameTagWithId();
-            }
-  }
+            db_Players.LoadPlayerAccount(player);
+            player.SetNameTagWithId();
+        }
 
         private void API_onPlayerFinishedDownload(Client player)
         {
@@ -131,16 +118,16 @@ namespace TecoRP.Managers
             API.setEntityInvincible(sender, false);
             if (Convert.ToBoolean(args[1]))
             {
-                db_Accounts.CreatePlayerAccount(sender, "000");
+                db_Players.CreatePlayer(sender, "000");
             }
-            db_Accounts.LoadPlayerAccount(sender);
+            db_Players.LoadPlayerAccount(sender);
 
             bool isMale = (args[0].ToString().StartsWith("k", StringComparison.InvariantCultureIgnoreCase) || args[0].ToString().StartsWith("g", StringComparison.InvariantCultureIgnoreCase)) ? false : true;
             API.setEntityData(sender, "Gender", isMale);
             API.shared.consoleOutput("isMale is " + isMale);
             sender.SetSkinByGender();
             SetBeginnerInventory(sender);
-            db_Accounts.SavePlayerAccount(sender);
+            db_Players.SavePlayerAccount(sender);
 
             GoToApperanceSelection(sender);
         }
@@ -178,36 +165,7 @@ namespace TecoRP.Managers
             }
             API.shared.setPlayerWantedLevel(player, API.shared.getEntityData(player, "WantedLevel"));
         }
-        public bool CheckPlayerIfIsInWhiteList(Client sender)
-        {
-            var _Whitelist = db_WhiteList.GetAllowedPlayers();
-            if (_Whitelist.IsEnabled)
-            {
-                if (!_Whitelist.Users.Select(s => s.SocialClubName).Contains(sender.socialClubName))
-                {
-                    API.shared.consoleOutput("WHITELIST REDDEDİLDİ : " + sender.socialClubName);
-                    API.sendChatMessageToPlayer(sender, "~r~HATA: ~s~Erişiminiz bulunmuyor.");
-                    API.shared.sendNotificationToPlayer(sender, "~r~Başvurunuz henüz kabul edilmemiş veya onaylanmamış.");
-                    API.kickPlayer(sender, "Oyuna girmek için başvuru yapmalısınız.");
-                    return false;
-                }
-            }
-            return true;
-        }
 
-        public int SetIdToPlayer(Client player)
-        {
-            var players = API.getAllPlayers();
-            for (int i = 0; i <= players.Count; i++)
-                if (!db_Accounts.IsPlayerOnline(i))
-                {
-                    API.setEntityData(player, "ID", i);
-                    API.consoleOutput("PLAYER CONNECTED ID : " + API.getEntityData(player, "ID"));
-                    return i;
-                }
-
-            return -1;
-        }
 
         public void GoToRegistration(Client player)
         {
@@ -220,21 +178,20 @@ namespace TecoRP.Managers
 
         private void GoToApperanceSelection(Client player)
         {
-            player.dimension = random.Next(2000, 99999);
+            player.dimension = Main.random.Next(2000, 99999);
             player.position = new Vector3(774, 315, 196);
             player.freeze(true);
             //This will return to ClothingManager
             API.shared.triggerClientEvent(player, "ChooseCharacterApperance", player.getData("Gender") == true ? "male" : "female");
         }
-        static Random rnd = new Random();
         public void SetBeginnerInventory(Client player)
         {
             var inv = player.GetInventory();
 
             inv.ItemList.Add(new ClientItem { ItemId = 21, Count = 2 });
             inv.ItemList.Add(new ClientItem { ItemId = 2, Count = 2 });
-            inv.ItemList.Add(new ClientItem { ItemId = rnd.Next(5000,7000), Count = 1, Equipped = true });
-            inv.ItemList.Add(new ClientItem { ItemId = rnd.Next(5000, 7000), Count = 1, Equipped = false });
+            inv.ItemList.Add(new ClientItem { ItemId = Main.random.Next(5000, 7000), Count = 1, Equipped = true });
+            inv.ItemList.Add(new ClientItem { ItemId = Main.random.Next(5000, 7000), Count = 1, Equipped = false });
             //TODO: Add something else in starter inventory...
         }
 
@@ -367,7 +324,7 @@ namespace TecoRP.Managers
             API.shared.setEntityData(player, "HealthLevel", player.health);
             API.shared.setEntityData(player, "Dimension", player.dimension);
             API.shared.setEntityData(player, "CharacterName", player.nametag.Remove(0, IdLenght + 3));
-            db_Accounts.SavePlayerAccount(player);
+            db_Players.SavePlayerAccount(player);
         }
     }
 }

@@ -1,10 +1,10 @@
 ﻿/// <reference path="../../types-gt-mp/Declarations.d.ts" />
 
-var loginBrowser = null; //we set it to null because the browser is not yet created, we cannot have a var that has empty value, so we use null
-
+var loginBrowser = null; 
 
 API.onResourceStart.connect(function () {
     try {
+        API.setEntityTransparency(API.getLocalPlayer(),0);
         var res = API.getScreenResolution(); //this gets the client's screen resoulution
         loginBrowser = API.createCefBrowser(res.Width, res.Height); //we're initializing the browser here. This will be the full size of the user's screen.
         API.waitUntilCefBrowserInit(loginBrowser); //this stops the script from getting ahead of itself, it essentially pauses until the browser is initialized
@@ -20,11 +20,58 @@ API.onResourceStart.connect(function () {
     }
 });
 
+API.onServerEventTrigger.connect(function (eventName, args) {
+    if (eventName == "register_result") {
+        if (args[0] == true) {
+            API.loadPageCefBrowser(loginBrowser, "Client/Accounts/login.html");
+        }
+        else {
+            API.loadPageCefBrowser(loginBrowser, "Client/Accounts/login.html?message="+args[1]);
+        }
+    }
+    if (eventName == "login_result") {
+        if (args[0] == true) {
+            API.destroyCefBrowser(loginBrowser);
+        }
+        else {
+            API.loadPageCefBrowser(loginBrowser, "Client/Accounts/login.html?message="+args[1]);
+        }
+    }
+
+    if (eventName == "go_character_selection") {
+        callCharacterSelectionMenu(args);
+    }
+});
+
 function login(email, password) {
-    API.sendChatMessage("Login triggered with params: " + email + " | " + password);
+    API.triggerServerEvent("Login",email, password);
 }
 
-function register(email, password) {
-    API.register("Register triggered with params: " + email + " | " + password);
-    API.destroyCefBrowser(loginBrowser);
+function registerFromCef(email, password) {
+    API.triggerServerEvent("Register", email, password);
+}
+
+function callCharacterSelectionMenu(args) {
+    if (loginBrowser != null)
+        API.destroyCefBrowser(loginBrowser);
+
+
+    var chars_menu = API.createMenu("Karakterler", "Karakter seçimi:", 0, 0, 6);
+    API.setMenuBannerRectangle(chars_menu, 255, 49, 27, 146);
+    API.sendChatMessage("args length: " + args.Length);
+
+    let data = JSON.parse(args[0]);
+
+    for (var i = 0; i < data.Characters.length; i++) {
+        chars_menu.AddItem(API.createMenuItem(data.Characters[i], ""));
+    }
+
+    var newCharMenuItem = API.createColoredItem("Karakter Oluştur", "", "#311B92", "#F1F1F2");
+    chars_menu.AddItem(newCharMenuItem);
+    newCharMenuItem.Activated.connect(function (sender, selected) {
+        chars_menu.Clear();
+        chars_menu.Visible = false;
+        API.triggerServerEvent("CMD_EnableCreator");
+    });
+    chars_menu.Visible = true;
 }

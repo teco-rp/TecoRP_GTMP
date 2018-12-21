@@ -277,7 +277,7 @@ namespace TecoRP.Admin
         public void RevivePlayer(Client sender, int targetPlayerId)
         {
             if (!(API.getEntityData(sender, "AdminLevel") >= 1)) { API.sendChatMessageToPlayer(sender, "~r~HATA: ~w~Bunun için yetkiniz yok."); return; }
-            var player = db_Accounts.FindPlayerById(targetPlayerId);
+            var player = db_Players.FindPlayerById(targetPlayerId);
             if (player != null)
             {
                 Users.MedicalCommands.RevivePlayer(sender);
@@ -291,7 +291,7 @@ namespace TecoRP.Admin
         public void SetHudColor(Client sender, int playerId, int red, int green, int blue)
         {
             if (!(API.getEntityData(sender, "AdminLevel") >= 1)) { API.sendChatMessageToPlayer(sender, "~r~HATA: ~w~Bunun için yetkiniz yok."); return; }
-            var _player = db_Accounts.FindPlayerById(playerId);
+            var _player = db_Players.FindPlayerById(playerId);
             if (_player != null)
             {
                 API.triggerClientEvent(_player, "set_ui_color", red, green, blue);
@@ -344,7 +344,7 @@ namespace TecoRP.Admin
             if (!(API.getEntityData(sender, "AdminLevel") > 0)) { API.sendChatMessageToPlayer(sender, "~r~HATA: ~w~Bunun için yetkiniz yok."); return; }
             if (type.ToLower().StartsWith("p"))
             {
-                var player = db_Accounts.GetPlayerById(Convert.ToInt32(identity));
+                var player = db_Players.GetPlayerById(Convert.ToInt32(identity));
                 if (player != null)
                 {
                     if (player.isInVehicle)
@@ -492,7 +492,7 @@ namespace TecoRP.Admin
 
             if ("player".StartsWith(type.ToLower()))
             {
-                var player = db_Accounts.FindPlayerById(Convert.ToInt32(identity));
+                var player = db_Players.FindPlayerById(Convert.ToInt32(identity));
                 if (player != null)
                 {
                     if (sender.isInVehicle)
@@ -860,7 +860,7 @@ namespace TecoRP.Admin
             else
             if ("wanted".StartsWith(type.ToLower()))
             {
-                var player = db_Accounts.GetPlayerById(Convert.ToInt32(targetPlayer));
+                var player = db_Players.GetPlayerById(Convert.ToInt32(targetPlayer));
                 if (player != null)
                 {
 
@@ -874,7 +874,7 @@ namespace TecoRP.Admin
                 try
                 {
 
-                    var player = db_Accounts.GetPlayerById(Convert.ToInt32(targetPlayer));
+                    var player = db_Players.GetPlayerById(Convert.ToInt32(targetPlayer));
                     if (player != null)
                     {
                         API.shared.setPlayerTeam(player, Convert.ToInt32(value));
@@ -960,7 +960,7 @@ namespace TecoRP.Admin
                                 return;
                             }
 
-                            var player = db_Accounts.GetPlayerById(Convert.ToInt32(targetPlayer));
+                            var player = db_Players.GetPlayerById(Convert.ToInt32(targetPlayer));
                             if (player != null)
                             {
                                 if (db_Vehicles.CreateVehicle(_RequestedVehicle, player))
@@ -1044,7 +1044,7 @@ namespace TecoRP.Admin
             }
             if ("metalpart".StartsWith(type.ToLower()))
             {
-                var player = db_Accounts.FindPlayerById(Convert.ToInt32(targetPlayer));
+                var player = db_Players.FindPlayerById(Convert.ToInt32(targetPlayer));
                 if (player != null)
                 {
                     InventoryManager.AddMetalPartsToPlayer(player, Convert.ToInt32(value), false);
@@ -1056,7 +1056,7 @@ namespace TecoRP.Admin
             }
             if ("gender".StartsWith(type.ToLower()))
             {
-                var player = db_Accounts.FindPlayerById(Convert.ToInt32(targetPlayer));
+                var player = db_Players.FindPlayerById(Convert.ToInt32(targetPlayer));
                 if (player != null)
                 {
                     API.shared.setEntityData(player, "Gender", Convert.ToBoolean(value));
@@ -3310,7 +3310,7 @@ namespace TecoRP.Admin
         {
             if (!(API.getEntityData(sender, "AdminLevel") >= 1)) { API.sendChatMessageToPlayer(sender, "~r~HATA: ~w~Bunun için yetkiniz yok."); return; }
             var question = db_Reports.GetReport(qId);
-            var player = db_Accounts.IsPlayerOnline(question.OwnerSocialClubID);
+            var player = db_Players.IsPlayerOnline(question.OwnerSocialClubID);
             if (player != null)
             {
                 API.sendChatMessageToPlayer(player, "~b~[?]~s~~h~ Sorunuzun Cevabı: ~h~" + text);
@@ -3330,7 +3330,7 @@ namespace TecoRP.Admin
         {
             if (!(API.getEntityData(sender, "AdminLevel") >= 1)) { API.sendChatMessageToPlayer(sender, "~r~HATA: ~w~Bunun için yetkiniz yok."); return; }
             var question = db_Reports.GetReport(qId);
-            var player = db_Accounts.IsPlayerOnline(question.OwnerSocialClubID);
+            var player = db_Players.IsPlayerOnline(question.OwnerSocialClubID);
             if (player != null)
             {
                 API.sendChatMessageToPlayer(sender, "~r~[!]~s~~h~ - Raporun sahibi şu anda online: " + player.nametag);
@@ -3348,7 +3348,7 @@ namespace TecoRP.Admin
         {
             if (!(API.getEntityData(sender, "AdminLevel") >= 1)) { API.sendChatMessageToPlayer(sender, "~r~HATA: ~w~Bunun için yetkiniz yok."); return; }
             var question = db_Reports.GetReport(qId);
-            var player = db_Accounts.IsPlayerOnline(question.OwnerSocialClubID);
+            var player = db_Players.IsPlayerOnline(question.OwnerSocialClubID);
             if (player != null)
             {
                 API.sendChatMessageToPlayer(sender, "~r~[!]~s~~h~ - Raporun sahibi şu anda online: " + player.nametag);
@@ -3411,7 +3411,7 @@ namespace TecoRP.Admin
             if (!(API.getEntityData(sender, "AdminLevel") >= 1)) { API.sendChatMessageToPlayer(sender, "~r~HATA: ~w~Bunun için yetkiniz yok."); return; }
             if ("player".StartsWith(type.ToLower()))
             {
-                var player = db_Accounts.FindPlayerById(id);
+                var player = db_Players.FindPlayerById(id);
                 if (player != null)
                 {
                     Clients.ClientManager.UpdateWaypoint(sender, player.position);
@@ -3502,7 +3502,7 @@ namespace TecoRP.Admin
         public void ClearPlayerStar(Client sender, int targetPlayerId)
         {
             if (!(API.getEntityData(sender, "AdminLevel") >= 1)) { API.sendChatMessageToPlayer(sender, "~r~HATA: ~w~Bunun için yetkiniz yok."); return; }
-            var player = db_Accounts.FindPlayerById(targetPlayerId);
+            var player = db_Players.FindPlayerById(targetPlayerId);
             if (player != null)
             {
                 player.wantedLevel = 0;
@@ -3573,7 +3573,7 @@ namespace TecoRP.Admin
         {
             if (!(API.getEntityData(sender, "AdminLevel") >= 1)) { API.sendChatMessageToPlayer(sender, "~r~HATA: ~w~Bunun için yetkiniz yok."); return; }
 
-            var player = db_Accounts.GetPlayerById(playerId);
+            var player = db_Players.GetPlayerById(playerId);
             if (player == null)
             {
                 API.shared.sendChatMessageToPlayer(sender, "~r~HATA: ~w~Oyuncu bulunamadı.");
@@ -3656,7 +3656,7 @@ namespace TecoRP.Admin
         public static void RemoveItemFromInventory(Client sender, string ownerSocialClubId, int index)
         {
             if (!(API.shared.getEntityData(sender, "AdminLevel") >= 2)) { API.shared.sendChatMessageToPlayer(sender, "~r~HATA: ~w~Bunun için yetkiniz yok."); return; }
-            var player = db_Accounts.IsPlayerOnline(ownerSocialClubId);
+            var player = db_Players.IsPlayerOnline(ownerSocialClubId);
             if (player != null)
             {
                 InventoryManager.RemoveItemFromPlayerInventoryByIndex(player, index);

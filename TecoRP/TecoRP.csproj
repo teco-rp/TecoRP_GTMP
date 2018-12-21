@@ -69,6 +69,8 @@
   <ItemGroup>
     <Compile Include="Admin\AdminCommands.cs" />
     <Compile Include="Client\ClientManager.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="Database\db_Accounts.cs" />
     <Compile Include="Database\db_Adversitements.cs" />
     <Compile Include="Database\db_Buildings.cs" />
     <Compile Include="Database\db_Craftings.cs" />
@@ -89,6 +91,7 @@
     <Compile Include="Database\db_PhoneOperatorShop.cs" />
     <Compile Include="Helpers\ClothingExtensions.cs" />
     <Compile Include="Helpers\Converter.cs" />
+    <Compile Include="Helpers\EventArgs.cs" />
     <Compile Include="Helpers\PlayerExtensions.cs" />
     <Compile Include="Helpers\SoftException.cs" />
     <Compile Include="Jobs\db_KamyonJob.cs" />
@@ -99,7 +102,7 @@
     <Compile Include="Managers\BankManager.cs" />
     <Compile Include="Managers\Base\EventMethodTriggerBase.cs" />
     <Compile Include="Managers\BlipManager.cs" />
-    <Compile Include="Database\db_Accounts.cs" />
+    <Compile Include="Database\db_Players.cs" />
     <Compile Include="Database\db_Blips.cs" />
     <Compile Include="Database\db_Entrances.cs" />
     <Compile Include="Database\db_Houses.cs" />
@@ -109,6 +112,7 @@
     <Compile Include="Database\db_Vehicles.cs" />
     <Compile Include="Managers\BuildingManager.cs" />
     <Compile Include="Managers\BusinessManager.cs" />
+    <Compile Include="Managers\CharacterCreatorManager.cs" />
     <Compile Include="Managers\ClothesManager.cs" />
     <Compile Include="Managers\CraftingManager.cs" />
     <Compile Include="Managers\CrimeManager.cs" />
@@ -155,6 +159,7 @@
     <Compile Include="Models\Hospital.cs" />
     <Compile Include="Models\HouseElements.cs" />
     <Compile Include="Models\Houses.cs" />
+    <Compile Include="Models\ISingleDocBase.cs" />
     <Compile Include="Models\Items.cs" />
     <Compile Include="Models\Jobs.cs" />
     <Compile Include="Models\Job_Bus.cs" />
@@ -172,7 +177,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Managers\RPGManager.cs" />
     <Compile Include="Repository\Base\IBaseRepository.cs" />
+    <Compile Include="Repository\Base\ISingleDocRepositoryBase.cs" />
     <Compile Include="Repository\Base\JsonRepositoryBase.cs" />
+    <Compile Include="Repository\Base\JsonSingleDocRepositoryBase.cs" />
     <Compile Include="Users\Animation.cs" />
     <Compile Include="Users\MedicalCommands.cs" />
     <Compile Include="Users\PoliceCommands.cs" />

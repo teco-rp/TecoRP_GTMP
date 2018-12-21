@@ -25,7 +25,7 @@ namespace TecoRP.Managers
         public static void ColshapeOnMap_onEntityEnterColShape(ColShape shape, GrandTheftMultiplayer.Shared.NetHandle entity)
         {
             if (!API.shared.hasEntityData(entity, "ID")) return;
-            var _player = (Client)db_Accounts.FindPlayerById(API.shared.getEntityData(entity, "ID"));
+            var _player = (Client)db_Players.FindPlayerById(API.shared.getEntityData(entity, "ID"));
             var _shapeIndex = db_LicensePoints.currentVehLicenseCheckpoints.Items.IndexOf(db_LicensePoints.currentVehLicenseCheckpoints.Items.FirstOrDefault(x => x.ColshapeOnMap == (CylinderColShape)shape));
             API.shared.consoleOutput("shape ındex: " + _shapeIndex);
             if (_shapeIndex >= 0)
@@ -149,7 +149,7 @@ namespace TecoRP.Managers
                 var licenses = InventoryManager.GetItemsFromPlayerInventory(sender, ItemType.License).Where(x => x.Item1.Value_0 == "0").ToList();
                 var splitted = type.Split(' ');
                 if (splitted.Length < 2) { API.shared.sendChatMessageToPlayer(sender,"/ehliyet goster [OyuncuID]"); return; }
-                var targetPlayer = db_Accounts.GetPlayerById(Convert.ToInt32(splitted[1]));
+                var targetPlayer = db_Players.GetPlayerById(Convert.ToInt32(splitted[1]));
                 if (targetPlayer == null){ API.shared.sendChatMessageToPlayer(sender, "~r~HATA: ~s~Oyuncu bulunamadı."); return; }
 
                 User userInformation = new User(sender.socialClubName);
@@ -157,7 +157,7 @@ namespace TecoRP.Managers
                 {
                     try
                     {
-                        userInformation = db_Accounts.GetOfflineUserDatas(licenses[Convert.ToInt32(splitted[2])].Item2.SpecifiedValue);
+                        userInformation = db_Players.GetOfflineUserDatas(licenses[Convert.ToInt32(splitted[2])].Item2.SpecifiedValue);
 
                     }
                     catch (Exception ex)
@@ -169,7 +169,7 @@ namespace TecoRP.Managers
                             string strIdentities = ""; int index = 0;
                             foreach (var item in licenses)
                             {
-                                strIdentities += "~y~" + index + " ~s~- " + (String.IsNullOrEmpty(item.Item2.SpecifiedValue) ? "Belirsiz" : db_Accounts.GetOfflineUserDatas(item.Item2.SpecifiedValue).CharacterName) + "\n";
+                                strIdentities += "~y~" + index + " ~s~- " + (String.IsNullOrEmpty(item.Item2.SpecifiedValue) ? "Belirsiz" : db_Players.GetOfflineUserDatas(item.Item2.SpecifiedValue).CharacterName) + "\n";
                                 index++;
                             }
                             API.shared.sendChatMessageToPlayer(sender, strIdentities); return;
@@ -178,7 +178,7 @@ namespace TecoRP.Managers
                 }
                 else
                 {
-                    userInformation = db_Accounts.GetOfflineUserDatas(licenses.FirstOrDefault().Item2.SpecifiedValue);
+                    userInformation = db_Players.GetOfflineUserDatas(licenses.FirstOrDefault().Item2.SpecifiedValue);
                 }
 
                 if(userInformation == null) { userInformation.CharacterName = "Belirsiz"; }

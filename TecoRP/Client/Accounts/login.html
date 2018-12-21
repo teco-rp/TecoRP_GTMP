@@ -14,7 +14,7 @@
         </center>
 
         <div class="textbox">
-            <input id="Email" type="email" placeholder="E-Posta" value="" />
+            <input id="Email" type="email" placeholder="Kullanıcı adı" value="" />
             <span id="EmailVal"></span>
         </div>
 
@@ -23,7 +23,7 @@
             <span id="PasswordVal"></span>
         </div>
         <div class="textbox hidden" id="passwordConfirmBox">
-            <input id="PasswordConfirm" placeholder="Parola Tekrar" value="" />
+            <input id="PasswordConfirm" type="password" placeholder="Parola Tekrar" value="" />
             <span id="PasswordConfirmVal"></span>
         </div>
         <input onclick="onLogin()" class="btn-primary" type="submit" name="" value="Giriş">
@@ -45,7 +45,7 @@
                     return;
                 } else { $("#PasswordConfirmVal").html(""); }
 
-                resourceCall("register", $("#Email").val() , $("#Password").val());
+                resourceCall("registerFromCef", $("#Email").val(), $("#Password").val());
             }
             else {
                 $("#passwordConfirmBox").removeClass("hidden");

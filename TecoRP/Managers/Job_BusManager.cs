@@ -28,7 +28,7 @@ namespace TecoRP.Managers
         {
             if (API.getEntityData(entity, JOB_ON) != null && Convert.ToInt32(API.getEntityData(entity, "JobId")) == 1)
             {
-                Client player = db_Accounts.GetPlayerById(API.getEntityData(entity, "ID"));
+                Client player = db_Players.GetPlayerById(API.getEntityData(entity, "ID"));
 
                 if (player.isInVehicle && API.getEntityData(player, "ID") == API.getEntityData(player.vehicle, JOB_VEHICLE))
                 {

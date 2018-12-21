@@ -21,7 +21,7 @@ namespace TecoRP.Managers
             List<User> returnModel = new List<Models.User>();
             foreach (var itemPlayer in db_Crimes.GetAll().Items)
             {
-                returnModel.Add(db_Accounts.GetOfflineUserDatas(itemPlayer.OwnerSocialClubName));
+                returnModel.Add(db_Players.GetOfflineUserDatas(itemPlayer.OwnerSocialClubName));
             }
             return returnModel;
         }
@@ -79,7 +79,7 @@ namespace TecoRP.Managers
                         {
                             if (item.Crimes.Count > 0)
                             {
-                                names.Add(db_Accounts.GetOfflineUserDatas(item.OwnerSocialClubName).CharacterName);
+                                names.Add(db_Players.GetOfflineUserDatas(item.OwnerSocialClubName).CharacterName);
                                 descs.Add("Toplam Suç: " + item.CrimesBefore + " Son Suç: " + (item.Crimes.Count > 0 ? item.Crimes.LastOrDefault().Name : "Belirsiz."));
                             }
                         }
@@ -109,7 +109,7 @@ namespace TecoRP.Managers
 
         public static void OnAddCrimeToPlayer(Client sender, string fingerPrint)
         {
-            User player = db_Accounts.FindFingerPrint(fingerPrint);
+            User player = db_Players.FindFingerPrint(fingerPrint);
             if (player != null)
             {
                 List<string> names = new List<string>();
@@ -132,7 +132,7 @@ namespace TecoRP.Managers
             var crimeList = db_Crimes.GetCrimeTypes().Items;
             db_Crimes.AddCrimeToPlayer(crimeList[index], socialClubName);
 
-            var player = db_Accounts.IsPlayerOnline(socialClubName);
+            var player = db_Players.IsPlayerOnline(socialClubName);
             if (player != null)
             {
                 API.shared.setPlayerWantedLevel(player, API.shared.getPlayerWantedLevel(player) + crimeList[index].WantedLevel > 5 ? 5 : API.shared.getPlayerWantedLevel(player) + crimeList[index].WantedLevel);
@@ -140,7 +140,7 @@ namespace TecoRP.Managers
             }
             else
             {
-                var _offlinePlayer = db_Accounts.GetOfflineUserDatas(socialClubName);
+                var _offlinePlayer = db_Players.GetOfflineUserDatas(socialClubName);
                 _offlinePlayer.WantedLevel = _offlinePlayer.WantedLevel + crimeList[index].WantedLevel > 5 ? 5 : _offlinePlayer.WantedLevel + crimeList[index].WantedLevel;
             }
             API.shared.sendChatMessageToPlayer(sender, "~y~Suç başarıyla eklendi.");

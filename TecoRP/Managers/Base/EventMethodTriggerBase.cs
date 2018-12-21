@@ -29,7 +29,8 @@ namespace TecoRP.Managers.Base
             }
             try
             {
-                method.Invoke(this, parameters: BindParameters(sender, parameters, arguments).ToArray());
+                var pr = BindParameters(sender, parameters, arguments).ToArray();
+                method.Invoke(this, parameters: pr);
             }
             catch (Exception ex)
             {
@@ -41,8 +42,8 @@ namespace TecoRP.Managers.Base
         public IEnumerable<object> BindParameters(Client sender, ParameterInfo[] parameters, object[] arguments)
         {
             yield return sender;
-            for (int i = 1; i < parameters.Length; i++)
-                yield return Convert.ChangeType(arguments[i], parameters[i].ParameterType);
+            for (int i = 0; i < arguments.Length; i++)
+                yield return Convert.ChangeType(arguments[i], parameters[i + 1].ParameterType);
 
         }
     }

@@ -30,7 +30,7 @@ namespace TecoRP.Managers
         {
             if (API.hasEntityData(entity, JOB_ON) && Convert.ToInt32(API.getEntityData(entity, "JobId")) == 3)
             {
-                Client sender = db_Accounts.GetPlayerById(API.getEntityData(entity, "ID"));
+                Client sender = db_Players.GetPlayerById(API.getEntityData(entity, "ID"));
                 if (sender.isInVehicle && API.getEntityData(sender, "ID") == API.getEntityData(sender.vehicle, JOB_VEHICLE))
                 {
                     var _Index = db_KamyonJob.FindKamyonDeliveryPointIndexById(API.getEntityData(sender, JOB_ON));

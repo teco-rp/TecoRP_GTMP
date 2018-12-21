@@ -31,7 +31,7 @@ namespace TecoRP.Managers
             };
             
             API.shared.setEntityData(sender, nameof(User.ClothingData), cData);
-            db_Accounts.SavePlayerAccount(sender);
+            db_Players.SavePlayerAccount(sender);
             sender.dimension = API.getEntityData(sender, "Dimension");
             sender.position = API.getEntityData(sender, "LastPosition");
             sender.freeze(false);

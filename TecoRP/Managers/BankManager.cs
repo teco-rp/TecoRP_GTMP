@@ -228,11 +228,11 @@ namespace TecoRP.Managers
             if (bankMoney >= Convert.ToInt32(value))
             {
 
-                foreach (var itemPlayer in db_Accounts.GetOfflineUserDatas())
+                foreach (var itemPlayer in db_Players.GetOfflineUserDatas())
                 {
                     if (itemPlayer.BankAccount == bankAccount)
                     {
-                        var clientPlayer = db_Accounts.IsPlayerOnline(itemPlayer.SocialClubName);
+                        var clientPlayer = db_Players.IsPlayerOnline(itemPlayer.SocialClubName);
                         if (clientPlayer != null)
                         {
                             int takerBankMoney = API.getEntityData(clientPlayer, "BankMoney");
@@ -246,7 +246,7 @@ namespace TecoRP.Managers
                             itemPlayer.BankMoney += valueToTranfser;
                             bankMoney -= valueToTranfser;
                         }
-                        db_Accounts.SaveOfflineUserData(itemPlayer.SocialClubName, itemPlayer);
+                        db_Players.SaveOfflineUserData(itemPlayer.SocialClubName, itemPlayer);
                         API.sendNotificationToPlayer(sender, "Banka Hesabı:\n~r~-" + valueToTranfser);
                         API.setEntityData(sender, "BankMoney", bankMoney);
 

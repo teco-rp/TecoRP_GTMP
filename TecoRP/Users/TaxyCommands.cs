@@ -65,8 +65,8 @@ namespace TecoRP.Users
             if (_ticket != null)
             {
                 Clients.ClientManager.ShowBlip(sender, _ticket.Position.X, _ticket.Position.Y, _ticket.Position.Z);
-                RPGManager.SenAllPlayersInJob(playerJobId, "~y~[TAKSİ]: ~s~" + db_Accounts.GetPlayerCharacterName(sender) + " adlı kişi bir çağrıyı kabul etti. (( " + _ticket.ID + " ))");
-                var player = db_Accounts.IsPlayerOnline(_ticket.OwnerSocialClubID);
+                RPGManager.SenAllPlayersInJob(playerJobId, "~y~[TAKSİ]: ~s~" + db_Players.GetPlayerCharacterName(sender) + " adlı kişi bir çağrıyı kabul etti. (( " + _ticket.ID + " ))");
+                var player = db_Players.IsPlayerOnline(_ticket.OwnerSocialClubID);
                 if (player != null)
                 {
                     API.sendChatMessageToPlayer(sender, "~y~[TAKSİ]: ~s~Çağrınız kabul edildi. Bulunduğunuz konumda bekleyin.");
@@ -86,8 +86,8 @@ namespace TecoRP.Users
             var _ticket = currentTickets.FirstOrDefault(x => x.ID == id);
             if (_ticket != null)
             {
-                RPGManager.SenAllPlayersInJob(playerJobId, "~y~[TAKSİ]: ~s~" + db_Accounts.GetPlayerCharacterName(sender) + " adlı kişi bir çağrıyı reddetti. (( "+_ticket.ID+" ))");
-                var player = db_Accounts.IsPlayerOnline(_ticket.OwnerSocialClubID);
+                RPGManager.SenAllPlayersInJob(playerJobId, "~y~[TAKSİ]: ~s~" + db_Players.GetPlayerCharacterName(sender) + " adlı kişi bir çağrıyı reddetti. (( "+_ticket.ID+" ))");
+                var player = db_Players.IsPlayerOnline(_ticket.OwnerSocialClubID);
                 if (player != null)
                 {
                     API.sendChatMessageToPlayer(sender, "~y~[TAKSİ]: ~s~Çağrınız kabul edildi. Bulunduğunuz konumda bekleyin.");

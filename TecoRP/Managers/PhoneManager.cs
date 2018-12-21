@@ -296,7 +296,7 @@ namespace TecoRP.Managers
             if (API.hasEntityData(sender, "ringing"))
             {
                 string[] ringing = API.getEntityData(sender, "ringing");
-                var _player = db_Accounts.GetPlayerById(Convert.ToInt32(ringing[1]));
+                var _player = db_Players.GetPlayerById(Convert.ToInt32(ringing[1]));
                 API.resetEntityData(sender, "ringing");
                 API.setEntityData(_player, "OnCall", API.getEntityData(sender, "ID"));
                 API.setEntityData(sender, "OnCall", Convert.ToInt32(ringing[1]));
@@ -319,7 +319,7 @@ namespace TecoRP.Managers
                 string[] ringing = API.getEntityData(sender, "ringing");
                 try
                 {
-                    var _player = db_Accounts.GetPlayerById(Convert.ToInt32(ringing[1]));
+                    var _player = db_Players.GetPlayerById(Convert.ToInt32(ringing[1]));
                     API.resetEntityData(sender, "ringing");
                     API.resetEntityData(_player, "ringing");
                     API.resetEntityData(sender, "calling");
@@ -339,7 +339,7 @@ namespace TecoRP.Managers
             if (API.hasEntityData(sender, "calling"))
             {
                 int calling = API.getEntityData(sender, "calling");
-                var _player = db_Accounts.GetPlayerById(Convert.ToInt32(calling));
+                var _player = db_Players.GetPlayerById(Convert.ToInt32(calling));
                 API.resetEntityData(sender, "ringing");
                 API.resetEntityData(_player, "ringing");
                 API.resetEntityData(sender, "calling");
@@ -353,7 +353,7 @@ namespace TecoRP.Managers
             else
             if (API.hasEntityData(sender, "OnCall"))
             {
-                var _player = db_Accounts.GetPlayerById(API.getEntityData(sender, "OnCall"));
+                var _player = db_Players.GetPlayerById(API.getEntityData(sender, "OnCall"));
                 API.resetEntityData(sender, "ringing");
                 API.resetEntityData(_player, "ringing");
                 API.resetEntityData(sender, "calling");

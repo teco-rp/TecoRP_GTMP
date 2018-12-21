@@ -146,7 +146,7 @@ namespace TecoRP.Managers
             {
                 if (player.dimension == sender.dimension && Vector3.Distance(player.position, sender.position) < 45)
                 {
-                    API.sendChatMessageToPlayer(player, "~p~"+ db_Accounts.GetPlayerCharacterName(sender) + _action);
+                    API.sendChatMessageToPlayer(player, "~p~"+ db_Players.GetPlayerCharacterName(sender) + _action);
                 }
             }
         }
@@ -269,7 +269,7 @@ namespace TecoRP.Managers
             {
                 if (Vector3.Distance(sender.position, itemPlayer.position) < 75)
                 {
-                    API.sendChatMessageToPlayer(itemPlayer, $"({db_Accounts.GetPlayerCharacterName(sender)})~y~[MEGAFON]: ~s~{_text}");
+                    API.sendChatMessageToPlayer(itemPlayer, $"({db_Players.GetPlayerCharacterName(sender)})~y~[MEGAFON]: ~s~{_text}");
                 }
             }
         }
@@ -277,13 +277,13 @@ namespace TecoRP.Managers
         [Command("w", "/w [OyuncuID] [Mesajınız] ((IC))", GreedyArg = true)]
         public void WhisperToPlayer(Client sender, int targetPlayerId,string _text)
         {
-            var player = db_Accounts.GetPlayerById(targetPlayerId);
+            var player = db_Players.GetPlayerById(targetPlayerId);
             if (player != null)
             {
                 if (Vector3.Distance(sender.position, player.position) > 3) { return; }
-                API.sendChatMessageToPlayer(player, $"{db_Accounts.GetPlayerCharacterName(sender)}~818181~[FISILTI]: " + _text);
+                API.sendChatMessageToPlayer(player, $"{db_Players.GetPlayerCharacterName(sender)}~818181~[FISILTI]: " + _text);
             }
-            Me(sender, $" adlı oyuncu {db_Accounts.GetPlayerCharacterName(player)} adlı oyuncuya bir şeyler fısıldar.");
+            Me(sender, $" adlı oyuncu {db_Players.GetPlayerCharacterName(player)} adlı oyuncuya bir şeyler fısıldar.");
         }
         [Command("notificationall", "/notifyall [text]", Alias = "notifyall", GreedyArg = true)]
         public void NotifyToAll(Client sender, string _text)

@@ -28,7 +28,7 @@ namespace TecoRP.Managers
                 {
                     if (API.getEntityData(itemPlayer, "FactionId") == _factionID)
                     {
-                        strPlayers += "\n~y~("+db_FactionRanks.GetRank(_factionID,API.getEntityData(itemPlayer,"FactionRank")).RankName + ") ~s~"+db_Accounts.GetPlayerCharacterName(itemPlayer)+" ~h~("+API.getEntityData(itemPlayer,"ID")+")";
+                        strPlayers += "\n~y~("+db_FactionRanks.GetRank(_factionID,API.getEntityData(itemPlayer,"FactionRank")).RankName + ") ~s~"+db_Players.GetPlayerCharacterName(itemPlayer)+" ~h~("+API.getEntityData(itemPlayer,"ID")+")";
                     }
                 }
                 API.sendChatMessageToPlayer(sender, strPlayers);
@@ -54,7 +54,7 @@ namespace TecoRP.Managers
             }
             //if (factionRank >= _FacRank.Ranks[_FacRank.Ranks.Count - 2].RankLevel)
 
-            var player = Database.db_Accounts.GetPlayerById(targetPlayerId);
+            var player = Database.db_Players.GetPlayerById(targetPlayerId);
             if (player != null)
             {
                 if (API.getEntityData(player, "FactionId") != _factionID)
@@ -218,7 +218,7 @@ namespace TecoRP.Managers
                 API.setEntityData(sender, "FactionId", API.getEntityData(sender, "FactionInvite"));
                 API.setEntityData(sender, "FactionRank", 1);
                 API.sendChatMessageToPlayer(sender, "~y~Oluşum davetini kabul ettiniz. Artık " + ToFactionName(API.getEntityData(sender, "FactionInvite")) + " adlı oluşumun üyesisiniz.");
-                RPGManager.SendAllPlayersInFaction(API.getEntityData(sender, "FactionInvite"), "~s~" + db_Accounts.GetPlayerCharacterName(sender) + "~y~ adlı kişi oluşuma katıldı.");
+                RPGManager.SendAllPlayersInFaction(API.getEntityData(sender, "FactionInvite"), "~s~" + db_Players.GetPlayerCharacterName(sender) + "~y~ adlı kişi oluşuma katıldı.");
                 API.resetEntityData(sender, "FactionInvite");
             }
             else
@@ -251,7 +251,7 @@ namespace TecoRP.Managers
             FactionRank _FacRank = db_FactionRanks.GetFactionRanks(factionId);
             if (factionRank >= _FacRank.Ranks.LastOrDefault().RankLevel)
             {
-                var player = db_Accounts.GetPlayerById(targetPlayerId);
+                var player = db_Players.GetPlayerById(targetPlayerId);
                 if (API.getEntityData(player, "FactionId") == factionId)
                 {
                     API.setEntityData(player, "FactionId", 0);
@@ -294,7 +294,7 @@ namespace TecoRP.Managers
             FactionRank _FacRank = db_FactionRanks.GetFactionRanks(factionId);
             if (factionRank >= _FacRank.Ranks[_FacRank.Ranks.Count - 2].RankLevel)
             {
-                var player = db_Accounts.GetPlayerById(targetPlayerId);
+                var player = db_Players.GetPlayerById(targetPlayerId);
                 if (player == null){ API.sendChatMessageToPlayer(sender, "~r~HATA: ~s~Oyuncu bulunamadı.");  return; }
 
                 if (API.getEntityData(player, "FactionId") != factionId){ API.sendChatMessageToPlayer(sender, "~r~HATA: ~s~Bu oyuncu sizin ile aynı oluşumda değil."); return; }

@@ -9,6 +9,6 @@ namespace TecoRP
 {
     public class Main : Script
     {
-
+        public static Random random = new Random();
     }
 }

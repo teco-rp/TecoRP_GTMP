@@ -32,7 +32,7 @@ namespace TecoRP.Users
         {
             if (API.getEntityData(sender, "FactionId") != 1) { API.sendChatMessageToPlayer(sender, "~r~Bunun için polis olmalısınız."); return; }
             try { Convert.ToInt32(targetPlayerId); } catch (Exception) { API.sendChatMessageToPlayer(sender, "~y~Girdiğiniz parametre ~w~ID~y~ ve~w~ sayı ~y~olmalıdır."); return; }
-            var player = db_Accounts.FindPlayerById(Convert.ToInt32(targetPlayerId));
+            var player = db_Players.FindPlayerById(Convert.ToInt32(targetPlayerId));
             if (player == null) { API.sendChatMessageToPlayer(sender, "~r~HATA: ~s~Oyuncu bulunamadı."); return; }
             if (Vector3.Distance(player.position, sender.position) > 3) { API.sendChatMessageToPlayer(sender, "~r~HATA: ~s~Oyuncu yanınızda olmalı."); return; }
             if (API.getEntityData(player, "ID") == Convert.ToInt32(targetPlayerId))
@@ -41,7 +41,7 @@ namespace TecoRP.Users
                 {
                     CuffPlayer(player);
 
-                    rpgMgr.Me(sender, $" kelepçesini alır ve {db_Accounts.GetPlayerCharacterName(player)} adlı kişinin ellerini arkasında birleştirip kelepçeler .");
+                    rpgMgr.Me(sender, $" kelepçesini alır ve {db_Players.GetPlayerCharacterName(player)} adlı kişinin ellerini arkasında birleştirip kelepçeler .");
                 }
                 else
                 {
@@ -59,7 +59,7 @@ namespace TecoRP.Users
             if (API.getEntityData(sender, "FactionId") != 1) { API.sendChatMessageToPlayer(sender, "~r~Bunun için polis olmalısınız."); return; }
 
             try { Convert.ToInt32(identity); } catch (Exception) { API.sendChatMessageToPlayer(sender, "~y~Girdiğiniz parametre ~w~ID~y~ ve~w~ sayı ~y~olmalıdır."); return; }
-            var player = db_Accounts.FindPlayerById(Convert.ToInt32(identity));
+            var player = db_Players.FindPlayerById(Convert.ToInt32(identity));
             if (Vector3.Distance(sender.position, player.position) < 2)
             {
                 if (API.hasEntityData(player, "Cuffed") && API.getEntityData(player, "Cuffed") == true)
@@ -239,7 +239,7 @@ namespace TecoRP.Users
                                 db_Crimes.ClearPlayerCrimes(itemPlayer.socialClubName);
                                 API.setPlayerWantedLevel(itemPlayer, 0);
                                 API.setEntityData(itemPlayer, "WantedLevel", 0);
-                                db_Accounts.SavePlayerAccount(sender);
+                                db_Players.SavePlayerAccount(sender);
                                 API.sendChatMessageToPlayer(sender, "~s~" + API.getEntityData(itemPlayer, "CharacterName") + " ~b~adlı kişi " + (totalStarts * 5) + " dk hapse atıldı.");
                                 API.sendChatMessageToPlayer(itemPlayer, "~s~" + (totalStarts * 5) + "~b~ dk hapse atıldınız.");
                                 return;
@@ -255,7 +255,7 @@ namespace TecoRP.Users
         {
             if (API.getEntityData(sender, "FactionId") != 1) { API.sendChatMessageToPlayer(sender, "~r~Bunun için polis olmalısınız."); return; }
             try { Convert.ToInt32(identity); } catch (Exception) { API.sendChatMessageToPlayer(sender, "~y~Girdiğiniz parametre ~w~ID~y~ ve~w~ sayı ~y~olmalıdır."); return; }
-            var player = db_Accounts.GetPlayerById(Convert.ToInt32(identity));
+            var player = db_Players.GetPlayerById(Convert.ToInt32(identity));
             if (Vector3.Distance(sender.position, player.position) < 5)
             {
                 player.position = sender.position + new Vector3(0, 0, 1);
@@ -296,7 +296,7 @@ namespace TecoRP.Users
                     }
                     else
                     {
-                        var droppedPlayer = db_Accounts.GetOfflineUserDatas(itemDropped.DroppedPlayerSocialClubName);
+                        var droppedPlayer = db_Players.GetOfflineUserDatas(itemDropped.DroppedPlayerSocialClubName);
                         API.sendChatMessageToPlayer(sender, "~b~" + itemDropped.LabelInGame.text + " adlı eşyada ~s~" + droppedPlayer.FingerPrint + "~b~ olarak kayıtlı parmak izi bulundu.");
                     }
                     return;
@@ -309,7 +309,7 @@ namespace TecoRP.Users
         public void GetFingerPrintFromPlayer(Client sender, int targetPlayerId)
         {
             if (API.getEntityData(sender, "FactionId") != 1) { API.sendChatMessageToPlayer(sender, "~r~Bunun için polis olmalısınız."); return; }
-            var player = db_Accounts.GetPlayerById(targetPlayerId);
+            var player = db_Players.GetPlayerById(targetPlayerId);
             if (player != null)
             {
                 if (API.hasEntityData(player, "Cuffed") || API.hasEntityData(player, "Handsup"))
@@ -342,7 +342,7 @@ namespace TecoRP.Users
                 return;
             }
 
-            var player = db_Accounts.GetPlayerById(targetPlayerId);
+            var player = db_Players.GetPlayerById(targetPlayerId);
             if (player != null)
             {
                 if (Vector3.Distance(sender.position, player.position) < 3)
@@ -402,7 +402,7 @@ namespace TecoRP.Users
             var _ticket = currentTickets.FirstOrDefault(x => x.ID == tId);
             if (_ticket != null)
             {
-                RPGManager.SendAllPlayersInFaction(1, "~b~[LSPD]: ~s~" + db_Accounts.GetPlayerCharacterName(sender) + "~b~ adlı kişi bir ihbarı sildi. ~s~( " + _ticket.ID + " )");
+                RPGManager.SendAllPlayersInFaction(1, "~b~[LSPD]: ~s~" + db_Players.GetPlayerCharacterName(sender) + "~b~ adlı kişi bir ihbarı sildi. ~s~( " + _ticket.ID + " )");
                 currentTickets.Remove(_ticket);
             }
             else
@@ -430,7 +430,7 @@ namespace TecoRP.Users
         public void FindFingerPrintOwner(Client sender, string fingerPrint)
         {
             if (API.getEntityData(sender, "FactionId") != 1) { API.sendChatMessageToPlayer(sender, "~r~Bunun için polis olmalısınız."); return; }
-            var _user = db_Accounts.FindFingerPrint(fingerPrint);
+            var _user = db_Players.FindFingerPrint(fingerPrint);
             if (_user != null)
             {
                 API.sendChatMessageToPlayer(sender, "~b~Parmak izi sahibi: ~s~" + _user.CharacterName + "\n" +
@@ -439,7 +439,7 @@ namespace TecoRP.Users
                         "~b~Son Görülme: ~s~ (Son görüldüğü yer haritanızda işaretlendi.)"
                         );
 
-                var _userClient = db_Accounts.IsPlayerOnline(_user.SocialClubName);
+                var _userClient = db_Players.IsPlayerOnline(_user.SocialClubName);
                 if (_userClient != null)
                 {
                     API.triggerClientEvent(sender, "update_waypoint", _userClient.position.X, _userClient.position.Y);
@@ -475,7 +475,7 @@ namespace TecoRP.Users
         }
         public static void FindFingerPrintOwner2(Client sender, string fingerPrint)
         {
-            var _user = db_Accounts.FindFingerPrint(fingerPrint);
+            var _user = db_Players.FindFingerPrint(fingerPrint);
             if (_user != null)
             {
                 API.shared.sendChatMessageToPlayer(sender, "~b~Parmak izi sahibi: ~s~" + _user.CharacterName + "\n" +
@@ -484,7 +484,7 @@ namespace TecoRP.Users
                         "~b~Son Görülme: ~s~ (Son görüldüğü yer haritanızda işaretlendi.)"
                         );
 
-                var _userClient = db_Accounts.IsPlayerOnline(_user.SocialClubName);
+                var _userClient = db_Players.IsPlayerOnline(_user.SocialClubName);
                 if (_userClient != null)
                 {
                     API.shared.triggerClientEvent(sender, "update_waypoint", _userClient.position.X, _userClient.position.Y);

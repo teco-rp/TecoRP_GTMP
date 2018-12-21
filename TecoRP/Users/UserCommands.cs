@@ -174,11 +174,11 @@ namespace TecoRP.Users
         //   [Command("login","/login [Şifre]")]
         public void Login(Client sender, string _password)
         {
-            if (!db_Accounts.IsPlayerLoggedIn(sender))
+            if (!db_Players.IsPlayerLoggedIn(sender))
             {
-                if (db_Accounts.TryLoginPlayer(sender, _password))
+                if (db_Players.TryLoginPlayer(sender, _password))
                 {
-                    db_Accounts.LoadPlayerAccount(sender);
+                    db_Players.LoadPlayerAccount(sender);
                     API.sendChatMessageToPlayer(sender, "~g~Başarıyla giriş yaptınız.");
                     sender.position = API.getEntityData(sender, "LastPosition");
                     sender.setSkin(API.getEntityData(sender, "Skin"));
@@ -197,27 +197,6 @@ namespace TecoRP.Users
             {
                 API.sendChatMessageToPlayer(sender, "Zaten giriş yapmışsınız.");
             }
-        }
-
-
-        //    [Command("kayit", "/kayit ~y~[Şifre] [Şifre Tekrar]")]
-        public void Kayit(Client sender, string _password, string _passwordConfirm)
-        {
-            API.consoleOutput("Register matodu çalıştı.");
-            if (db_Accounts.IsPlayerLoggedIn(sender))
-            {
-                API.sendChatMessageToPlayer(sender, "~r~HATA: ~w~Zaten giriş yapmışsınız.!");
-                return;
-            }
-
-            if (db_Accounts.DoesAccountExist(sender.socialClubName))
-            {
-                API.sendChatMessageToPlayer(sender, "~r~HATA: ~w~Bu social Club üyeliğiniz ile kayıt yapmışsınız!");
-                return;
-            }
-
-            db_Accounts.CreatePlayerAccount(sender, _password);
-            // API.sendChatMessageToPlayer(sender, "~g~Hesap Oluşturuldu! ~w~Hemen ~y~/login [password] ~w~ ile giriş yapabilirsiniz.");
         }
 
         [Command("para", "/para")]
@@ -239,7 +218,7 @@ namespace TecoRP.Users
         [Command("paraver", "/paraver [OyuncuID] [Miktar]")]
         public void GiveMoney(Client sender, int _Id, int Value)
         {
-            var player = db_Accounts.GetPlayerById(_Id);
+            var player = db_Players.GetPlayerById(_Id);
             if (player != null)
             {
                 if (Vector3.Distance(player.position, sender.position) > 3) { API.sendChatMessageToPlayer(sender, "~r~HATA: ~s~Oyuncu yanınızda olmalı."); return; }
@@ -248,14 +227,7 @@ namespace TecoRP.Users
                 {
                     InventoryManager.AddMoneyToPlayer(sender, -1 * Value);
                     InventoryManager.AddMoneyToPlayer(player, Value);
-
-                    //giverMoney -= Value;
-                    //takerMoney += Value;
-                    //API.setEntityData(sender, "Money", giverMoney);
-                    //API.setEntityData(player, "Money", takerMoney);
-                    //API.triggerClientEvent(sender, "update_money_display", giverMoney);
-                    //API.triggerClientEvent(player, "update_money_display", takerMoney);
-                    rpgMgr.Me(sender, " bir miktar para çıkarır ve " + db_Accounts.GetPlayerCharacterName(player) + " adlı kişiye verir.");
+                    rpgMgr.Me(sender, " bir miktar para çıkarır ve " + db_Players.GetPlayerCharacterName(player) + " adlı kişiye verir.");
                 }
                 else
                 {
@@ -301,7 +273,7 @@ namespace TecoRP.Users
                 try
                 {
                     var playerID = Convert.ToInt32(splitted[1]);
-                    var player = db_Accounts.GetPlayerById(playerID);
+                    var player = db_Players.GetPlayerById(playerID);
                     if (player == null) { API.sendChatMessageToPlayer(sender, "~r~HATA: ~s~Böyle bir oyuncu yok."); return; }
 
                     var licenses = InventoryManager.GetItemsFromPlayerInventory(sender, ItemType.License).Where(x => x.Item1.Value_0 == "1").ToList();
@@ -309,7 +281,7 @@ namespace TecoRP.Users
                     {
                         try
                         {
-                            var identityInfo = db_Accounts.GetOfflineUserDatas(licenses[Convert.ToInt32(splitted[2])].Item2.SpecifiedValue);
+                            var identityInfo = db_Players.GetOfflineUserDatas(licenses[Convert.ToInt32(splitted[2])].Item2.SpecifiedValue);
 
                             API.shared.sendChatMessageToPlayer(player, "_____" + identityInfo.CharacterName + "_____\n" +
                                 "~y~Cinsiyet: ~s~" + (identityInfo.Gender == true ? "Erkek" : "Kadın") + " |~y~ Doğum Tarihi: ~s~" + ((DateTime)identityInfo.BirthDate).ToString("dd/MM/yyyy") + " \n" +
@@ -327,7 +299,7 @@ namespace TecoRP.Users
                                 string strIdentities = ""; int index = 0;
                                 foreach (var item in licenses)
                                 {
-                                    strIdentities += "~y~" + index + " ~s~- " + (String.IsNullOrEmpty(item.Item2.SpecifiedValue) ? "Belirsiz" : db_Accounts.GetOfflineUserDatas(item.Item2.SpecifiedValue).CharacterName) + "\n";
+                                    strIdentities += "~y~" + index + " ~s~- " + (String.IsNullOrEmpty(item.Item2.SpecifiedValue) ? "Belirsiz" : db_Players.GetOfflineUserDatas(item.Item2.SpecifiedValue).CharacterName) + "\n";
                                     index++;
                                 }
                                 API.shared.sendChatMessageToPlayer(sender, strIdentities);
@@ -341,13 +313,13 @@ namespace TecoRP.Users
                     else
                     {
                         if (licenses.Count == 0) { API.sendChatMessageToPlayer(sender, "~r~HATA: ~s~Üzerinizde herhangi bir kimlik yok."); return; }
-                        var identityInfo = db_Accounts.GetOfflineUserDatas(licenses.FirstOrDefault().Item2.SpecifiedValue);
+                        var identityInfo = db_Players.GetOfflineUserDatas(licenses.FirstOrDefault().Item2.SpecifiedValue);
                         if (identityInfo == null) { API.sendChatMessageToPlayer(sender, "~r~HATA: ~s~Üzerinizde herhangi bir kimlik yok."); return; }
                         API.shared.sendChatMessageToPlayer(player, "_____" + identityInfo.CharacterName + "_____\n" +
                             "~y~Cinsiyet: ~s~" + (identityInfo.Gender == true ? "Erkek" : "Kadın") + " |~y~ Doğum Tarihi: ~s~" + ((DateTime)identityInfo.BirthDate).ToString("dd/MM/yyyy") + " \n" +
                             "~y~Memleket: ~s~" + identityInfo.Origin);
 
-                        rpgMgr.Me(sender, $" elini cebine atıp bir kimlik çıkartır ve {db_Accounts.GetPlayerCharacterName(player)} adlı kişiye gösterir.", 5);
+                        rpgMgr.Me(sender, $" elini cebine atıp bir kimlik çıkartır ve {db_Players.GetPlayerCharacterName(player)} adlı kişiye gösterir.", 5);
                         //rpgMgr.Me(sender, " adlı kişi, " + API.shared.getEntityData(player, "CharacterName") + " adlı kişiye kimliğini gösterir.", 5);
 
                     }
@@ -494,7 +466,7 @@ namespace TecoRP.Users
                         Clients.ClientManager.RemoveMissionMarker(player);
                         API.shared.setEntityData(player, "Mission", 1);
                         UserManager.TriggerUserMission(player);
-                        db_Accounts.SavePlayerAccount(player);
+                        db_Players.SavePlayerAccount(player);
                     }
                     else
                     {

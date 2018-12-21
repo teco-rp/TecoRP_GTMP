@@ -23,11 +23,11 @@ namespace TecoRP.Users
         {
             if (API.hasEntityData(sender, BROADCAST) && InventoryManager.IsEquippedItem(sender, 238))
             {
-                API.shared.sendChatMessageToAll($"~g~[WZNews] [{(FactionManager.IsPlayerInFaction(sender, 5) ? "Sunucu" : "Konuk") }] ({db_Accounts.GetPlayerCharacterName(sender)}): " + message);
+                API.shared.sendChatMessageToAll($"~g~[WZNews] [{(FactionManager.IsPlayerInFaction(sender, 5) ? "Sunucu" : "Konuk") }] ({db_Players.GetPlayerCharacterName(sender)}): " + message);
             }
             if (API.hasEntityData(sender, INVITATION))
             {
-                API.shared.sendChatMessageToAll($"~g~[WZNews] [{(FactionManager.IsPlayerInFaction(sender, 5) ? "Konuk Sunucu" : "Konuk") }] ({db_Accounts.GetPlayerCharacterName(sender)}): " + message);
+                API.shared.sendChatMessageToAll($"~g~[WZNews] [{(FactionManager.IsPlayerInFaction(sender, 5) ? "Konuk Sunucu" : "Konuk") }] ({db_Players.GetPlayerCharacterName(sender)}): " + message);
             }
         }
 
@@ -62,7 +62,7 @@ namespace TecoRP.Users
                     {
                         if (Vector3.Distance(itemPlayer.position, sender.position) < 3)
                         {
-                            names.Add(db_Accounts.GetPlayerCharacterName(itemPlayer));
+                            names.Add(db_Players.GetPlayerCharacterName(itemPlayer));
                             IDs.Add(API.shared.getEntityData(itemPlayer, "ID"));
                         }
                     }
@@ -78,10 +78,10 @@ namespace TecoRP.Users
                     if (API.shared.hasEntityData(sender, INVITATION))
                     {
                         API.shared.sendChatMessageToPlayer(sender, "~g~[WZNews] ~s~Yayından ayrıldınız.");
-                        var player = db_Accounts.GetPlayerById(API.shared.getEntityData(sender, INVITATION));
+                        var player = db_Players.GetPlayerById(API.shared.getEntityData(sender, INVITATION));
                         if (player != null)
                         {
-                            API.shared.sendChatMessageToPlayer(player, "~g~[WZNews] ~s~" + db_Accounts.GetPlayerCharacterName(sender) + " adlı kişi yayından ayrıldı.");
+                            API.shared.sendChatMessageToPlayer(player, "~g~[WZNews] ~s~" + db_Players.GetPlayerCharacterName(sender) + " adlı kişi yayından ayrıldı.");
                         }
                         API.shared.resetEntityData(sender, INVITATION);
                     }
@@ -98,7 +98,7 @@ namespace TecoRP.Users
                     {
                         if (Vector3.Distance(itemPlayer.position, sender.position) < 3)
                         {
-                            namesk.Add(db_Accounts.GetPlayerCharacterName(itemPlayer));
+                            namesk.Add(db_Players.GetPlayerCharacterName(itemPlayer));
                             IDsk.Add(API.shared.getEntityData(itemPlayer, "ID"));
                         }
                     }
@@ -118,13 +118,13 @@ namespace TecoRP.Users
         }
         public static void CompleteInvite(Client invitor, int invitedPlayerID)
         {
-            var player = db_Accounts.FindPlayerById(invitedPlayerID);
+            var player = db_Players.FindPlayerById(invitedPlayerID);
             if (player != null)
             {
                 RPGManager rpgMgr = new RPGManager();
-                rpgMgr.Me(invitor, $" elindeki mikrofonu {db_Accounts.GetPlayerCharacterName(player)} adlı kişiye uzatır.");
+                rpgMgr.Me(invitor, $" elindeki mikrofonu {db_Players.GetPlayerCharacterName(player)} adlı kişiye uzatır.");
                 API.shared.sendChatMessageToPlayer(player, "~g~[WZNews] ~s~Canlı yayına dahil oldunuz.  Çıkmak için ~y~((/cy ayrıl))");
-                API.shared.sendChatMessageToPlayer(invitor, $"~g~[WZNews] ~s~{db_Accounts.GetPlayerCharacterName(player)} adlı kişi canlı yayına aldınız. Çıkarmak için ~y~((/cy cikar))");
+                API.shared.sendChatMessageToPlayer(invitor, $"~g~[WZNews] ~s~{db_Players.GetPlayerCharacterName(player)} adlı kişi canlı yayına aldınız. Çıkarmak için ~y~((/cy cikar))");
                 API.shared.setEntityData(player, INVITATION, API.shared.getEntityData(invitor, "ID"));
             }
             else
@@ -135,20 +135,20 @@ namespace TecoRP.Users
 
         public static void KickPlayerFromBroadCast(Client sender, int targetPlayerId)
         {
-            var player = db_Accounts.GetPlayerById(targetPlayerId);
+            var player = db_Players.GetPlayerById(targetPlayerId);
             if (player != null)
             {
                 if (API.shared.hasEntityData(player, INVITATION))
                 {
-                    var invitorPlayer = db_Accounts.GetPlayerById(API.shared.getEntityData(player, INVITATION));
+                    var invitorPlayer = db_Players.GetPlayerById(API.shared.getEntityData(player, INVITATION));
                     if (invitorPlayer != null)
                     {
                         if (invitorPlayer != sender)
                         {
-                            API.shared.sendChatMessageToPlayer(invitorPlayer, $"~g~[WZNews] ~s~{db_Accounts.GetPlayerCharacterName(player)} adlı kişi yayından {db_Accounts.GetPlayerCharacterName(sender)} tarafından çıkarıldı.");
+                            API.shared.sendChatMessageToPlayer(invitorPlayer, $"~g~[WZNews] ~s~{db_Players.GetPlayerCharacterName(player)} adlı kişi yayından {db_Players.GetPlayerCharacterName(sender)} tarafından çıkarıldı.");
                         }
-                        API.shared.sendChatMessageToPlayer(sender, $"~g~[WZNews] ~s~{db_Accounts.GetPlayerCharacterName(player)} adlı kişi yayından çıkarıldı.");
-                        API.shared.sendChatMessageToPlayer(player, $"~g~[WZNews] ~s~{db_Accounts.GetPlayerCharacterName(sender)} adlı kişi sizi yayından çıkardı.");
+                        API.shared.sendChatMessageToPlayer(sender, $"~g~[WZNews] ~s~{db_Players.GetPlayerCharacterName(player)} adlı kişi yayından çıkarıldı.");
+                        API.shared.sendChatMessageToPlayer(player, $"~g~[WZNews] ~s~{db_Players.GetPlayerCharacterName(sender)} adlı kişi sizi yayından çıkardı.");
                         API.shared.resetEntityData(player, INVITATION);
                     }
                 }
