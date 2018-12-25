@@ -226,7 +226,7 @@ namespace TecoRP.Models
     //Model to serialize to JSON
     public class Inventory
     {
-        public string OwnerSocialClubName { get; set; }
+        public string OwnerCharacterId { get; set; }
         public int MetalParts { get; set; }
         public int OtherParts { get; set; }
         public List<ClientItem> ItemList { get; set; } = new List<ClientItem>();

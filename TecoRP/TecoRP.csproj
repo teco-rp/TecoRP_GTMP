@@ -168,10 +168,10 @@
     <Compile Include="Models\LicenseTakings.cs" />
     <Compile Include="Models\Objects.cs" />
     <Compile Include="Models\PhoneOperatorShop.cs" />
+    <Compile Include="Models\Player.cs" />
     <Compile Include="Models\PoliceDatabase.cs" />
     <Compile Include="Models\ReportsAndQuestions.cs" />
     <Compile Include="Models\Shops.cs" />
-    <Compile Include="Models\Users.cs" />
     <Compile Include="Models\Vehicles.cs" />
     <Compile Include="Models\VehicleShop.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

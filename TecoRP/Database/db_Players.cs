@@ -18,7 +18,7 @@ namespace TecoRP.Database
 {
     public class db_Players
     {
-        public const string ACCOUNT_FOLDER = "cnc_accounts";
+        public const string PLAYERS_FOLDER = "Characters";
         public const string INVENTORY_FOLDER = "Data/inventories";
 
         public db_Players()
@@ -27,8 +27,8 @@ namespace TecoRP.Database
         }
         public static void Init()
         {
-            if (!Directory.Exists(ACCOUNT_FOLDER))
-                Directory.CreateDirectory(ACCOUNT_FOLDER);
+            if (!Directory.Exists(PLAYERS_FOLDER))
+                Directory.CreateDirectory(PLAYERS_FOLDER);
             if (!Directory.Exists(INVENTORY_FOLDER.Split('/')[0]))
                 Directory.CreateDirectory(INVENTORY_FOLDER.Split('/')[0]);
             if (!Directory.Exists(INVENTORY_FOLDER.Split('/')[1]))
@@ -36,20 +36,36 @@ namespace TecoRP.Database
             API.shared.consoleOutput("Database initialized!");
         }
 
-        public static IEnumerable<User> GetCharacters(Account account)
+        public static IEnumerable<Player> GetCharacters(Account account)
         {
             foreach (var item in account.Characters)
             {
-                var path = Path.Combine(ACCOUNT_FOLDER, item);
+                var path = Path.Combine(PLAYERS_FOLDER, item);
                 if (File.Exists(path))
-                    yield return JsonConvert.DeserializeObject<User>(File.ReadAllText(path));
+                    yield return JsonConvert.DeserializeObject<Player>(File.ReadAllText(path));
                 else
                     account.Characters.Remove(item);
             }
         }
-        public static bool DoesAccountExist(string name)
+
+        public static Player CreatePlayerCharacter(Client client, Managers.PlayerCustomization customizationData, string characterName)
         {
-            var path = Path.Combine(ACCOUNT_FOLDER, name);
+            var _player = new Player(characterName);
+            _player.CustomizationData = customizationData;
+            API.shared.consoleOutput("Gender value is " + customizationData.Gender);
+            _player.Gender = Convert.ToBoolean(customizationData.Gender);
+
+            foreach (var property in _player.GetType().GetProperties())
+            {
+                client.setData(property.Name, property.GetValue(_player));
+            }
+
+            SavePlayerAccount(client, forceSave: true);
+            return _player;
+        }
+        public static bool DoesPlayerExist(string name)
+        {
+            var path = Path.Combine(PLAYERS_FOLDER, name);
             return File.Exists(path);
         }
 
@@ -58,105 +74,45 @@ namespace TecoRP.Database
             return API.shared.getEntityData(player, "LOGGED_IN") == true;
         }
 
-        public static void CreatePlayer(Client player, string password)
+        public static void LoadPlayerData(Client player)
         {
-            var path = Path.Combine(ACCOUNT_FOLDER, player.socialClubName);
-            var pathInv = Path.Combine(INVENTORY_FOLDER, player.socialClubName);
-            //if (!path.StartsWith(Directory.GetCurrentDirectory())) return;
-
-            var data = new Models.User(player.socialClubName);
-
-            var dataInv = new Inventory
-            {
-                OwnerSocialClubName = player.socialClubName,
-                ItemList = new List<ClientItem> { new ClientItem { Count = 2, ItemId = 2 }, new ClientItem { ItemId = 5, Count = 1 } }
-            };
-
-            var ser = API.shared.toJson(data);
-            var serInv = API.shared.toJson(dataInv);
-
-            File.WriteAllText(path, ser);
-            File.WriteAllText(pathInv, ser);
-        }
-
-        public static bool TryLoginPlayer(Client player, string password)
-        {
-            var path = Path.Combine(ACCOUNT_FOLDER, player.socialClubName);
-
-            //if (!path.StartsWith(Directory.GetCurrentDirectory())) return false;
-
+            var path = Path.Combine(PLAYERS_FOLDER, player.socialClubName);
             var txt = File.ReadAllText(path);
-
-            User playerObj = API.shared.fromJson(txt).ToObject<User>();
-
-            return API.shared.getHashSHA256(password) == playerObj.Password;
-        }
-
-        public static void LoadPlayerAccount(Client player)
-        {
-
-            //if (!path.StartsWith(Directory.GetCurrentDirectory())) return;
-            try
-            {
-                LoadPlayerData(player);
-            }
-            catch (Exception ex)
-            {
-                API.shared.consoleOutput(LogCat.Fatal, $"LoadPlayerData | {player.socialClubName} | {API.shared.getEntityData(player,"ID")} | {ex.ToString()}");
-           
-            }
-
-            try
-            {
-                LoadPlayerInventory(player);
-            }
-            catch (Exception ex)
-            {
-                API.shared.consoleOutput(LogCat.Fatal, $"LoadPlayerInventory | {player.socialClubName} | {API.shared.getEntityData(player,"ID")} | {ex.ToString()}");
-
-            }
-            player.SetLoggedIn(true);
-            //API.shared.setEntityData(player, "LOGGED_IN", true);
-        }
-        private static void LoadPlayerData(Client player)
-        {
-            var path = Path.Combine(ACCOUNT_FOLDER, player.socialClubName);
-            var txt = File.ReadAllText(path);
-            Models.User playerObj = API.shared.fromJson(txt).ToObject<Models.User>();
-            foreach (var property in typeof(Models.User).GetProperties())
+            Models.Player playerObj = API.shared.fromJson(txt).ToObject<Models.Player>();
+            foreach (var property in typeof(Models.Player).GetProperties())
             {
                 if (property.GetCustomAttributes(typeof(XmlIgnoreAttribute), false).Length > 0) continue;
 
                 API.shared.setEntityData(player, property.Name, property.GetValue(playerObj, null));
             }
         }
-        private static void LoadPlayerInventory(Client player)
+        public static void LoadPlayerInventory(Client player)
         {
-            
-                var pathInv = Path.Combine(INVENTORY_FOLDER, player.socialClubName);
-                string txtInv = "";
-                if (!System.IO.File.Exists(pathInv))
-                {
-                    txtInv = API.shared.toJson(new Inventory { OwnerSocialClubName = player.socialClubName });
-                    File.WriteAllText(pathInv, txtInv);
 
-                }
-                else
-                    txtInv = File.ReadAllText(pathInv);
+            var pathInv = Path.Combine(INVENTORY_FOLDER, player.socialClubName);
+            string txtInv = "";
+            if (!System.IO.File.Exists(pathInv))
+            {
+                txtInv = API.shared.toJson(new Inventory { OwnerCharacterId = player.socialClubName });
+                File.WriteAllText(pathInv, txtInv);
+
+            }
+            else
+                txtInv = File.ReadAllText(pathInv);
 
 
-                Inventory inventoryObj = API.shared.fromJson(txtInv).ToObject<Inventory>();
-                API.shared.setEntityData(player, "inventory", inventoryObj);
-            
+            Inventory inventoryObj = API.shared.fromJson(txtInv).ToObject<Inventory>();
+            API.shared.setEntityData(player, "inventory", inventoryObj);
+
         }
         public static string GetPlayerCharacterName(Client sender)
         {
             return API.shared.getEntityData(sender, "CharacterName");
         }
-        public static User GetOfflineUserDatas(string socialClubName)
+        public static Player GetOfflineUserDatas(string playerId)
         {
-            if (String.IsNullOrEmpty(socialClubName)) { return null; }
-            var path = Path.Combine(ACCOUNT_FOLDER, socialClubName);
+            if (String.IsNullOrEmpty(playerId)) { return null; }
+            var path = Path.Combine(PLAYERS_FOLDER, playerId);
             if (!File.Exists(path))
             {
                 return null;
@@ -164,24 +120,16 @@ namespace TecoRP.Database
             else
             {
                 var txt = File.ReadAllText(path);
-                Models.User playerObj = API.shared.fromJson(txt).ToObject<Models.User>();
+                Models.Player playerObj = API.shared.fromJson(txt).ToObject<Models.Player>();
                 return playerObj;
             }
         }
-        public static User GetOfflineUserDatas(string socialClubName, bool serverMapPath = false)
+        public static Player GetOfflineUserDatas(string socialClubName, bool serverMapPath = false)
         {
             if (String.IsNullOrEmpty(socialClubName)) { return null; }
-            //string path = "";
-            //if (serverMapPath)
-            //{
-            //var path = Path.Combine(ACCOUNT_FOLDER, socialClubName);
 
 
-
-            //    path = HttpContext.Current.Server.MapPath("~/"+combined);
-            //}
-
-            var path = Path.Combine(ACCOUNT_FOLDER, socialClubName);
+            var path = Path.Combine(PLAYERS_FOLDER, socialClubName);
 
             if (!File.Exists(path))
             {
@@ -190,7 +138,7 @@ namespace TecoRP.Database
             else
             {
                 var txt = File.ReadAllText(path);
-                Models.User playerObj = JsonConvert.DeserializeObject<Models.User>(txt);
+                Models.Player playerObj = JsonConvert.DeserializeObject<Models.Player>(txt);
                 return playerObj;
             }
         }
@@ -209,30 +157,30 @@ namespace TecoRP.Database
                 return playerObj;
             }
         }
-        public static List<User> GetOfflineUserDatas()
+        public static List<Player> GetOfflineUserDatas()
         {
-            var retunModel = new List<Models.User>();
-            var path = Path.Combine(ACCOUNT_FOLDER);
+            var retunModel = new List<Models.Player>();
+            var path = Path.Combine(PLAYERS_FOLDER);
 
             foreach (var item in Directory.GetFiles(path))
             {
                 var txt = File.ReadAllText(item);
-                retunModel.Add(API.shared.fromJson(txt).ToObject<Models.User>());
+                retunModel.Add(API.shared.fromJson(txt).ToObject<Models.Player>());
             }
 
             return retunModel;
         }
 
-        public static User FindFingerPrint(string fingerPrint)
+        public static Player FindFingerPrint(string fingerPrint)
         {
 
-            var path = Path.Combine(ACCOUNT_FOLDER);
+            var path = Path.Combine(PLAYERS_FOLDER);
 
             foreach (var item in Directory.GetFiles(path))
             {
                 var txt = File.ReadAllText(item);
 
-                var _user = (Models.User)API.shared.fromJson(txt).ToObject<Models.User>();
+                var _user = (Models.Player)API.shared.fromJson(txt).ToObject<Models.Player>();
                 if (_user.FingerPrint == fingerPrint)
                 {
                     return _user;
@@ -241,9 +189,9 @@ namespace TecoRP.Database
             }
             return null;
         }
-        public static bool SaveOfflineUserData(string socialClubName, User playerObj)
+        public static bool SaveOfflineUserData(string socialClubName, Player playerObj)
         {
-            var path = Path.Combine(ACCOUNT_FOLDER, socialClubName);
+            var path = Path.Combine(PLAYERS_FOLDER, socialClubName);
             if (!File.Exists(path)) return false;
             try
             {
@@ -257,25 +205,26 @@ namespace TecoRP.Database
             }
         }
 
-        public static void SavePlayerAccount(Client player)
+        public static void SavePlayerAccount(Client player, bool forceSave = false)
         {
             //if (!API.shared.hasEntityData(player, "FINISHED_DOWNLOAD"))
             //    return;
-            if (!IsPlayerLoggedIn(player))
+            if (!forceSave && !IsPlayerLoggedIn(player))
             {
-                API.shared.consoleOutput(LogCat.Warn,$"SavePlayerAccount | Player not logged in : {player.socialClubName} | {API.shared.getEntityData(player,"ID")}");
+                API.shared.consoleOutput(LogCat.Warn, $"SavePlayerAccount | Player not logged in : {player.socialClubName} | {API.shared.getEntityData(player, "ID")}");
                 return;
             }
             lock (player)
             {
-                var path = Path.Combine(ACCOUNT_FOLDER, player.socialClubName);
-                var pathInv = Path.Combine(INVENTORY_FOLDER, player.socialClubName);
+                var charId = (string)player.getData(nameof(Player.CharacterId));
+                var path = Path.Combine(PLAYERS_FOLDER, charId);
+                var pathInv = Path.Combine(INVENTORY_FOLDER, charId);
                 try
                 {
                     //  var old = API.shared.fromJson(File.ReadAllText(path));
-                    var data = GetOfflineUserDatas(player.socialClubName) ?? new User(player.socialClubName);
-                    
-                    foreach (var property in typeof(Models.User).GetProperties())
+                    var data = GetOfflineUserDatas(player.socialClubName) ?? new Player(player.socialClubName);
+
+                    foreach (var property in typeof(Models.Player).GetProperties())
                     {
                         if (property.GetCustomAttributes(typeof(XmlIgnoreAttribute), false).Length > 0) continue;
 
@@ -283,7 +232,7 @@ namespace TecoRP.Database
                         {
                             try
                             {
-                                if (!API.shared.hasEntityData(player, property.Name)) { API.shared.consoleOutput(LogCat.Debug,$"{GetPlayerCharacterName(player)} | Save Account Error. Oyuncu Entity Data'ya sahip değil: {property.Name} | Son kayıt uygulandı. {property.Name} : {property.GetValue(data)}"); continue; }
+                                if (!API.shared.hasEntityData(player, property.Name)) { API.shared.consoleOutput(LogCat.Debug, $"{GetPlayerCharacterName(player)} | Save Account Error. Oyuncu Entity Data'ya sahip değil: {property.Name} | Son kayıt uygulandı. {property.Name} : {property.GetValue(data)}"); continue; }
                                 property.SetValue(data, API.shared.getEntityData(player, property.Name), null);
                             }
                             catch (Exception ex)
@@ -292,23 +241,31 @@ namespace TecoRP.Database
 
                                 if (ex.GetType() == typeof(NullReferenceException))
                                 {
-                                    API.shared.consoleOutput(LogCat.Warn,$"PlayerSaveAccountError:  Client {property.Name} adlı entity data'ya sahip değil!") ;
+                                    API.shared.consoleOutput(LogCat.Warn, $"PlayerSaveAccountError:  Client {property.Name} adlı entity data'ya sahip değil!");
                                     continue;
                                 }
                             }
                         }
                     }
-                    var ser = API.shared.toJson(data);
 
+                    if (!Directory.Exists(PLAYERS_FOLDER))
+                        Directory.CreateDirectory(PLAYERS_FOLDER);
+
+                    var ser = API.shared.toJson(data);
                     File.WriteAllText(path, ser);
 
                     var _currentInventory = Managers.InventoryManager.GetPlayerInventory(player);
                     if (_currentInventory == null)
                     {
-                        API.shared.consoleOutput(LogCat.Fatal, $"InventorySaveError! Player: {player.socialClubName} | NullReferenceException");
+                        if (!forceSave)
+                            API.shared.consoleOutput(LogCat.Fatal, $"InventorySaveError! Player: {player.socialClubName} | NullReferenceException");
                         _currentInventory = new Inventory();
                     }
-                    _currentInventory.OwnerSocialClubName = player.socialClubName;
+
+                    if (!Directory.Exists(INVENTORY_FOLDER))
+                        Directory.CreateDirectory(INVENTORY_FOLDER);
+
+                    _currentInventory.OwnerCharacterId = player.getData(nameof(Player.CharacterId));
                     var serInv = API.shared.toJson(_currentInventory);
                     File.WriteAllText(pathInv, serInv);
                 }
@@ -320,7 +277,7 @@ namespace TecoRP.Database
         }
         public async Task SavePlayerAccountAsync(Client player)
         {
-            await Task.Run(()=> 
+            await Task.Run(() =>
             {
                 SavePlayerAccount(player);
             });

@@ -13,9 +13,9 @@ namespace TecoRP.Managers
     {
         public static void CheckPlayer(Client player)
         {
-            if (player.hasData(nameof(User.DrunkMinutes)))
+            if (player.hasData(nameof(Player.DrunkMinutes)))
             {
-                var drunkSeconds = player.getData(nameof(User.DrunkMinutes)) as int?;
+                var drunkSeconds = player.getData(nameof(Player.DrunkMinutes)) as int?;
                 if(drunkSeconds != null)
                 {
                     ClientManager.SetPlayerDrunk(player);
@@ -27,7 +27,7 @@ namespace TecoRP.Managers
 
         public static void DecreaseDrunkTime(Client player, int mins)
         {
-            int? _mins = player.hasData(nameof(User.DrunkMinutes)) ? player.getData(nameof(User.DrunkMinutes)) : null;
+            int? _mins = player.hasData(nameof(Player.DrunkMinutes)) ? player.getData(nameof(Player.DrunkMinutes)) : null;
 
             _mins = _mins.GetValueOrDefault(0) - mins;
 
@@ -35,7 +35,7 @@ namespace TecoRP.Managers
             {
                 _mins = null;
             }
-            player.setData(nameof(User.DrunkMinutes), _mins);
+            player.setData(nameof(Player.DrunkMinutes), _mins);
         }
     }
 }

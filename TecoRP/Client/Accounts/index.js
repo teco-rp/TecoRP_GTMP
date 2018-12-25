@@ -52,26 +52,46 @@ function registerFromCef(email, password) {
 }
 
 function callCharacterSelectionMenu(args) {
-    if (loginBrowser != null)
+    if (loginBrowser != null) {
         API.destroyCefBrowser(loginBrowser);
+        loginBrowser = null;
+    }
 
 
     var chars_menu = API.createMenu("Karakterler", "Karakter seçimi:", 0, 0, 6);
     API.setMenuBannerRectangle(chars_menu, 255, 49, 27, 146);
-    API.sendChatMessage("args length: " + args.Length);
-
     let data = JSON.parse(args[0]);
+    let chars = JSON.parse(args[1]);
 
-    for (var i = 0; i < data.Characters.length; i++) {
-        chars_menu.AddItem(API.createMenuItem(data.Characters[i], ""));
+
+    for (var i = 0; i < chars.length; i++) {
+        chars_menu.AddItem(API.createMenuItem(chars[i].CharacterName, ""));
     }
-
-    var newCharMenuItem = API.createColoredItem("Karakter Oluştur", "", "#311B92", "#F1F1F2");
-    chars_menu.AddItem(newCharMenuItem);
-    newCharMenuItem.Activated.connect(function (sender, selected) {
-        chars_menu.Clear();
-        chars_menu.Visible = false;
-        API.triggerServerEvent("CMD_EnableCreator");
+    chars_menu.OnIndexChange.connect(function (sender, index) {
+        if (index < chars.length) {
+            API.triggerServerEvent("PreviewCharacter", chars[index].CharacterId);
+        }
     });
+
+    chars_menu.OnItemSelect.connect(function (sender, index) {
+        if (index < chars.length) {
+            API.triggerServerEvent("CharacterSelected", chars[index].CharacterId);
+        }
+    });
+
+    if (data.MaxCharacters > chars.length) {
+        var newCharMenuItem = API.createColoredItem("Karakter Oluştur", "", "#311B92", "#F1F1F2");
+
+        chars_menu.AddItem(newCharMenuItem);
+        newCharMenuItem.Activated.connect(function (sender, selected) {
+            chars_menu.Clear();
+            chars_menu.Visible = false;
+            API.triggerServerEvent("CMD_EnableCreator");
+        });
+    }
     chars_menu.Visible = true;
 }
+
+API.onUpdate.connect(function () {
+    if (loginBrowser != null) { API.disableAllControlsThisFrame(); }
+});

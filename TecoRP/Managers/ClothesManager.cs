@@ -30,7 +30,7 @@ namespace TecoRP.Managers
                 HairColor  = Convert.ToInt32(args[3]),
             };
             
-            API.shared.setEntityData(sender, nameof(User.ClothingData), cData);
+            API.shared.setEntityData(sender, nameof(Player.CustomizationData), cData);
             db_Players.SavePlayerAccount(sender);
             sender.dimension = API.getEntityData(sender, "Dimension");
             sender.position = API.getEntityData(sender, "LastPosition");

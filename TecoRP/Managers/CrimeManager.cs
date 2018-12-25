@@ -16,9 +16,9 @@ namespace TecoRP.Managers
 {
     public class CrimeManager : Script
     {
-        public List<User> GetAllGuiltyPlayers()
+        public List<Player> GetAllGuiltyPlayers()
         {
-            List<User> returnModel = new List<Models.User>();
+            List<Player> returnModel = new List<Models.Player>();
             foreach (var itemPlayer in db_Crimes.GetAll().Items)
             {
                 returnModel.Add(db_Players.GetOfflineUserDatas(itemPlayer.OwnerSocialClubName));
@@ -109,7 +109,7 @@ namespace TecoRP.Managers
 
         public static void OnAddCrimeToPlayer(Client sender, string fingerPrint)
         {
-            User player = db_Players.FindFingerPrint(fingerPrint);
+            Player player = db_Players.FindFingerPrint(fingerPrint);
             if (player != null)
             {
                 List<string> names = new List<string>();
@@ -119,7 +119,7 @@ namespace TecoRP.Managers
                     names.Add(item.Name);
                     descs.Add("Suç ağırlığı: " + item.WantedLevel);
                 }
-                Clients.ClientManager.SendCrimeList(sender, names, descs, player.SocialClubName);
+                Clients.ClientManager.SendCrimeList(sender, names, descs, player.CharacterId);
             }
             else
             {

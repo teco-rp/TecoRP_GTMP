@@ -52,5 +52,13 @@ namespace TecoRP.Database
             _repository.Update(loggedInAccount);
             return loggedInAccount;
         }
+
+        public static void AddCharacter(Client player, string characterId)
+        {
+            Account account = player.getData(nameof(Account)) as Account;
+            account.Characters.Add(characterId);
+            player.setData(nameof(Account), account);
+            _repository.Update(account);
+        }
     }
 }

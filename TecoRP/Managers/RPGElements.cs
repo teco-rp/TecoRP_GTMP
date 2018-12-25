@@ -177,7 +177,7 @@ namespace TecoRP.Managers
             {
                 foreach (var itemPlayer in db_Players.GetOfflineUserDatas())
                 {
-                    var _player = db_Players.IsPlayerOnline(itemPlayer.SocialClubName);
+                    var _player = db_Players.IsPlayerOnline(itemPlayer.CharacterId);
                     if (_player != null)
                     {
                         if (!String.IsNullOrEmpty(API.getEntityData(_player, "BankAccount")))
@@ -201,7 +201,7 @@ namespace TecoRP.Managers
                             itemPlayer.BankMoney += (int)(itemPlayer.BankMoney * 0.01f);
                             itemPlayer.PastBankMinutes -= 60;
                         }
-                        db_Players.SaveOfflineUserData(itemPlayer.SocialClubName, itemPlayer);
+                        db_Players.SaveOfflineUserData(itemPlayer.CharacterId, itemPlayer);
                     }
                 }
 

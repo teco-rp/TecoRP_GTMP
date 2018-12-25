@@ -1,4 +1,5 @@
-﻿using GrandTheftMultiplayer.Server.Constant;
+﻿using GrandTheftMultiplayer.Server.API;
+using GrandTheftMultiplayer.Server.Constant;
 using GrandTheftMultiplayer.Server.Elements;
 using GrandTheftMultiplayer.Shared;
 using GrandTheftMultiplayer.Shared.Math;
@@ -9,7 +10,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TecoRP.Database;
 using TecoRP.Helpers;
+using TecoRP.Models;
 
 namespace TecoRP.Managers
 {
@@ -99,20 +102,17 @@ namespace TecoRP.Managers
 
     public class CharacterCreatorManager : Base.EventMethodTriggerBase
     {
-        public string SAVE_DIRECTORY = "CustomCharacters";
-        public Dictionary<NetHandle, PlayerCustomization> CustomPlayerData = new Dictionary<NetHandle, PlayerCustomization>();
+        public static Dictionary<NetHandle, PlayerCustomization> CustomPlayerData = new Dictionary<NetHandle, PlayerCustomization>();
 
-        public Vector3 CreatorCharPos = new Vector3(402.8664, -996.4108, -99.00027);
-        public Vector3 CreatorPos = new Vector3(402.8664, -997.5515, -98.5);
-        public Vector3 CameraLookAtPos = new Vector3(402.8664, -996.4108, -98.5);
-        public float FacingAngle = -185.0f;
+        public static Vector3 CreatorCharPos = new Vector3(402.8664, -996.4108, -99.00027);
+        public static Vector3 CreatorPos = new Vector3(402.8664, -997.5515, -98.5);
+        public static Vector3 CameraLookAtPos = new Vector3(402.8664, -996.4108, -98.5);
+        public static float FacingAngle = -185.0f;
         public int DimensionID = 1;
 
         public CharacterCreatorManager()
         {
-            API.onResourceStart += CharCreator_Init;
 
-            API.onPlayerFinishedDownload += CharCreator_PlayerJoin;
             API.onClientEventTrigger += CharCreator_EventTrigger;
             API.onPlayerDisconnected += CharCreator_PlayerLeave;
 
@@ -120,32 +120,39 @@ namespace TecoRP.Managers
         }
 
         #region Methods
-        public void LoadCharacter(Client player)
+        public static void PreviewCharacter(Client player, params object[] parameters)
         {
-            if (CustomPlayerData.ContainsKey(player.handle)) return;
-            string player_file = SAVE_DIRECTORY + Path.DirectorySeparatorChar + player.socialClubName + ".json";
+            API.shared.consoleOutput("PreviewCharacter Triggered!");
+            player.transparency = 255;
+            API.shared.consoleOutput("PreviewCharacter 1");
+            string characterId = parameters[0].ToString();
+            API.shared.consoleOutput("PreviewCharacter 2");
+            API.shared.consoleOutput("CharacterId is "+characterId);
+            var playerData = db_Players.GetOfflineUserDatas(characterId);
+            API.shared.consoleOutput("PreviewCharacter 3");
+            API.shared.consoleOutput("PlayerData is null: "+ (playerData == null));
+            LoadCharacter(player, playerData.CustomizationData);
+        }
+        public static void LoadCharacter(Client player, PlayerCustomization playerCustomization)
+        {
+            if (CustomPlayerData.ContainsKey(player.handle))
+                CustomPlayerData.Remove(player.handle);
 
-            if (File.Exists(player_file))
-            {
-                CustomPlayerData.Add(player.handle, JsonConvert.DeserializeObject<PlayerCustomization>(File.ReadAllText(player_file)));
-            }
-            else
-            {
-                CustomPlayerData.Add(player.handle, new PlayerCustomization());
-            }
-
+            CustomPlayerData.Add(player.handle, new PlayerCustomization());
             ApplyCharacter(player);
         }
 
-        public void ApplyCharacter(Client player)
+        public static void ApplyCharacter(Client player)
         {
+            API.shared.consoleOutput("ApplyCharacter 1");
             if (!CustomPlayerData.ContainsKey(player.handle)) return;
+            API.shared.consoleOutput("ApplyCharacter 2");
 
             player.setSkin((CustomPlayerData[player.handle].Gender == 0) ? PedHash.FreemodeMale01 : PedHash.FreemodeFemale01);
             player.setDefaultClothes();
             player.setClothes(2, CustomPlayerData[player.handle].Hair.Hair, 0);
 
-            API.sendNativeToAllPlayers(
+            API.shared.sendNativeToAllPlayers(
                 Hash.SET_PED_HEAD_BLEND_DATA,
                 player.handle,
 
@@ -164,66 +171,75 @@ namespace TecoRP.Managers
                 false
             );
 
-            for (int i = 0; i < CustomPlayerData[player.handle].Features.Length; i++) API.sendNativeToAllPlayers(Hash._SET_PED_FACE_FEATURE, player.handle, i, CustomPlayerData[player.handle].Features[i]);
-            for (int i = 0; i < CustomPlayerData[player.handle].Appearance.Length; i++) API.sendNativeToAllPlayers(Hash.SET_PED_HEAD_OVERLAY, player.handle, i, CustomPlayerData[player.handle].Appearance[i].Value, CustomPlayerData[player.handle].Appearance[i].Opacity);
+            for (int i = 0; i < CustomPlayerData[player.handle].Features.Length; i++) API.shared.sendNativeToAllPlayers(Hash._SET_PED_FACE_FEATURE, player.handle, i, CustomPlayerData[player.handle].Features[i]);
+            for (int i = 0; i < CustomPlayerData[player.handle].Appearance.Length; i++) API.shared.sendNativeToAllPlayers(Hash.SET_PED_HEAD_OVERLAY, player.handle, i, CustomPlayerData[player.handle].Appearance[i].Value, CustomPlayerData[player.handle].Appearance[i].Opacity);
 
             // apply colors
-            API.sendNativeToAllPlayers(Hash._SET_PED_HAIR_COLOR, player.handle, CustomPlayerData[player.handle].Hair.Color, CustomPlayerData[player.handle].Hair.HighlightColor);
-            API.sendNativeToAllPlayers(Hash._SET_PED_EYE_COLOR, player.handle, CustomPlayerData[player.handle].EyeColor);
+            API.shared.sendNativeToAllPlayers(Hash._SET_PED_HAIR_COLOR, player.handle, CustomPlayerData[player.handle].Hair.Color, CustomPlayerData[player.handle].Hair.HighlightColor);
+            API.shared.sendNativeToAllPlayers(Hash._SET_PED_EYE_COLOR, player.handle, CustomPlayerData[player.handle].EyeColor);
 
-            API.sendNativeToAllPlayers(Hash._SET_PED_HEAD_OVERLAY_COLOR, player.handle, 1, 1, CustomPlayerData[player.handle].BeardColor, 0);
-            API.sendNativeToAllPlayers(Hash._SET_PED_HEAD_OVERLAY_COLOR, player.handle, 2, 1, CustomPlayerData[player.handle].EyebrowColor, 0);
-            API.sendNativeToAllPlayers(Hash._SET_PED_HEAD_OVERLAY_COLOR, player.handle, 5, 2, CustomPlayerData[player.handle].BlushColor, 0);
-            API.sendNativeToAllPlayers(Hash._SET_PED_HEAD_OVERLAY_COLOR, player.handle, 8, 2, CustomPlayerData[player.handle].LipstickColor, 0);
-            API.sendNativeToAllPlayers(Hash._SET_PED_HEAD_OVERLAY_COLOR, player.handle, 10, 1, CustomPlayerData[player.handle].ChestHairColor, 0);
+            API.shared.sendNativeToAllPlayers(Hash._SET_PED_HEAD_OVERLAY_COLOR, player.handle, 1, 1, CustomPlayerData[player.handle].BeardColor, 0);
+            API.shared.sendNativeToAllPlayers(Hash._SET_PED_HEAD_OVERLAY_COLOR, player.handle, 2, 1, CustomPlayerData[player.handle].EyebrowColor, 0);
+            API.shared.sendNativeToAllPlayers(Hash._SET_PED_HEAD_OVERLAY_COLOR, player.handle, 5, 2, CustomPlayerData[player.handle].BlushColor, 0);
+            API.shared.sendNativeToAllPlayers(Hash._SET_PED_HEAD_OVERLAY_COLOR, player.handle, 8, 2, CustomPlayerData[player.handle].LipstickColor, 0);
+            API.shared.sendNativeToAllPlayers(Hash._SET_PED_HEAD_OVERLAY_COLOR, player.handle, 10, 1, CustomPlayerData[player.handle].ChestHairColor, 0);
 
-            player.setSyncedData("CustomCharacter", API.toJson(CustomPlayerData[player.handle]));
+            player.setSyncedData("CustomCharacter", API.shared.toJson(CustomPlayerData[player.handle]));
         }
 
-        public void SavePlayer(Client player)
+        public void SavePlayer(Client player, string characterName)
         {
+            API.consoleOutput("SavePlayer 1");
             if (!CustomPlayerData.ContainsKey(player.handle)) return;
-
-            string player_file = SAVE_DIRECTORY + Path.DirectorySeparatorChar + player.socialClubName + ".json";
-            File.WriteAllText(player_file, JsonConvert.SerializeObject(CustomPlayerData[player.handle], Formatting.Indented));
+            API.consoleOutput("SavePlayer 2");
+            var createdCharacter = db_Players.CreatePlayerCharacter(player, CustomPlayerData[player.handle], characterName);
+            db_Accounts.AddCharacter(player, createdCharacter.CharacterId);
         }
-
+        public static void SendToCreatorLocation(Client player, int dim = 1, bool isVisible = true)
+        {
+            player.transparency = isVisible ? 255 : 0;
+            player.dimension = dim;
+            player.rotation = new Vector3(0f, 0f, FacingAngle);
+            player.position = CreatorCharPos;
+            player.triggerEvent(isVisible ? "CreatorCamera" : "JustSetup", CreatorPos, CameraLookAtPos, FacingAngle);
+        }
         public void SendToCreator(Client player)
         {
             player.setData("Creator_PrevPos", player.position);
 
-            player.dimension = DimensionID;
-            player.rotation = new Vector3(0f, 0f, FacingAngle);
-            player.position = CreatorCharPos;
+            SendToCreatorLocation(player, DimensionID);
 
             if (CustomPlayerData.ContainsKey(player.handle))
             {
+                API.consoleOutput("UpdateCreator Client Event Triggered");
                 SetCreatorClothes(player, CustomPlayerData[player.handle].Gender);
                 player.triggerEvent("UpdateCreator", API.toJson(CustomPlayerData[player.handle]));
             }
             else
             {
+                API.consoleOutput("Else triggered amd set defaışt features called");
                 CustomPlayerData.Add(player.handle, new PlayerCustomization());
                 SetDefaultFeatures(player, 0);
             }
 
-            player.triggerEvent("CreatorCamera", CreatorPos, CameraLookAtPos, FacingAngle);
             DimensionID++;
         }
 
         public void SendBackToWorld(Client player)
         {
-            player.dimension = 0;
-            player.position = (Vector3)player.getData("Creator_PrevPos");
-
-            player.triggerEvent("DestroyCamera");
             if (!player.IsPlayerLoggedIn())
-                player.triggerEvent("go_character_selection");
-            player.resetData("Creator_PrevPos");
+            {
+                player.dimension = 0;
+                player.position = (Vector3)player.getData("Creator_PrevPos");
+                player.triggerEvent("DestroyCamera");
+                AccountManager.GoToCharacterSelection(player);
+                player.resetData("Creator_PrevPos");
+            }
         }
 
         public void SetDefaultFeatures(Client player, int gender, bool reset = false)
         {
+            API.consoleOutput("SetDefaultFeatures with gender " + gender + ", reset " + reset);
             if (reset)
             {
                 CustomPlayerData[player.handle] = new PlayerCustomization();
@@ -240,11 +256,15 @@ namespace TecoRP.Managers
 
             // clothes
             SetCreatorClothes(player, gender);
+
+            CMD_EnableCreator(player);
         }
 
         public void SetCreatorClothes(Client player, int gender)
         {
+            API.consoleOutput("SetCreatorClothes 1");
             if (!CustomPlayerData.ContainsKey(player.handle)) return;
+            API.consoleOutput("SetCreatorClothes 2");
 
             // clothes
             player.setDefaultClothes();
@@ -272,17 +292,6 @@ namespace TecoRP.Managers
         #endregion
 
         #region Events
-        public void CharCreator_Init()
-        {
-            SAVE_DIRECTORY = API.getResourceFolder() + Path.DirectorySeparatorChar + SAVE_DIRECTORY;
-            if (!Directory.Exists(SAVE_DIRECTORY)) Directory.CreateDirectory(SAVE_DIRECTORY);
-        }
-
-        public void CharCreator_PlayerJoin(Client player)
-        {
-            LoadCharacter(player);
-        }
-
         public void CharCreator_EventTrigger(Client player, string event_name, params object[] args)
         {
             switch (event_name)
@@ -300,7 +309,7 @@ namespace TecoRP.Managers
 
                 case "SaveCharacter":
                     {
-                        if (args.Length < 8 || !CustomPlayerData.ContainsKey(player.handle)) return;
+                        if (args.Length < 9 || !CustomPlayerData.ContainsKey(player.handle)) return;
 
                         player.setDefaultClothes();
 
@@ -394,26 +403,19 @@ namespace TecoRP.Managers
 
                         if (player.hasData("ChangedGender")) player.resetData("ChangedGender");
                         ApplyCharacter(player);
-                        SavePlayer(player);
+                        SavePlayer(player, args[8].ToString());
                         SendBackToWorld(player);
                         break;
                     }
 
                 case "LeaveCreator":
                     {
-                        if (!CustomPlayerData.ContainsKey(player.handle)) return;
-
-                        // revert back to last save data
-                        if (player.hasData("ChangedGender"))
+                        if (!player.IsPlayerLoggedIn())
                         {
-                            string player_file = SAVE_DIRECTORY + Path.DirectorySeparatorChar + player.socialClubName + ".json";
-                            if (File.Exists(player_file)) CustomPlayerData[player.handle] = JsonConvert.DeserializeObject<PlayerCustomization>(File.ReadAllText(player_file));
-                            player.resetData("ChangedGender");
+                            AccountManager.GoToCharacterSelection(player);
+                            return;
                         }
-
-                        ApplyCharacter(player);
-
-                        // bye
+                        LoadCharacter(player, player.getData(nameof(Player.CustomizationData)) as PlayerCustomization);
                         SendBackToWorld(player);
                         break;
                     }
@@ -446,11 +448,12 @@ namespace TecoRP.Managers
         #region Commands
         public void CMD_EnableCreator(Client player)
         {
-            if (!(player.model == (int)PedHash.FreemodeMale01 || player.model == (int)PedHash.FreemodeFemale01))
-            {
-                player.sendChatMessage("You need to have a freemode character skin.");
-                return;
-            }
+            API.consoleOutput("CMD_EnableCreator");
+            //if (!(player.model == (int)PedHash.FreemodeMale01 || player.model == (int)PedHash.FreemodeFemale01))
+            //{
+            //    player.sendChatMessage("You need to have a freemode character skin.");
+            //    return;
+            //}
             player.transparency = 255;
             SendToCreator(player);
         }

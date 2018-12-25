@@ -7,14 +7,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using TecoRP.Managers;
 
 namespace TecoRP.Models
 {
 
-    public class User
+    public class Player
     {
         [XmlIgnore]
-        public string SocialClubName { get; set; }
+        public string CharacterId { get; set; }
         [XmlIgnore]
         public string Password { get; set; }
         public int FactionId { get; set; } = 0;
@@ -48,14 +49,20 @@ namespace TecoRP.Models
         public int DeadSeconds { get; set; } = 0;
         public bool Cuffed { get; set; } = false;
         public List<Jobs> JobAbilities { get; set; }
-        public ClothingData ClothingData { get; set; } = new ClothingData();
+        public PlayerCustomization CustomizationData { get; set; } = new PlayerCustomization();
 
-        public User(string socialClubName)
+        public Player()
         {
+
+        }
+
+        public Player(string characterName)
+        {
+            CharacterId = Guid.NewGuid().ToString("N");
+            CharacterName = characterName;
             JobAbilities = new List<Jobs>();
-            this.SocialClubName = socialClubName;
-            Money = 1250;
-            LastPosition = new GrandTheftMultiplayer.Shared.Math.Vector3 { X = -801, Y = -102, Z = 37 };
+            Money = Constants.STARTING_MONEY;
+            LastPosition = Constants.STARTING_POS;
             ArmorLevel = 0;
             HealthLevel = 100;
             BankMoney = 0;

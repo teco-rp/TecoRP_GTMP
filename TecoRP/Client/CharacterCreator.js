@@ -532,15 +532,15 @@ API.onResourceStart.connect(function () {
     });
 
     // SAVE & CANCEL BUTTONS
-    var save_button = API.createColoredItem("Save", "Save all changes and leave the character creator.", "#0d47a1", "#1976d2");
+    var save_button = API.createColoredItem("Kaydet", "Karakterinize isim verin ve kaydedin.", "#0d47a1", "#1976d2");
     creatorMainMenu.AddItem(save_button);
 
     save_button.Activated.connect(function (menu, item) {
         var feature_values = [];
-        for (var i = 0; i < featureNames.length; i++) feature_values.push(parseFloat(creatorFeaturesItems[i].IndexToItem(creatorFeaturesItems[i].Index)));
+        for (let i = 0; i < featureNames.length; i++) feature_values.push(parseFloat(creatorFeaturesItems[i].IndexToItem(creatorFeaturesItems[i].Index)));
 
         var appearance_values = [];
-        for (var i = 0; i < appearanceNames.length; i++) appearance_values.push({ Value: ((creatorAppearanceItems[i].Index == 0) ? 255 : creatorAppearanceItems[i].Index - 1), Opacity: creatorAppearanceOpacityItems[i].Index * 0.01 });
+        for (let i = 0; i < appearanceNames.length; i++) appearance_values.push({ Value: ((creatorAppearanceItems[i].Index == 0) ? 255 : creatorAppearanceItems[i].Index - 1), Opacity: creatorAppearanceOpacityItems[i].Index * 0.01 });
 
         var hair_or_colors = [];
         hair_or_colors.push(hairIDList[currentGender][hairItem.Index]);
@@ -553,7 +553,7 @@ API.onResourceStart.connect(function () {
         hair_or_colors.push(lipstickColorItem.Index);
         hair_or_colors.push(chestHairColorItem.Index);
 
-        API.triggerServerEvent("SaveCharacter", currentGender, fathers[fatherItem.Index], mothers[motherItem.Index], similarityItem.Index * 0.01, skinSimilarityItem.Index * 0.01, JSON.stringify(feature_values), JSON.stringify(appearance_values), JSON.stringify(hair_or_colors));
+        API.triggerServerEvent("SaveCharacter", currentGender, fathers[fatherItem.Index], mothers[motherItem.Index], similarityItem.Index * 0.01, skinSimilarityItem.Index * 0.01, JSON.stringify(feature_values), JSON.stringify(appearance_values), JSON.stringify(hair_or_colors), API.getUserInput("John Doe",60));
     });
 
     var cancel_button = API.createColoredItem("Cancel", "Discard all changes and leave the character creator.", "#d50000", "#e53935");
@@ -668,6 +668,21 @@ API.onEntityStreamIn.connect(function (ent, entType) {
 
 API.onServerEventTrigger.connect(function (event, args) {
     switch (event) {
+        case "JustSetup":
+            if (creatorCamera == null) {
+                creatorCamera = API.createCamera(args[0], new Vector3(0, 0, 0));
+                API.pointCameraAtPosition(creatorCamera, args[1]);
+
+                API.setActiveCamera(creatorCamera);
+                API.setCanOpenChat(false);
+                API.setHudVisible(false);
+                API.setChatVisible(false);
+
+                baseAngle = args[2];
+                API.sendChatMessage("JustSetup triggered");
+            }
+            break;
+
         case "CreatorCamera":
             if (creatorCamera == null) {
                 creatorCamera = API.createCamera(args[0], new Vector3(0, 0, 0));
@@ -680,6 +695,7 @@ API.onServerEventTrigger.connect(function (event, args) {
 
                 baseAngle = args[2];
                 creatorMainMenu.Visible = true;
+                API.sendChatMessage("CreatorCamera triggered");
             }
             break;
 
@@ -728,6 +744,8 @@ API.onServerEventTrigger.connect(function (event, args) {
             blushColorItem.Index = data.BlushColor;
             lipstickColorItem.Index = data.LipstickColor;
             chestHairColorItem.Index = data.ChestHairColor;
+            API.sendChatMessage("UpdateCreator triggered");
+            creatorMainMenu.Visible = true;
             break;
     }
 });

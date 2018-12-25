@@ -193,13 +193,13 @@ namespace TecoRP.Managers
                                         if (InventoryManager.IsEnoughMoney(sender, _house.Price))
                                         {
                                             InventoryManager.AddMoneyToPlayer(sender, -1 * _house.Price);
-                                            InventoryManager.AddMoneyToOfflinePlayerBank(sellerOfflinePlayer.SocialClubName, (int)(_house.Price * 0.98f));
+                                            InventoryManager.AddMoneyToOfflinePlayerBank(sellerOfflinePlayer.CharacterId, (int)(_house.Price * 0.98f));
                                         }
                                         else
                                                                  if (InventoryManager.IsEnougMoneyInBank(sender, _house.Price))
                                         {
                                             InventoryManager.AddMoneyToPlayerBank(sender, -1 * _house.Price);
-                                            InventoryManager.AddMoneyToOfflinePlayerBank(sellerOfflinePlayer.SocialClubName, (int)(_house.Price * 0.98f));
+                                            InventoryManager.AddMoneyToOfflinePlayerBank(sellerOfflinePlayer.CharacterId, (int)(_house.Price * 0.98f));
                                         }
                                         else
                                         {
@@ -210,7 +210,7 @@ namespace TecoRP.Managers
                                         #endregion
 
                                         _house.OwnerSocialClubName = sender.socialClubName;
-                                        db_Players.SaveOfflineUserData(sellerOfflinePlayer.SocialClubName, sellerOfflinePlayer);
+                                        db_Players.SaveOfflineUserData(sellerOfflinePlayer.CharacterId, sellerOfflinePlayer);
                                         HouseMarkerColor hmc = new Models.HouseMarkerColor();
                                        // var _house = db_Houses.GetHouse(_house.HouseId);
                                        // _house.MarkerOnMap.color = new Color(hmc.NormalColor.Red, hmc.NormalColor.Green, hmc.NormalColor.Blue, 255);

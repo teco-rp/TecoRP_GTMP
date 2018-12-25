@@ -171,34 +171,6 @@ namespace TecoRP.Users
 
         }
 
-        //   [Command("login","/login [Şifre]")]
-        public void Login(Client sender, string _password)
-        {
-            if (!db_Players.IsPlayerLoggedIn(sender))
-            {
-                if (db_Players.TryLoginPlayer(sender, _password))
-                {
-                    db_Players.LoadPlayerAccount(sender);
-                    API.sendChatMessageToPlayer(sender, "~g~Başarıyla giriş yaptınız.");
-                    sender.position = API.getEntityData(sender, "LastPosition");
-                    sender.setSkin(API.getEntityData(sender, "Skin"));
-                    sender.health = API.getEntityData(sender, "HealthLevel");
-                    sender.armor = API.getEntityData(sender, "ArmorLevel");
-
-
-                    int money = API.getEntityData(sender, "Money");
-                    float _Hunger = Convert.ToInt32(API.getEntityData(sender, "Hunger"));
-                    float _Thirsty = Convert.ToInt32(API.getEntityData(sender, "Thirsty"));
-                    API.triggerClientEvent(sender, "update_hungerthirsty", _Hunger, _Thirsty);
-                    API.triggerClientEvent(sender, "update_money_display", money);
-                }
-            }
-            else
-            {
-                API.sendChatMessageToPlayer(sender, "Zaten giriş yapmışsınız.");
-            }
-        }
-
         [Command("para", "/para")]
         public void Money(Client sender)
         {

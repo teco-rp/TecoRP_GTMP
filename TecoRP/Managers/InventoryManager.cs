@@ -390,7 +390,7 @@ namespace TecoRP.Managers
                     case ItemType.Drug:
                         if (API.getEntityData(sender, "Dead") == true) return;
                         #region Drug
-                        sender.setData(nameof(User.DrunkMinutes), Convert.ToInt32(usedItem.Value_0));
+                        sender.setData(nameof(Player.DrunkMinutes), Convert.ToInt32(usedItem.Value_0));
                         #endregion
                         break;
                     //-----------------------------

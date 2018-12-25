@@ -439,7 +439,7 @@ namespace TecoRP.Users
                         "~b~Son Görülme: ~s~ (Son görüldüğü yer haritanızda işaretlendi.)"
                         );
 
-                var _userClient = db_Players.IsPlayerOnline(_user.SocialClubName);
+                var _userClient = db_Players.IsPlayerOnline(_user.CharacterId);
                 if (_userClient != null)
                 {
                     API.triggerClientEvent(sender, "update_waypoint", _userClient.position.X, _userClient.position.Y);
@@ -484,7 +484,7 @@ namespace TecoRP.Users
                         "~b~Son Görülme: ~s~ (Son görüldüğü yer haritanızda işaretlendi.)"
                         );
 
-                var _userClient = db_Players.IsPlayerOnline(_user.SocialClubName);
+                var _userClient = db_Players.IsPlayerOnline(_user.CharacterId);
                 if (_userClient != null)
                 {
                     API.shared.triggerClientEvent(sender, "update_waypoint", _userClient.position.X, _userClient.position.Y);

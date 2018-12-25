@@ -19,10 +19,13 @@ namespace TecoRP.Managers
     {
         public UserManager()
         {
+            AccountManager.OnPlayerLogin += AccountManager_OnPlayerLogin;
             //API.onPlayerConnected += API_onPlayerConnected;
             //API.onPlayerFinishedDownload += API_onPlayerFinishedDownload;
             //API.onPlayerDisconnected += API_onPlayerDisconnected;
         }
+
+
         ~UserManager()
         {
             API.consoleOutput("Started to save all players...");
@@ -36,24 +39,22 @@ namespace TecoRP.Managers
         }
 
 
-        private void API_onPlayerConnected(Client player)
+        private void AccountManager_OnPlayerLogin(object sender, EventArgs<Client> e)
         {
-            db_Players.LoadPlayerAccount(player);
-            player.SetNameTagWithId();
+            OnPlayerLoggedIn(e.Data);
         }
+        //private void API_onPlayerFinishedDownload(Client player)
+        //{
+        //    if (player.IsPlayerLoggedIn())
+        //        OnPlayerLoggedIn(player);
+        //    else
+        //        OnPlayerRegistering(player);
 
-        private void API_onPlayerFinishedDownload(Client player)
-        {
-            if (player.IsPlayerLoggedIn())
-                OnPlayerLoggedIn(player);
-            else
-                OnPlayerRegistering(player);
+        //    RPGManager.CreatePlayerTalkLabel(player);
 
-            RPGManager.CreatePlayerTalkLabel(player);
-
-            API.shared.sendChatMessageToPlayer(player, "Herhangi bir sorunuz olduğunda ~y~/?~w~ komutunu veya bir hata ile karşılaştığınızda ~y~/rapor~w~ komutunu kullanabilirsiniz.");
-            API.shared.sendChatMessageToPlayer(player, "Ayrıca ~y~F2~w~ tuşuna basarak da yardım menüsüne ulaşabilirsiniz.");
-        }
+        //    API.shared.sendChatMessageToPlayer(player, "Herhangi bir sorunuz olduğunda ~y~/?~w~ komutunu veya bir hata ile karşılaştığınızda ~y~/rapor~w~ komutunu kullanabilirsiniz.");
+        //    API.shared.sendChatMessageToPlayer(player, "Ayrıca ~y~F2~w~ tuşuna basarak da yardım menüsüne ulaşabilirsiniz.");
+        //}
         private void API_onPlayerDisconnected(Client player, string reason)
         {
             if (player.IsPlayerLoggedIn())
@@ -80,6 +81,7 @@ namespace TecoRP.Managers
         public void OnPlayerLoggedIn(Client player)
         {
             LoadPlayerLastLocation(player);
+            CharacterCreatorManager.LoadCharacter(player, player.getData(nameof(Player.CustomizationData)) as PlayerCustomization);
             LoadApperance(player);
             LoadPlayerStats(player);
 
@@ -97,40 +99,40 @@ namespace TecoRP.Managers
         }
 
         //Client event will be trigger
-        public void ReturnCharacterName(Client sender, params object[] args)
-        {
-            API.consoleOutput("ReturnCharacterName");
-            if (String.IsNullOrEmpty(args[0].ToString()) || !(args[0].ToString().Contains(" ")))
-            {
-                API.sendChatMessageToPlayer(sender, "~r~Lütfen adınızı \"İsim Soyisim\" formatında giriniz.");
-                API.triggerClientEvent(sender, "set_character_name", true);
-                return;
-            }
-            API.setEntityData(sender, "CharacterName", args[0].ToString());
-            sender.SetNameTagWithId();
-            API.triggerClientEvent(sender, "set_character_sex", true);
-        }
+        //public void ReturnCharacterName(Client sender, params object[] args)
+        //{
+        //    API.consoleOutput("ReturnCharacterName");
+        //    if (String.IsNullOrEmpty(args[0].ToString()) || !(args[0].ToString().Contains(" ")))
+        //    {
+        //        API.sendChatMessageToPlayer(sender, "~r~Lütfen adınızı \"İsim Soyisim\" formatında giriniz.");
+        //        API.triggerClientEvent(sender, "set_character_name", true);
+        //        return;
+        //    }
+        //    API.setEntityData(sender, "CharacterName", args[0].ToString());
+        //    sender.SetNameTagWithId();
+        //    API.triggerClientEvent(sender, "set_character_sex", true);
+        //}
         //Client event
-        public void ReturnCharacterGender(Client sender, params object[] args)
-        {
-            API.consoleOutput("return_character_sex with " + args[0]);
-            sender.freeze(false);
-            API.setEntityInvincible(sender, false);
-            if (Convert.ToBoolean(args[1]))
-            {
-                db_Players.CreatePlayer(sender, "000");
-            }
-            db_Players.LoadPlayerAccount(sender);
+        //public void ReturnCharacterGender(Client sender, params object[] args)
+        //{
+        //    API.consoleOutput("return_character_sex with " + args[0]);
+        //    sender.freeze(false);
+        //    API.setEntityInvincible(sender, false);
+        //    if (Convert.ToBoolean(args[1]))
+        //    {
+        //        //db_Players.CreatePlayer(sender);
+        //    }
+        //    db_Players.LoadPlayerAccount(sender);
 
-            bool isMale = (args[0].ToString().StartsWith("k", StringComparison.InvariantCultureIgnoreCase) || args[0].ToString().StartsWith("g", StringComparison.InvariantCultureIgnoreCase)) ? false : true;
-            API.setEntityData(sender, "Gender", isMale);
-            API.shared.consoleOutput("isMale is " + isMale);
-            sender.SetSkinByGender();
-            SetBeginnerInventory(sender);
-            db_Players.SavePlayerAccount(sender);
+        //    bool isMale = (args[0].ToString().StartsWith("k", StringComparison.InvariantCultureIgnoreCase) || args[0].ToString().StartsWith("g", StringComparison.InvariantCultureIgnoreCase)) ? false : true;
+        //    API.setEntityData(sender, "Gender", isMale);
+        //    API.shared.consoleOutput("isMale is " + isMale);
+        //    sender.SetSkinByGender();
+        //    SetBeginnerInventory(sender);
+        //    db_Players.SavePlayerAccount(sender);
 
-            GoToApperanceSelection(sender);
-        }
+        //    GoToApperanceSelection(sender);
+        //}
 
         public void LoadPlayerLastLocation(Client player)
         {
@@ -145,7 +147,7 @@ namespace TecoRP.Managers
                 .UnwearTops()
                 .UnwearPants()
                 .UnwearShoes()
-                .ApplyApperance((ClothingData)API.getEntityData(player, nameof(User.ClothingData)));
+                .ApplyApperance((ClothingData)API.getEntityData(player, nameof(Player.CustomizationData)));
             InventoryManager.LoadPlayerEquippedItems(player);
         }
 

@@ -30,7 +30,7 @@ namespace TecoRP.Managers
                 var jsonVehs = JsonConvert.SerializeObject(db_VehicleShops.GetPricesByClass(nearest.VehicleClass));
                 var jsonShop = JsonConvert.SerializeObject(nearest);
 
-                var adminLevel = (int)sender.getData(nameof(User.AdminLevel));
+                var adminLevel = (int)sender.getData(nameof(Player.AdminLevel));
                 API.consoleOutput("AdminLevel is " + adminLevel);
                 API.triggerClientEvent(sender, "open_vehicle_shop", jsonVehs, jsonShop,adminLevel );
             }

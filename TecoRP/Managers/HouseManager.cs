@@ -68,7 +68,7 @@ namespace TecoRP.Managers
                                     {
                                         var sellerOfflinePlayer = db_Players.GetOfflineUserDatas(itemHouse.OwnerSocialClubName);
                                         sellerOfflinePlayer.BankAccount += itemHouse.Price;
-                                        db_Players.SaveOfflineUserData(sellerOfflinePlayer.SocialClubName, sellerOfflinePlayer);
+                                        db_Players.SaveOfflineUserData(sellerOfflinePlayer.CharacterId, sellerOfflinePlayer);
                                         HouseMarkerColor hmc = new Models.HouseMarkerColor();
                                         var _house = db_Houses.GetHouse(itemHouse.HouseId);
                                         _house.MarkerOnMap.color = new Color(hmc.NormalColor.Red, hmc.NormalColor.Green, hmc.NormalColor.Blue, 255);

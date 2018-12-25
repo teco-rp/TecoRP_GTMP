@@ -1,4 +1,5 @@
-﻿using GrandTheftMultiplayer.Server.Constant;
+﻿using GrandTheftMultiplayer.Server.API;
+using GrandTheftMultiplayer.Server.Constant;
 using GrandTheftMultiplayer.Server.Elements;
 using GrandTheftMultiplayer.Shared.Math;
 using System;
@@ -35,10 +36,8 @@ namespace TecoRP.Managers
 
         private void API_onPlayerFinishedDownload(Client player)
         {
-
+            CharacterCreatorManager.SendToCreatorLocation(player, isVisible: false);
         }
-
-
         public void Register(Client player, string email, string password)
         {
             API.consoleOutput("Register has triggered on server with following parameters:");
@@ -46,7 +45,7 @@ namespace TecoRP.Managers
             try
             {
                 var user = db_Accounts.Register(player, email, password);
-                API.triggerClientEvent(player, "register_result", true);              
+                API.triggerClientEvent(player, "register_result", true);
             }
             catch (SoftException ex)
             {
@@ -63,15 +62,14 @@ namespace TecoRP.Managers
         {
             try
             {
-                var user = db_Accounts.Login(player, email, password);
-
-                var chars = db_Players.GetCharacters(user);
-
+                var account = db_Accounts.Login(player, email, password);
+                var chars = db_Players.GetCharacters(account);
+                player.setData(nameof(Account), account);
                 API.triggerClientEvent(player, "login_result", true);
                 player.position = new Vector3(402.8664, -996.4108, -99.00027);
                 player.transparency = 0;
-                API.consoleOutput("user characters " + user.Characters.Count);
-                API.triggerClientEvent(player, "go_character_selection", user.ToJson());
+                API.consoleOutput("user characters " + account.Characters.Count);
+                GoToCharacterSelection(player);
             }
             catch (SoftException ex)
             {
@@ -82,6 +80,14 @@ namespace TecoRP.Managers
                 API.consoleOutput(LogCat.Fatal, ex.ToString());
                 API.triggerClientEvent(player, "login_result", false, "Bir sorun oluştu. Daha sonra tekrar deneyin.");
             }
+        }
+
+        public void CharacterSelected(Client player, string characterId)
+        {
+            db_Players.LoadPlayerData(player);
+            db_Players.LoadPlayerInventory(player);
+            player.setData(nameof(Player), db_Players.GetOfflineUserDatas(characterId));
+            OnPlayerLogin?.Invoke(this, new EventArgs<Client>(player));
         }
 
         public bool CheckPlayerIfIsInWhiteList(Client sender)
@@ -113,6 +119,32 @@ namespace TecoRP.Managers
                 }
 
             return -1;
+        }
+
+        public static void GoToCharacterSelection(Client player)
+        {
+            API.shared.consoleOutput("GoToCharacterSelection");
+            Account account = (Account)player.getData(nameof(Account));
+            API.shared.consoleOutput("account data is null: " + (account == null));
+
+            API.shared.triggerClientEvent(player, "go_character_selection", account.ToJson(), EnumerateAccountPlayers(player).ToJson());
+        }
+
+        
+
+        public static IEnumerable<Player> EnumerateAccountPlayers(Client client)
+        {
+            Account account = (Account)client.getData(nameof(Account));
+            if (account != null)
+            {
+                foreach (var item in account.Characters)
+                {
+                    API.shared.consoleOutput("Character enumerating for " + item);
+                    var readItem = db_Players.GetOfflineUserDatas(item);
+                    API.shared.consoleOutput("read Item is: \n\n "+readItem.ToJson());
+                    yield return readItem;
+                }
+            }
         }
     }
 }
